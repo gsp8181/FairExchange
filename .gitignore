@@ -2,6 +2,8 @@ build/
 target/
 .idea/
 WebService/.git/
+.openshift/
+
 
 #################
 ## Eclipse
