@@ -25,28 +25,27 @@ public class SessionRepositoryMongo implements SessionRepository {
         Query q = ds.createQuery(Session.class).field("expires").greaterThan(new Date());
         List<Session> sessions = q.asList();
         return sessions;
-        //List<Session> sessions = //ds.find(Session.class, "expires <", new Date());
     }
 
     @Override
     public Session addSession(Session s) {
 
         // Try and find the users previous sessions
-        Query q = ds.createQuery(Session.class).field("email").equal(s.getEmail());
-        Session old = (Session)q.get();
+        Query userSession = ds.createQuery(Session.class).field("email").equal(s.getEmail());
+        Session old = (Session)userSession.get();
         if(old == null)
         {
             // Delete a previous session with the same IP
-            Query q2 = ds.createQuery(Session.class).field("ip").equal(s.getIp());
-            q2.field("email").notEqual(s.getEmail());
-            ds.delete(q2);
+            Query removeOtherSessions = ds.createQuery(Session.class).field("ip").equal(s.getIp());
+            removeOtherSessions.field("email").notEqual(s.getEmail());
+            ds.delete(removeOtherSessions);
             ds.save(s);
             return s;
         } else
         {
             old.setExpires(s.getExpires()); //TODO: is this the best way?
             UpdateOperations<Session> ops = ds.createUpdateOperations(Session.class).set("expires", s.getExpires());
-            ds.update(q,ops);
+            ds.update(userSession,ops);
             return old;
         }
 

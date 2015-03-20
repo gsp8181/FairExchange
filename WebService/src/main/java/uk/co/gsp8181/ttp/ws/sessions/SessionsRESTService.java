@@ -1,7 +1,5 @@
 package uk.co.gsp8181.ttp.ws.sessions;
 
-import uk.co.gsp8181.ttp.ws.helloworld.HelloWorld;
-
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;

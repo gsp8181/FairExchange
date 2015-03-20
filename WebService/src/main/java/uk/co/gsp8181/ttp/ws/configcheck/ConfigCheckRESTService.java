@@ -30,7 +30,7 @@ public class ConfigCheckRESTService {
     public boolean isPortOpen(@Context HttpServletRequest req)
     {
         String remoteAddr = req.getRemoteAddr();
-        try (Socket ignored = new Socket(remoteAddr, 80)) {
+        try (Socket ignored = new Socket(remoteAddr, 6555)) {
             return true;
         } catch (IOException ignored) {
             return false;
