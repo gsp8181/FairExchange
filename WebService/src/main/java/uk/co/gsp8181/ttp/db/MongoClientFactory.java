@@ -27,7 +27,7 @@ public class MongoClientFactory {
             try {
                 mongoClient = new MongoClient("localhost");
             } catch (UnknownHostException e) {
-                throw new RuntimeException("You're an idiot who shouldn't run a server"); //TODO better handling
+                throw new RuntimeException("Forget about running servers mate");
             }
         } else
         {
@@ -40,7 +40,7 @@ public class MongoClientFactory {
             try {
                 mongoClient = new MongoClient(new ServerAddress(host, port), mongoClientOptions);
             } catch (UnknownHostException e) {
-                throw new RuntimeException("Whoever designed this to throw an exception was a tool"); //TODO better handling
+                throw new RuntimeException("Openshift was detected but a mongo instance was not found");
             }
             mongoClient.setWriteConcern(WriteConcern.SAFE);
         }

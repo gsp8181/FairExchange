@@ -11,13 +11,13 @@ import java.util.Date;
  * Created by b1020537 on 20/03/2015.
  */
 @Entity
-public class Session {
+public class Session { //TODO: store if session is open
 
     @Id
     private ObjectId id;
     private String ip;
     private String email;
-    private Date startTime;
+    //private Date startTime;
     private Date expires;
 
     public Session(){}
@@ -46,13 +46,13 @@ public class Session {
         this.email = email;
     }
 
-    public Date getStartTime() {
+    /*public Date getStartTime() {
         return startTime;
     }
 
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
-    }
+    }*/
 
     public Date getExpires() {
         return expires;

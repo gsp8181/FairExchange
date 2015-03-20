@@ -43,7 +43,11 @@
             <!-- See https://github.com/mongodb/morphia/releases for the latest version -->
             <version>0.110</version>
         </dependency>
-
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.5</version>
+        </dependency>
 
 
     </dependencies>
