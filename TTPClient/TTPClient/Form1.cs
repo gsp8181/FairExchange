@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.OpenSsl;
+using Org.BouncyCastle.Security;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -25,7 +28,7 @@ namespace TTPClient
         private void whatMyIp_Click(object sender, EventArgs e)
         {
             var url = textBox1.Text + "/rest/config/ip/";
-            
+
             var content = syncClient.DownloadString(url);
             MessageBox.Show(content);
         }
@@ -52,14 +55,15 @@ namespace TTPClient
 
             url = url + input;
             try
-            { 
-            var content = syncClient.DownloadString(url);
-            MessageBox.Show(content);
-                } catch (WebException ex)
+            {
+                var content = syncClient.DownloadString(url);
+                MessageBox.Show(content);
+            }
+            catch (WebException ex)
             {
                 MessageBox.Show("Could not find. " + ex.Message);
             }
-            
+
         }
 
         private void PortOpenButton_Click(object sender, EventArgs e)
@@ -75,8 +79,15 @@ namespace TTPClient
                 {
                     string publicPrivateKeyXML = rsa.ToXmlString(true);
                     string publicOnlyKeyXML = rsa.ToXmlString(false);
+                    AsymmetricCipherKeyPair dsaKey = DotNetUtilities.GetDsaKeyPair(rsa);
                     //MessageBox.Show(publicOnlyKeyXML);
                     MessageBox.Show(publicPrivateKeyXML);
+                    StringWriter sw = new StringWriter();
+                    PemWriter pw = new PemWriter(sw);
+                    pw.WriteObject(dsaKey);
+                    //pw.flush();
+                    String rsakeypem = sw.ToString();
+                    MessageBox.Show(rsakeypem);
                 }
                 finally
                 {
