@@ -36,6 +36,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.emailBox = new System.Windows.Forms.TextBox();
+            this.GenDSAKeysButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // whatsMyIpButton
@@ -111,11 +112,22 @@
             this.emailBox.Size = new System.Drawing.Size(186, 20);
             this.emailBox.TabIndex = 7;
             // 
+            // GenDSAKeysButton
+            // 
+            this.GenDSAKeysButton.Location = new System.Drawing.Point(12, 202);
+            this.GenDSAKeysButton.Name = "GenDSAKeysButton";
+            this.GenDSAKeysButton.Size = new System.Drawing.Size(106, 23);
+            this.GenDSAKeysButton.TabIndex = 8;
+            this.GenDSAKeysButton.Text = "Gen DSA Keys";
+            this.GenDSAKeysButton.UseVisualStyleBackColor = true;
+            this.GenDSAKeysButton.Click += new System.EventHandler(this.GenDSAKeysButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
+            this.Controls.Add(this.GenDSAKeysButton);
             this.Controls.Add(this.emailBox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -141,6 +153,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox emailBox;
+        private System.Windows.Forms.Button GenDSAKeysButton;
     }
 }
 

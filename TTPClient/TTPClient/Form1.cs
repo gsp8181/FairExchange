@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -59,6 +60,29 @@ namespace TTPClient
                 MessageBox.Show("Could not find. " + ex.Message);
             }
             
+        }
+
+        private void PortOpenButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void GenDSAKeysButton_Click(object sender, EventArgs e)
+        {
+            using (var rsa = new DSACryptoServiceProvider(1024))
+            {
+                try
+                {
+                    string publicPrivateKeyXML = rsa.ToXmlString(true);
+                    string publicOnlyKeyXML = rsa.ToXmlString(false);
+                    //MessageBox.Show(publicOnlyKeyXML);
+                    MessageBox.Show(publicPrivateKeyXML);
+                }
+                finally
+                {
+                    rsa.PersistKeyInCsp = false;
+                }
+            }
         }
     }
 }
