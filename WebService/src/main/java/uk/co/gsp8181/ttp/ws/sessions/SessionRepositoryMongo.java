@@ -2,6 +2,7 @@ package uk.co.gsp8181.ttp.ws.sessions;
 
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
+import uk.co.gsp8181.ttp.db.MongoClientFactory;
 
 import javax.inject.Inject;
 import java.util.Date;
@@ -12,7 +13,7 @@ import java.util.Date;
 public class SessionRepositoryMongo implements SessionRepository {
 
     @Inject
-    Datastore ds = new Morphia().createDatastore("Session");
+    private Datastore ds = MongoClientFactory.getInstance().getDatastore();
 
     @Override
     public Date addSession(Session session) {
