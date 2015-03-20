@@ -15,7 +15,7 @@ import java.util.Map;
  * Created by b1020537 on 19/03/2015.
  */
 @Path("/sessions")
-@Consumes(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON) //TODO: and text plain? or does this need moving down
 @Produces(MediaType.APPLICATION_JSON)
 @Stateless
 public class SessionsRESTService {

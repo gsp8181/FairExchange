@@ -12,7 +12,7 @@ import java.net.UnknownHostException;
 public class MongoClientFactory {
 
     private static final MongoClientFactory INSTANCE = new MongoClientFactory();
-    private final Datastore datastore;
+    private final Datastore datastore; //TODO: persistance
     public final String dbname;
     public boolean usingOpenshift;
 
