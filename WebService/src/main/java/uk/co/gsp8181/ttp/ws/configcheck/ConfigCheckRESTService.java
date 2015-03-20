@@ -21,8 +21,7 @@ public class ConfigCheckRESTService {
     @Path("/ip")
     public String returnIp(@Context HttpServletRequest req)
     {
-        String remoteAddr = req.getRemoteAddr();
-        return remoteAddr;
+        return req.getRemoteAddr();
     }
 
     @GET
