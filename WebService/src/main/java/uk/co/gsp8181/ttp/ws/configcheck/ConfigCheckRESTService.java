@@ -1,4 +1,4 @@
-package uk.co.gsp8181.ttp.configcheck;
+package uk.co.gsp8181.ttp.ws.configcheck;
 
 import javax.ejb.Stateless;
 import javax.servlet.http.HttpServletRequest;

@@ -1,4 +1,4 @@
-package uk.co.gsp8181.ttp;
+package uk.co.gsp8181.ttp.ws;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;

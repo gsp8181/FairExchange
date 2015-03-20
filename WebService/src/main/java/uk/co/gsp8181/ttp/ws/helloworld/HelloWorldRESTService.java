@@ -1,4 +1,4 @@
-package uk.co.gsp8181.ttp.helloworld;
+package uk.co.gsp8181.ttp.ws.helloworld;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
