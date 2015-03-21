@@ -15,10 +15,10 @@ import java.util.Map;
  * Created by b1020537 on 19/03/2015.
  */
 @Path("/sessions")
-@Consumes(MediaType.APPLICATION_JSON) //TODO: and text plain? or does this need moving down
+//@Consumes(MediaType.APPLICATION_JSON) //TODO: and text plain? or does this need moving down
 @Produces(MediaType.APPLICATION_JSON)
 @Stateless
-public class SessionsRESTService {
+public class  SessionsRESTService {
 
     //@Inject
     private static SessionService service = new SessionService();

@@ -1,6 +1,7 @@
 build/
 target/
 .idea/
+*.iml
 WebService/.git/
 .openshift/
 
