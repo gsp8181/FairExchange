@@ -45,8 +45,8 @@ public class  SessionsRESTService {
     {
         String remoteAddr = req.getRemoteAddr();
         boolean started = service.start(email, remoteAddr);
-        Map<String, String> response = new HashMap<>(); //TODO: needs fix
-        response.put("started",String.valueOf(started));
+        Map<String, Boolean> response = new HashMap<>(); //TODO: needs fix
+        response.put("started",started);
         return Response.ok(response).build();
     }
 }
