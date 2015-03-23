@@ -27,7 +27,7 @@ public class SessionRepositoryMongo implements SessionRepository {
         return sessions;
     }
 
-    @Override
+    @Override //TODO: python session clearer?
     public Session addSession(Session s) {
 
         // Try and find the users previous sessions
