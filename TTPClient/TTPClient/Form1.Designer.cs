@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.whatsMyIpButton = new System.Windows.Forms.Button();
             this.regWithTrackerButton = new System.Windows.Forms.Button();
             this.PortOpenButton = new System.Windows.Forms.Button();
@@ -38,6 +40,7 @@
             this.emailBox = new System.Windows.Forms.TextBox();
             this.GenDSAKeysButton = new System.Windows.Forms.Button();
             this.startServer = new System.Windows.Forms.Button();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.SuspendLayout();
             // 
             // whatsMyIpButton
@@ -133,6 +136,12 @@
             this.startServer.UseVisualStyleBackColor = true;
             this.startServer.Click += new System.EventHandler(this.startServer_Click);
             // 
+            // notifyIcon1
+            // 
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+            this.notifyIcon1.Text = "notifyIcon1";
+            this.notifyIcon1.Visible = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -167,6 +176,7 @@
         private System.Windows.Forms.TextBox emailBox;
         private System.Windows.Forms.Button GenDSAKeysButton;
         private System.Windows.Forms.Button startServer;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
     }
 }
 

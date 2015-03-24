@@ -23,6 +23,19 @@ namespace TTPClient
         public Form1()
         {
             InitializeComponent();
+            MyResource.Notify += MyResource_Click;
+            MyResource.FileRecieved += MyResource_FileRecieved;
+        }
+
+        void MyResource_FileRecieved(object sender, string fileName)
+        {
+            notifyIcon1.ShowBalloonTip(5000, "File Recieved", fileName, ToolTipIcon.Info);
+        }
+
+        void MyResource_Click(object sender, string myValue)
+        {
+            //notifyIcon1.BalloonTipText(myValue);
+            notifyIcon1.ShowBalloonTip(5000, "Request Recieved", myValue, ToolTipIcon.Info);
         }
 
         private void whatMyIp_Click(object sender, EventArgs e)
