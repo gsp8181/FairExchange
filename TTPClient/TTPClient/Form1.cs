@@ -95,5 +95,10 @@ namespace TTPClient
                 }
             }
         }
+
+        private void startServer_Click(object sender, EventArgs e)
+        {
+            Program.server.Start();
+        }
     }
 }
