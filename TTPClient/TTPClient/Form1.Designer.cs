@@ -157,6 +157,7 @@
             this.Controls.Add(this.PortOpenButton);
             this.Controls.Add(this.regWithTrackerButton);
             this.Controls.Add(this.whatsMyIpButton);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
