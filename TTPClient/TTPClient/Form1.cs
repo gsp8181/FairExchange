@@ -1,4 +1,5 @@
-﻿using Org.BouncyCastle.Crypto;
+﻿using Grapevine.Client;
+using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Security;
 using System;
@@ -109,9 +110,38 @@ namespace TTPClient
             }
         }
 
-        private void startServer_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            { 
+
+            var stream = openFileDialog1.OpenFile(); //TODO: if not null and using!
+                using (StreamReader sr = new StreamReader(stream))
+                {
+                    String text = sr.ReadToEnd();
+                    string ip = Microsoft.VisualBasic.Interaction.InputBox("IP", "IP ADDRESS", "Default", -1, -1);
+                    var client = new RESTClient("http://" + ip + ":6555");
+                    var req = new RESTRequest("/file/");
+                    req.Method = Grapevine.HttpMethod.POST;
+                    req.ContentType = Grapevine.ContentType.JSON;
+                    req.Payload = text;
+                    client.Execute(req);
+                    MessageBox.Show(text);
+                }
+                    
+            //MessageBox.Show(stream.);
+            }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            Program.server.OnStart = new Grapevine.Server.ToggleServerHandler(this.onServerStartNotify);
             Program.server.Start();
+        }
+
+        private void onServerStartNotify()
+        {//TODO: check if port is open
+            notifyIcon1.ShowBalloonTip(5000, "Started", "Server started and is listening on port 6555", ToolTipIcon.Info);
         }
     }
 }

@@ -38,8 +38,8 @@
     <Reference Include="BouncyCastle.Crypto">
       <HintPath>..\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
-    <Reference Include="Grapevine">
-      <HintPath>..\packages\Grapevine.3.0.4\lib\net40\Grapevine.dll</HintPath>
+    <Reference Include="GrapevinePlus">
+      <HintPath>..\packages\GrapevinePlus.3.0.4\lib\net40\GrapevinePlus.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Newtonsoft.Json">
