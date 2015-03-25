@@ -39,7 +39,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.emailBox = new System.Windows.Forms.TextBox();
             this.GenDSAKeysButton = new System.Windows.Forms.Button();
-            this.startServer = new System.Windows.Forms.Button();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.button1 = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
@@ -92,6 +91,7 @@
             this.textBox1.Size = new System.Drawing.Size(186, 20);
             this.textBox1.TabIndex = 4;
             this.textBox1.Text = "http://localhost:8080";
+            this.textBox1.Validated += new System.EventHandler(this.textBox1_Validated);
             // 
             // label1
             // 
@@ -117,6 +117,8 @@
             this.emailBox.Name = "emailBox";
             this.emailBox.Size = new System.Drawing.Size(186, 20);
             this.emailBox.TabIndex = 7;
+            this.emailBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.emailBox_KeyPress);
+            this.emailBox.Validated += new System.EventHandler(this.emailBox_Validated);
             // 
             // GenDSAKeysButton
             // 
@@ -128,15 +130,6 @@
             this.GenDSAKeysButton.UseVisualStyleBackColor = true;
             this.GenDSAKeysButton.Click += new System.EventHandler(this.GenDSAKeysButton_Click);
             // 
-            // startServer
-            // 
-            this.startServer.Location = new System.Drawing.Point(197, 85);
-            this.startServer.Name = "startServer";
-            this.startServer.Size = new System.Drawing.Size(75, 23);
-            this.startServer.TabIndex = 9;
-            this.startServer.Text = "start server";
-            this.startServer.UseVisualStyleBackColor = true;
-            // 
             // notifyIcon1
             // 
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
@@ -145,7 +138,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(197, 115);
+            this.button1.Location = new System.Drawing.Point(197, 85);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 10;
@@ -163,7 +156,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.startServer);
             this.Controls.Add(this.GenDSAKeysButton);
             this.Controls.Add(this.emailBox);
             this.Controls.Add(this.label2);
@@ -193,7 +185,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox emailBox;
         private System.Windows.Forms.Button GenDSAKeysButton;
-        private System.Windows.Forms.Button startServer;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
