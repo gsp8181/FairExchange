@@ -38,6 +38,7 @@
             this.progressBar1.Location = new System.Drawing.Point(13, 13);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(239, 23);
+            this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.progressBar1.TabIndex = 0;
             // 
             // button1
@@ -54,9 +55,9 @@
             this.progressLabel.AutoSize = true;
             this.progressLabel.Location = new System.Drawing.Point(13, 60);
             this.progressLabel.Name = "progressLabel";
-            this.progressLabel.Size = new System.Drawing.Size(48, 13);
+            this.progressLabel.Size = new System.Drawing.Size(111, 13);
             this.progressLabel.TabIndex = 2;
-            this.progressLabel.Text = "Progress";
+            this.progressLabel.Text = "Attempting to contact ";
             // 
             // SendDialog
             // 

@@ -151,13 +151,16 @@ namespace TTPClient
         private void button1_Click(object sender, EventArgs e)
         {
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            { 
+            {
+                string ip = Microsoft.VisualBasic.Interaction.InputBox("IP", "IP ADDRESS", "Default", -1, -1);
+                var sendDialog = new SendDialog(ip, openFileDialog1.OpenFile());
+                sendDialog.ShowDialog();
 
-            var stream = openFileDialog1.OpenFile(); //TODO: if not null and using!
+                /* var stream = openFileDialog1.OpenFile(); //TODO: if not null and using!
                 using (StreamReader sr = new StreamReader(stream))
                 {
                     String text = sr.ReadToEnd();
-                    string ip = Microsoft.VisualBasic.Interaction.InputBox("IP", "IP ADDRESS", "Default", -1, -1);
+                    
                     var client = new RESTClient("http://" + ip + ":6555");
                     var req = new RESTRequest("/file/");
                     req.Method = Grapevine.HttpMethod.POST;
@@ -165,9 +168,9 @@ namespace TTPClient
                     req.Payload = text;
                     client.Execute(req);
                     MessageBox.Show(text);
-                }
-                    
-            //MessageBox.Show(stream.);
+                }*/
+
+                //MessageBox.Show(stream.);
             }
         }
 

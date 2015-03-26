@@ -59,7 +59,7 @@ namespace TTPClient
                 var ip = context.Request.RemoteEndPoint.Address.ToString();
 
                 var output = new NotifyRequest();
-                output.email = email;
+                output.email = email; //TODO: err?
                 output.fileName = fileName;
                 output.ip = ip;
                 return output;
