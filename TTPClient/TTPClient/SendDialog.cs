@@ -16,6 +16,17 @@ namespace TTPClient
         public SendDialog(string ip, Stream file)
         {
             InitializeComponent();
+            MyResource.StartTransmission += MyResource_StartTransmission;
+        }
+
+        void MyResource_StartTransmission(object sender, string addrSender, NotifyArgs callbackArgs)
+        {
+            callbackArgs.hasSet = true;
+        }
+
+        private void SendDialog_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            MyResource.StartTransmission -= MyResource_StartTransmission;
         }
     }
 }

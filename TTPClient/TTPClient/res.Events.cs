@@ -14,5 +14,11 @@ namespace TTPClient
 
         public delegate void FileRecievedHandler(object sender, string fileName);
         public static event FileRecievedHandler FileRecieved = delegate { };
+
+        public delegate void NotifyRecievedHandler(object sender, string addrSender, string fileName, string email);
+        public static event NotifyRecievedHandler NotifyRecieved = delegate { };
+
+        public delegate void StartTransmissionHandler(object sender, string addrSender, NotifyArgs callbackArgs);
+        public static event StartTransmissionHandler StartTransmission = delegate { };
     }
 }

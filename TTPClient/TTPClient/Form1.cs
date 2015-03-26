@@ -28,6 +28,13 @@ namespace TTPClient
             InitializeComponent();
             MyResource.Notify += MyResource_Click;
             MyResource.FileRecieved += MyResource_FileRecieved;
+            MyResource.NotifyRecieved += MyResource_NotifyRecieved;   
+        }
+
+        private void MyResource_NotifyRecieved(object sender, string addrSender, string fileName, string email)
+        {
+            notifyIcon1.ShowBalloonTip(60000, "Incoming File",
+                email + " wants to send you " + fileName + ". Click to accept", ToolTipIcon.Info);
         }
 
         void MyResource_FileRecieved(object sender, string fileName)
@@ -165,7 +172,6 @@ namespace TTPClient
         private void emailBox_Validated(object sender, EventArgs e)
         {
             RegWithTracker(textBox1.Text, emailBox.Text);
-            MessageBox.Show("Validated");
         }
 
         private void emailBox_KeyPress(object sender, KeyPressEventArgs e)
@@ -190,6 +196,11 @@ namespace TTPClient
             TcpListener t = new TcpListener(ipLocalEndPoint);
             t.Start();
             t.Stop();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            new SendDialog("123", null).Show();
         }
     }
 }

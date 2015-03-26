@@ -69,6 +69,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "SendDialog";
             this.Text = "SendDialog";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SendDialog_FormClosed);
             this.ResumeLayout(false);
             this.PerformLayout();
 
