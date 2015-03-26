@@ -5,6 +5,7 @@ import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 
 import java.net.UnknownHostException;
+import java.util.Arrays;
 
 /**
  * Created by b1020537 on 20/03/2015.
@@ -36,9 +37,9 @@ public class MongoClientFactory {
             int port = Integer.parseInt(System.getenv("OPENSHIFT_MONGODB_DB_PORT"));
             String username = System.getenv("OPENSHIFT_MONGODB_DB_USERNAME");
             String password = System.getenv("OPENSHIFT_MONGODB_DB_PASSWORD");
-            MongoClientOptions mongoClientOptions = MongoClientOptions.builder().build();
+            MongoCredential credential = MongoCredential.createCredential(username,dbname,password.toCharArray());
             try {
-                mongoClient = new MongoClient(new ServerAddress(host, port), mongoClientOptions);
+                mongoClient = new MongoClient(new ServerAddress(host, port), Arrays.asList(credential));
             } catch (UnknownHostException e) {
                 throw new RuntimeException("Openshift was detected but a mongo instance was not found");
             }
