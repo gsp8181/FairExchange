@@ -27,6 +27,19 @@ namespace TTPClient
             [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/notify/?$")]
             public void HandleNotifyRecievedRequest(HttpListenerContext context)
             {
+                var vars = NotifySend(context);
+                if (vars == null)
+                    return;
+
+                JObject response = new JObject();
+                response.Add("accepted", true);
+                this.SendJsonResponse(context, response);
+                NotifyRecieved(this, vars);
+
+            }
+
+            private NotifyRequest NotifySend(HttpListenerContext context)//TODO: rename
+            {
                 var jsonStr = this.GetJsonPayload(context.Request); //TODO: validate here with Json.NET Schema
                 string fileName, email;
                 try
@@ -38,31 +51,42 @@ namespace TTPClient
                 {
                     JObject eresponse = new JObject();
                     eresponse.Add("accepted", false);
-                    eresponse.Add("error","malformed JSON");
-                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    eresponse.Add("error", "malformed JSON");
+                    context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
                     this.SendJsonResponse(context, eresponse);
-                    return;
+                    return null;
                 }
                 var ip = context.Request.RemoteEndPoint.Address.ToString();
 
-                NotifyRecieved(this, ip, fileName, email);
-                JObject response = new JObject();
-                response.Add("accepted",true);
-                this.SendJsonResponse(context,response);
+                var output = new NotifyRequest();
+                output.email = email;
+                output.fileName = fileName;
+                output.ip = ip;
+                return output;
             }
 
             [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/start/?$")]
             public void HandleStartTransmissionRequest(HttpListenerContext context)
             {
                 NotifyArgs args = new NotifyArgs();
-                StartTransmission(this, null, args);
+                var vars = NotifySend(context);
+                if (vars == null)
+                    return;
+
+                StartTransmission(this, vars, args);
                 if (args.hasSet)
                 {
-                    this.SendTextResponse(context,"yayy");
+                    JObject response = new JObject();
+                    response.Add("accepted", true);
+                    this.SendJsonResponse(context, response);
                 }
                 else
                 {
-                    this.SendTextResponse(context,"nayy");
+                    JObject response = new JObject();
+                    response.Add("accepted", false);
+                    response.Add("error", "cancelled");
+                    context.Response.StatusCode = (int)HttpStatusCode.Gone;
+                    this.SendJsonResponse(context, response);
                 }
             }
 

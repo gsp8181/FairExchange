@@ -28,7 +28,7 @@ namespace TTPClient
         public Form1()
         {
             InitializeComponent();
-            MyResource.Notify += MyResource_Click;
+            //MyResource.Notify += MyResource_Click;
             MyResource.FileRecieved += MyResource_FileRecieved;
             MyResource.NotifyRecieved += MyResource_NotifyRecieved;   
         }
@@ -46,11 +46,10 @@ namespace TTPClient
             notifyIcon1.ShowBalloonTip(timeout, tipTitle, tipText, tipIcon);
         }
 
-        private void MyResource_NotifyRecieved(object sender, string addrSender, string fileName, string email)
+        private void MyResource_NotifyRecieved(object sender, NotifyRequest nr)
         {
-            var nr = new NotifyRequest();
             ShowBalloonTip(60000, "Incoming File",
-                email + " wants to send you " + fileName + ". Click to accept", ToolTipIcon.Info, nr);
+                nr.email + " wants to send you " + nr.fileName + ". Click to accept", ToolTipIcon.Info, nr);
         }
 
         void MyResource_FileRecieved(object sender, string fileName)
@@ -58,11 +57,11 @@ namespace TTPClient
             ShowBalloonTip(5000, "File Recieved", fileName, ToolTipIcon.Info);
         }
 
-        void MyResource_Click(object sender, string myValue)
-        {
-            //notifyIcon1.BalloonTipText(myValue);
-            ShowBalloonTip(5000, "Request Recieved", myValue, ToolTipIcon.Info);
-        }
+        //void MyResource_Click(object sender, string myValue)
+        //{
+        //    //notifyIcon1.BalloonTipText(myValue);
+        //    ShowBalloonTip(5000, "Request Recieved", myValue, ToolTipIcon.Info);
+        //}
 
         private void whatMyIp_Click(object sender, EventArgs e)
         {
@@ -234,7 +233,7 @@ namespace TTPClient
             req.ContentType = Grapevine.ContentType.JSON;
             req.Payload = data.ToString();
             var response = client.Execute(req);
-            MessageBox.Show("Recieve from " + currentTipReq.email);
+            MessageBox.Show("Status Code: " + response.StatusCode);
         }
     }
 }

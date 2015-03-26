@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TTPClient
 {
-    class NotifyRequest
+    public class NotifyRequest
     {
         public string fileName { get; set; }
         public string email { get; set; }
