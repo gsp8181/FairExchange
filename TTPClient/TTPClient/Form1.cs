@@ -159,7 +159,7 @@ namespace TTPClient
         private void Form1_Load(object sender, EventArgs e)
         {
             createFirewallException(6555);
-            Program.server.OnStart = new Grapevine.Server.ToggleServerHandler(this.onServerStartNotify);
+            Program.server.OnStart = onServerStartNotify;
             Program.server.Start();
             RegWithTracker(textBox1.Text, emailBox.Text);
         }

@@ -26,9 +26,7 @@ namespace TTPClient
             [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/file/$")]
             public void HandleFileRecievedRequest(HttpListenerContext context)
             {
-                var input = context.Request.InputStream;
-                StreamReader sr = new StreamReader(input);
-                String x = sr.ReadToEnd();
+                var x = this.GetPayload(context.Request);
                 this.SendTextResponse(context, x);
                 FileRecieved(this, x);
             }
@@ -36,7 +34,24 @@ namespace TTPClient
             [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/notify/$")]
             public void HandleNotifyRecievedRequest(HttpListenerContext context)
             {
-                //NotifyRecieved(this, );
+                var jsonStr = this.GetJsonPayload(context.Request); //TODO: validate here with Json.NET Schema
+                string fileName, email;
+                try
+                {
+                    fileName = jsonStr.Value<String>("fileName");
+                    email = jsonStr.Value<String>("email"); //TODO: find off tracker or reject
+                }
+                catch (NullReferenceException e)
+                {
+                    JObject eresponse = new JObject();
+                    eresponse.Add("accepted", false);
+                    eresponse.Add("error","malformed JSON");
+                    this.SendJsonResponse(context, eresponse);
+                    return;
+                }
+                var ip = context.Request.RemoteEndPoint.Address.ToString();
+
+                NotifyRecieved(this, ip, fileName, email);
                 JObject response = new JObject();
                 response.Add("accepted",true);
                 this.SendJsonResponse(context,response);
