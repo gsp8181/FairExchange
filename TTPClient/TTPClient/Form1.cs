@@ -1,4 +1,5 @@
 ﻿using Grapevine.Client;
+using Newtonsoft.Json.Linq;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Security;
@@ -21,6 +22,7 @@ namespace TTPClient
     public partial class Form1 : Form
     {
         WebClient syncClient = new WebClient();
+        NotifyRequest currentTipReq = null;
         //RESTClient restClient = new RESTClient(textBox1.Text);
 
         public Form1()
@@ -31,21 +33,35 @@ namespace TTPClient
             MyResource.NotifyRecieved += MyResource_NotifyRecieved;   
         }
 
+        private void ShowBalloonTip(int timeout, string tipTitle, string tipText, ToolTipIcon tipIcon, NotifyRequest nr = null)
+        {
+            if (nr == null)
+            {
+                currentTipReq = null;
+            }
+            else
+            {
+                currentTipReq = nr;
+            }
+            notifyIcon1.ShowBalloonTip(timeout, tipTitle, tipText, tipIcon);
+        }
+
         private void MyResource_NotifyRecieved(object sender, string addrSender, string fileName, string email)
         {
-            notifyIcon1.ShowBalloonTip(60000, "Incoming File",
-                email + " wants to send you " + fileName + ". Click to accept", ToolTipIcon.Info);
+            var nr = new NotifyRequest();
+            ShowBalloonTip(60000, "Incoming File",
+                email + " wants to send you " + fileName + ". Click to accept", ToolTipIcon.Info, nr);
         }
 
         void MyResource_FileRecieved(object sender, string fileName)
         {
-            notifyIcon1.ShowBalloonTip(5000, "File Recieved", fileName, ToolTipIcon.Info);
+            ShowBalloonTip(5000, "File Recieved", fileName, ToolTipIcon.Info);
         }
 
         void MyResource_Click(object sender, string myValue)
         {
             //notifyIcon1.BalloonTipText(myValue);
-            notifyIcon1.ShowBalloonTip(5000, "Request Recieved", myValue, ToolTipIcon.Info);
+            ShowBalloonTip(5000, "Request Recieved", myValue, ToolTipIcon.Info);
         }
 
         private void whatMyIp_Click(object sender, EventArgs e)
@@ -166,7 +182,7 @@ namespace TTPClient
 
         private void onServerStartNotify()
         {//TODO: check if port is open
-            notifyIcon1.ShowBalloonTip(5000, "Started", "Server started and is listening on port 6555", ToolTipIcon.Info);
+            ShowBalloonTip(5000, "Started", "Server started and is listening on port 6555", ToolTipIcon.Info);
         }
 
         private void emailBox_Validated(object sender, EventArgs e)
@@ -201,6 +217,24 @@ namespace TTPClient
         private void button2_Click(object sender, EventArgs e)
         {
             new SendDialog("123", null).Show();
+        }
+
+        private void notifyIcon1_BalloonTipClicked_1(object sender, EventArgs e)
+        {
+            if (currentTipReq == null)
+            {
+                return;
+            }
+            var client = new RESTClient("http://" + currentTipReq.ip + ":6555");
+            var req = new RESTRequest("/start/");
+            JObject data = new JObject();
+            data.Add("fileName",currentTipReq.fileName);
+            data.Add("email", emailBox.Text);
+            req.Method = Grapevine.HttpMethod.POST;
+            req.ContentType = Grapevine.ContentType.JSON;
+            req.Payload = data.ToString();
+            var response = client.Execute(req);
+            MessageBox.Show("Recieve from " + currentTipReq.email);
         }
     }
 }

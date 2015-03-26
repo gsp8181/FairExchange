@@ -10,5 +10,6 @@ namespace TTPClient
     {
         public string fileName { get; set; }
         public string email { get; set; }
+        public string ip { get; set; }
     }
 }

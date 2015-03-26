@@ -15,15 +15,8 @@ namespace TTPClient
         public sealed partial class MyResource : RESTResource
         {
 
-            [RESTRoute(Method = HttpMethod.GET, PathInfo = @"^/notify/\d+$")]
-            [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/bar/\D+$")]
-            public void HandleFooBarRequests(HttpListenerContext context)
-            {
-                Notify(this,context.Request.Url.ToString());
-                this.SendTextResponse(context, "foo bar is a success!");
-            }
 
-            [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/file/$")]
+            [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/file/?$")]
             public void HandleFileRecievedRequest(HttpListenerContext context)
             {
                 var x = this.GetPayload(context.Request);
@@ -31,7 +24,7 @@ namespace TTPClient
                 FileRecieved(this, x);
             }
 
-            [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/notify/$")]
+            [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/notify/?$")]
             public void HandleNotifyRecievedRequest(HttpListenerContext context)
             {
                 var jsonStr = this.GetJsonPayload(context.Request); //TODO: validate here with Json.NET Schema
@@ -46,6 +39,7 @@ namespace TTPClient
                     JObject eresponse = new JObject();
                     eresponse.Add("accepted", false);
                     eresponse.Add("error","malformed JSON");
+                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     this.SendJsonResponse(context, eresponse);
                     return;
                 }
@@ -57,7 +51,7 @@ namespace TTPClient
                 this.SendJsonResponse(context,response);
             }
 
-            [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/start/$")]
+            [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/start/?$")]
             public void HandleStartTransmissionRequest(HttpListenerContext context)
             {
                 NotifyArgs args = new NotifyArgs();
