@@ -153,7 +153,14 @@ namespace TTPClient
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 var filename = openFileDialog1.FileName;
-                string ip = Microsoft.VisualBasic.Interaction.InputBox("IP", "IP ADDRESS", "127.0.0.1", -1, -1); //TODO: try and parse the IP
+                string ip = Microsoft.VisualBasic.Interaction.InputBox("IP", "IP ADDRESS", "127.0.0.1", -1, -1); //TODO: Transition to email/ip combo?
+                IPAddress ipObj;
+                if (!IPAddress.TryParse(ip,out ipObj))
+                {
+                    MessageBox.Show("Failed to parse IP");
+                    return;
+                }
+                
                 var sendDialog = new SendDialog(ip, filename);
                 sendDialog.ShowDialog();
 
