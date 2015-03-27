@@ -16,7 +16,7 @@ namespace TTPClient
     public partial class SendDialog : Form
     {
         private string ip;
-        private string fileName;
+        private string fileName; //TODO: extract actual filename/store in file obj?
         private string email = "test@email.com";
         public SendDialog(string ip, string fileName)
         {
