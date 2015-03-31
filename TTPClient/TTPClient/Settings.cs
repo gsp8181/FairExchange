@@ -48,25 +48,10 @@ namespace TTPClient
 
         private void GenDSAKeysButton_Click(object sender, EventArgs e)
         {
-            CspParameters csparams = new CspParameters(13);
-            csparams.KeyContainerName = "ttpclient";
-            using (var rsa = new DSACryptoServiceProvider(1024, csparams))
-            {
-                rsa.PersistKeyInCsp = false;
-                rsa.Clear();
-            }
-            using (var rsa = new DSACryptoServiceProvider(1024, csparams))
-            {
-                rsa.PersistKeyInCsp = true;
-                //string publicPrivateKeyXML = rsa.ToXmlString(true);
-                //string publicOnlyKeyXML = rsa.ToXmlString(false);
-                //AsymmetricCipherKeyPair dsaKey = DotNetUtilities.GetDsaKeyPair(rsa);
-                //StringWriter sw = new StringWriter();
-                //PemWriter pw = new PemWriter(sw);
-                //pw.WriteObject(dsaKey);
-                //String rsakeypem = sw.ToString();
-                MessageBox.Show("Regenerated Keys","Finished",MessageBoxButtons.OK,MessageBoxIcon.Information);
-            }
+            Security.Regenerate_DSA();
+            MessageBox.Show("Regenerated Keys", "Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
+
     }
 }
