@@ -86,12 +86,19 @@
     <Compile Include="SendDialog.Designer.cs">
       <DependentUpon>SendDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="SendOptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SendOptions.Designer.cs">
+      <DependentUpon>SendOptions.cs</DependentUpon>
+    </Compile>
     <Compile Include="Settings.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
+    <Compile Include="SettingsWrapperI.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -109,6 +116,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SendDialog.resx">
       <DependentUpon>SendDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SendOptions.resx">
+      <DependentUpon>SendOptions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>

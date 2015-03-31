@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.OpenSsl;
+using Org.BouncyCastle.Security;
 using TTPClient.Properties;
 
 namespace TTPClient
@@ -39,6 +44,29 @@ namespace TTPClient
             emailBox.Text = (string) Settings.Default["Email"];
             textBox1.Text = (string) Settings.Default["TTP"];
 
+        }
+
+        private void GenDSAKeysButton_Click(object sender, EventArgs e)
+        {
+            CspParameters csparams = new CspParameters(13);
+            csparams.KeyContainerName = "ttpclient";
+            using (var rsa = new DSACryptoServiceProvider(1024, csparams))
+            {
+                rsa.PersistKeyInCsp = false;
+                rsa.Clear();
+            }
+            using (var rsa = new DSACryptoServiceProvider(1024, csparams))
+            {
+                rsa.PersistKeyInCsp = true;
+                //string publicPrivateKeyXML = rsa.ToXmlString(true);
+                //string publicOnlyKeyXML = rsa.ToXmlString(false);
+                //AsymmetricCipherKeyPair dsaKey = DotNetUtilities.GetDsaKeyPair(rsa);
+                //StringWriter sw = new StringWriter();
+                //PemWriter pw = new PemWriter(sw);
+                //pw.WriteObject(dsaKey);
+                //String rsakeypem = sw.ToString();
+                MessageBox.Show("Regenerated Keys","Finished",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            }
         }
     }
 }

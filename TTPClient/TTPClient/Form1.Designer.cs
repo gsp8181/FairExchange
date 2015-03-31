@@ -34,7 +34,6 @@
             this.regWithTrackerButton = new System.Windows.Forms.Button();
             this.PortOpenButton = new System.Windows.Forms.Button();
             this.getRemoteStatus = new System.Windows.Forms.Button();
-            this.GenDSAKeysButton = new System.Windows.Forms.Button();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -85,16 +84,6 @@
             this.getRemoteStatus.UseVisualStyleBackColor = true;
             this.getRemoteStatus.Click += new System.EventHandler(this.getRemoteStatus_Click);
             // 
-            // GenDSAKeysButton
-            // 
-            this.GenDSAKeysButton.Location = new System.Drawing.Point(12, 202);
-            this.GenDSAKeysButton.Name = "GenDSAKeysButton";
-            this.GenDSAKeysButton.Size = new System.Drawing.Size(106, 23);
-            this.GenDSAKeysButton.TabIndex = 8;
-            this.GenDSAKeysButton.Text = "Gen DSA Keys";
-            this.GenDSAKeysButton.UseVisualStyleBackColor = true;
-            this.GenDSAKeysButton.Click += new System.EventHandler(this.GenDSAKeysButton_Click);
-            // 
             // notifyIcon1
             // 
             this.notifyIcon1.ContextMenuStrip = this.contextMenuStrip1;
@@ -110,26 +99,26 @@
             this.quitToolStripMenuItem,
             this.settingsToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 92);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(117, 70);
             // 
             // startToolStripMenuItem
             // 
             this.startToolStripMenuItem.Name = "startToolStripMenuItem";
-            this.startToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.startToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.startToolStripMenuItem.Text = "Start";
             this.startToolStripMenuItem.Click += new System.EventHandler(this.button1_Click);
             // 
             // quitToolStripMenuItem
             // 
             this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-            this.quitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.quitToolStripMenuItem.Text = "Quit";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
@@ -153,7 +142,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.GenDSAKeysButton);
             this.Controls.Add(this.getRemoteStatus);
             this.Controls.Add(this.PortOpenButton);
             this.Controls.Add(this.regWithTrackerButton);
@@ -173,7 +161,6 @@
         private System.Windows.Forms.Button regWithTrackerButton;
         private System.Windows.Forms.Button PortOpenButton;
         private System.Windows.Forms.Button getRemoteStatus;
-        private System.Windows.Forms.Button GenDSAKeysButton;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;

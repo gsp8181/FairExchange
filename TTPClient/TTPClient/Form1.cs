@@ -52,12 +52,6 @@ namespace TTPClient
                 nr.email + " wants to send you " + nr.fileName + ". Click to accept", ToolTipIcon.Info, nr);
         }
 
-        //void MyResource_Click(object sender, string myValue)
-        //{
-        //    //notifyIcon1.BalloonTipText(myValue);
-        //    ShowBalloonTip(5000, "Request Recieved", myValue, ToolTipIcon.Info);
-        //}
-
         private void whatMyIp_Click(object sender, EventArgs e)
         {
             var url = (string)Settings.Default["TTP"] + "/rest/config/ip/";
@@ -124,31 +118,6 @@ namespace TTPClient
         private void PortOpenButton_Click(object sender, EventArgs e)
         {
 
-        }
-
-        private void GenDSAKeysButton_Click(object sender, EventArgs e)
-        {
-            using (var rsa = new DSACryptoServiceProvider(1024))
-            {
-                try
-                {
-                    string publicPrivateKeyXML = rsa.ToXmlString(true);
-                    string publicOnlyKeyXML = rsa.ToXmlString(false);
-                    AsymmetricCipherKeyPair dsaKey = DotNetUtilities.GetDsaKeyPair(rsa);
-                    //MessageBox.Show(publicOnlyKeyXML);
-                    MessageBox.Show(publicPrivateKeyXML);
-                    StringWriter sw = new StringWriter();
-                    PemWriter pw = new PemWriter(sw);
-                    pw.WriteObject(dsaKey);
-                    //pw.flush();
-                    String rsakeypem = sw.ToString();
-                    MessageBox.Show(rsakeypem);
-                }
-                finally
-                {
-                    rsa.PersistKeyInCsp = false;
-                }
-            }
         }
 
         private void button1_Click(object sender, EventArgs e)

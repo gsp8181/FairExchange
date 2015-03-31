@@ -9,10 +9,10 @@ namespace TTPClient
 {
     interface SettingsWrapperI
     {
-        void setEmail();
-        void setTTP();
-        void loadTTP();
-        void loadEmail();
+        void setEmail(string email);
+        void setTTP(string ttp);
+        string loadTTP();
+        string loadEmail();
         bool isSet();
         bool regWithTracker(string email, string tracker );
         bool regWithTracker();
