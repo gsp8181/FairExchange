@@ -97,7 +97,7 @@ namespace TTPClient
                 //req.Payload = text;
                 try
                 {
-                     var q = client.Execute(req); //todo: IF NOT GONE
+                     var q = client.Execute(req); //todo: IF ACCEPTED = TRUE
                      if (q.StatusCode == HttpStatusCode.Gone) //TODO: this does not work as argumentnull always hits
                      {
                          progressBar1.Value = 0;

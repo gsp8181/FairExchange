@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ namespace TTPClient
     {
         private string fileName;
         private string ip;
+        private FileInfo localFile = new FileInfo(Path.GetTempFileName());
         public ReceiveDialog(string ip, string fileName)
         {
             InitializeComponent();
@@ -25,9 +27,13 @@ namespace TTPClient
 
         private void MyResource_FileRecieved(object sender, FileSend file, NotifyArgs callbackArgs)
         {
-            if (this.fileName == file.fileName)
+            if (this.fileName == file.fileName) //TODO: email!! or guid!
             {
                 callbackArgs.hasSet = true;
+            }
+            using (StreamWriter sw = new StreamWriter(localFile.OpenWrite())) //TODO: on another thread
+            {
+                sw.Write(file.data);
             }
             this.Invoke((MethodInvoker) delegate
             {
