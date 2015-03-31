@@ -24,6 +24,7 @@ namespace TTPClient
     {
         WebClient syncClient = new WebClient();
         NotifyRequest currentTipReq = null;
+        SettingsWrapper settings = new SettingsWrapper();
         //RESTClient restClient = new RESTClient(textBox1.Text);
 
         public Form1()
@@ -62,39 +63,8 @@ namespace TTPClient
 
         private void regWithTrackerButton_Click(object sender, EventArgs e)
         {
-            var response = RegWithTracker((string)Settings.Default["TTP"], (string)Settings.Default["Email"]);
+            var response = settings.regWithTracker();
             MessageBox.Show(response.ToString());
-        }
-
-        public static bool RegBySettings()
-        {
-            var email = (string)Settings.Default["Email"];
-            var ttp = (string)Settings.Default["TTP"];
-
-            return RegWithTracker(ttp, email);
-        }
-
-        private static bool RegWithTracker(string tracker, string email)
-        {
-            try
-            {
-                byte[] emailBytes = System.Text.Encoding.UTF8.GetBytes(email);
-                var url = tracker + "/rest/sessions/";
-                var request = (HttpWebRequest)WebRequest.CreateHttp(url);
-                request.Method = "POST";
-                request.ContentLength = emailBytes.Length;
-                request.ContentType = "application/json";
-                var dataStream = request.GetRequestStream();
-                dataStream.Write(emailBytes, 0, emailBytes.Length);
-                dataStream.Close();
-                var response = (HttpWebResponse)request.GetResponse();
-                if (response.StatusCode != HttpStatusCode.OK)
-                    return false;
-                return true;
-            } catch (Exception e)
-            {
-                return false;
-            }
         }
 
         private void getRemoteStatus_Click(object sender, EventArgs e)
@@ -145,7 +115,7 @@ namespace TTPClient
             createFirewallException(6555);
             Program.server.OnStart = onServerStartNotify;
             Program.server.Start();
-            RegBySettings();
+            settings.regWithTracker();
             if (!Program.server.IsListening) //TODO: maybe sort out with a timer
             {
                 NetAclChecker.AddAddress("http://+:6555/");

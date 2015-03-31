@@ -18,6 +18,7 @@ namespace TTPClient
 {
     public partial class SettingsDialog : Form
     {
+        private SettingsWrapper settings = new SettingsWrapper();
         public SettingsDialog()
         {
             InitializeComponent();
@@ -26,7 +27,7 @@ namespace TTPClient
         private void button1_Click(object sender, EventArgs e)
         {
             SaveSettings();
-            Form1.RegBySettings();
+            settings.regWithTracker();
             this.Close();
         }
 
