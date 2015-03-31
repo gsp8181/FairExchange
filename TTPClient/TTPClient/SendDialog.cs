@@ -16,21 +16,21 @@ namespace TTPClient
     public partial class SendDialog : Form
     {
         private string ip;
-        private string fileName; //TODO: extract actual filename/store in file obj?
+        private FileInfo file;
         private string email = "test@email.com";
         public SendDialog(string ip, string fileName)
         {
             InitializeComponent();
             MyResource.StartTransmission += MyResource_StartTransmission;
             this.ip = ip;
-            this.fileName = fileName;
+            this.file = new FileInfo(fileName);
 
             progressLabel.Text += ip;
 
             var client = new RESTClient("http://" + ip + ":6555");
             var req = new RESTRequest("/notify/");
             JObject data = new JObject();
-            data.Add("fileName", fileName);
+            data.Add("fileName", file.Name); //TODO: two names at once?! send guid?
             data.Add("email", email);
             req.Method = Grapevine.HttpMethod.POST;
             req.ContentType = Grapevine.ContentType.JSON; //TODO: async and await
@@ -43,7 +43,7 @@ namespace TTPClient
 
         private void MyResource_StartTransmission(object sender, NotifyRequest addrSender, NotifyArgs callbackArgs)
         {
-            if (addrSender.fileName != fileName)
+            if (addrSender.fileName != file.Name)
                 return;
             callbackArgs.hasSet = true; //TODO: check filename and dispatch another thread which updates progress, maybe have a positive event firing
             this.Invoke((MethodInvoker) delegate
@@ -74,7 +74,7 @@ namespace TTPClient
 
         private void timer2_Tick()
         {
-            progressLabel.Text = "Sending " + fileName;
+            progressLabel.Text = "Sending " + file.Name;
             progressBar1.Style = ProgressBarStyle.Continuous;
             progressBar1.Value = 25;
 
