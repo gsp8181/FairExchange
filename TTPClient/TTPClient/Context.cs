@@ -19,6 +19,7 @@ namespace TTPClient
             }
 
             form1 = new Form1();
+            this.MainForm = form1;
             form1.Show();
         }
 

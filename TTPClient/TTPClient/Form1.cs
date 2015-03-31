@@ -159,7 +159,7 @@ namespace TTPClient
         {
             this.Close();
             //Application.Exit();
-            Environment.Exit(0);
+            //Environment.Exit(0);
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
