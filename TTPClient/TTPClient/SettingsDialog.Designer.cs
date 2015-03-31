@@ -28,12 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.emailBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.ttpBox = new System.Windows.Forms.TextBox();
             this.okButton = new System.Windows.Forms.Button();
             this.regenKeysButton = new System.Windows.Forms.Button();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // emailBox
@@ -42,6 +45,7 @@
             this.emailBox.Name = "emailBox";
             this.emailBox.Size = new System.Drawing.Size(186, 20);
             this.emailBox.TabIndex = 11;
+            this.emailBox.Validated += new System.EventHandler(this.emailBox_Validated);
             // 
             // label2
             // 
@@ -67,6 +71,7 @@
             this.ttpBox.Name = "ttpBox";
             this.ttpBox.Size = new System.Drawing.Size(186, 20);
             this.ttpBox.TabIndex = 8;
+            this.ttpBox.Validated += new System.EventHandler(this.ttpBox_Validated);
             // 
             // okButton
             // 
@@ -88,8 +93,13 @@
             this.regenKeysButton.UseVisualStyleBackColor = true;
             this.regenKeysButton.Click += new System.EventHandler(this.GenDSAKeysButton_Click);
             // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            // 
             // SettingsDialog
             // 
+            this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 103);
@@ -105,6 +115,7 @@
             this.Name = "SettingsDialog";
             this.ShowInTaskbar = false;
             this.Text = "Settings";
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -118,5 +129,6 @@
         private System.Windows.Forms.TextBox ttpBox;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button regenKeysButton;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }
