@@ -31,9 +31,9 @@
             this.emailBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.ttpBox = new System.Windows.Forms.TextBox();
+            this.okButton = new System.Windows.Forms.Button();
+            this.regenKeysButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // emailBox
@@ -61,44 +61,44 @@
             this.label1.TabIndex = 9;
             this.label1.Text = "TTP Server: ";
             // 
-            // textBox1
+            // ttpBox
             // 
-            this.textBox1.Location = new System.Drawing.Point(86, 12);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(186, 20);
-            this.textBox1.TabIndex = 8;
+            this.ttpBox.Location = new System.Drawing.Point(86, 12);
+            this.ttpBox.Name = "ttpBox";
+            this.ttpBox.Size = new System.Drawing.Size(186, 20);
+            this.ttpBox.TabIndex = 8;
             // 
-            // button1
+            // okButton
             // 
-            this.button1.Location = new System.Drawing.Point(197, 64);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 12;
-            this.button1.Text = "OK";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.okButton.Location = new System.Drawing.Point(197, 64);
+            this.okButton.Name = "okButton";
+            this.okButton.Size = new System.Drawing.Size(75, 23);
+            this.okButton.TabIndex = 12;
+            this.okButton.Text = "OK";
+            this.okButton.UseVisualStyleBackColor = true;
+            this.okButton.Click += new System.EventHandler(this.button1_Click);
             // 
-            // button2
+            // regenKeysButton
             // 
-            this.button2.Location = new System.Drawing.Point(12, 64);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 13;
-            this.button2.Text = "Regen Keys";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.GenDSAKeysButton_Click);
+            this.regenKeysButton.Location = new System.Drawing.Point(12, 64);
+            this.regenKeysButton.Name = "regenKeysButton";
+            this.regenKeysButton.Size = new System.Drawing.Size(75, 23);
+            this.regenKeysButton.TabIndex = 13;
+            this.regenKeysButton.Text = "Regen Keys";
+            this.regenKeysButton.UseVisualStyleBackColor = true;
+            this.regenKeysButton.Click += new System.EventHandler(this.GenDSAKeysButton_Click);
             // 
             // SettingsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 103);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.regenKeysButton);
+            this.Controls.Add(this.okButton);
             this.Controls.Add(this.emailBox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.ttpBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -115,8 +115,8 @@
         private System.Windows.Forms.TextBox emailBox;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.TextBox ttpBox;
+        private System.Windows.Forms.Button okButton;
+        private System.Windows.Forms.Button regenKeysButton;
     }
 }

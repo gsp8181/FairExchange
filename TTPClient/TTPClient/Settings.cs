@@ -35,13 +35,13 @@ namespace TTPClient
         {
 
             settings.Email = this.emailBox.Text;
-            settings.TTP = this.textBox1.Text;
+            settings.TTP = this.ttpBox.Text;
         }
 
         public void LoadSettings()
         {
             emailBox.Text = settings.Email;
-            textBox1.Text = settings.TTP;
+            ttpBox.Text = settings.TTP;
 
         }
 
