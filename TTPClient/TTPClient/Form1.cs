@@ -23,7 +23,7 @@ namespace TTPClient
     public partial class Form1 : Form
     {
         WebClient syncClient = new WebClient();
-        NotifyRequest currentTipReq = null;
+        NotifyRequest currentTipReq;
         SettingsWrapper settings = new SettingsWrapper();
         //RESTClient restClient = new RESTClient(textBox1.Text);
 
@@ -36,14 +36,7 @@ namespace TTPClient
 
         private void ShowBalloonTip(int timeout, string tipTitle, string tipText, ToolTipIcon tipIcon, NotifyRequest nr = null)
         {
-            if (nr == null)
-            {
-                currentTipReq = null;
-            }
-            else
-            {
-                currentTipReq = nr;
-            }
+            currentTipReq = nr;
             notifyIcon1.ShowBalloonTip(timeout, tipTitle, tipText, tipIcon);
         }
 
@@ -70,7 +63,7 @@ namespace TTPClient
         private void getRemoteStatus_Click(object sender, EventArgs e)
         {
             var url = settings.TTP + "/rest/sessions/";
-            string input = Microsoft.VisualBasic.Interaction.InputBox("Prompt", "Title", "Default", -1, -1);
+            string input = Microsoft.VisualBasic.Interaction.InputBox("Prompt", "Title", "Default");
 
             url = url + input;
             try
@@ -95,7 +88,7 @@ namespace TTPClient
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 var filename = openFileDialog1.FileName;
-                string ip = Microsoft.VisualBasic.Interaction.InputBox("IP", "IP ADDRESS", "127.0.0.1", -1, -1); //TODO: Transition to email/ip combo?
+                string ip = Microsoft.VisualBasic.Interaction.InputBox("IP", "IP ADDRESS", "127.0.0.1"); //TODO: Transition to email/ip combo?
                 IPAddress ipObj;
                 /*if (!IPAddress.TryParse(ip,out ipObj))
                 {
@@ -136,7 +129,7 @@ namespace TTPClient
         private void createFirewallException(int port) //Stackoverflow how to diusplay windows firewall has blocked some features of this program;
         {
             IPAddress ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList[0]; //TODO: is this needed in the presence of the other listener?
-            IPEndPoint ipLocalEndPoint = new IPEndPoint(ipAddress, 6555);
+            IPEndPoint ipLocalEndPoint = new IPEndPoint(ipAddress, port);
 
             TcpListener t = new TcpListener(ipLocalEndPoint);
             t.Start();
@@ -154,9 +147,7 @@ namespace TTPClient
 
             var client = new RESTClient("http://" + currentTipReq.ip + ":6555");
             var req = new RESTRequest("/start/");
-            JObject data = new JObject();
-            data.Add("fileName",currentTipReq.fileName);
-            data.Add("email", settings.Email);
+            JObject data = new JObject {{"fileName", currentTipReq.fileName}, {"email", settings.Email}};
             req.Method = Grapevine.HttpMethod.POST;
             req.ContentType = Grapevine.ContentType.JSON;
             req.Payload = data.ToString();

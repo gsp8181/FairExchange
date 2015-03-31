@@ -31,9 +31,7 @@ namespace TTPClient
 
             var client = new RESTClient("http://" + ip + ":6555");
             var req = new RESTRequest("/notify/");
-            JObject data = new JObject();
-            data.Add("fileName", file.Name); //TODO: two names at once?! send guid?
-            data.Add("email", email);
+            JObject data = new JObject { { "fileName", file.Name }, { "email", email } };//TODO: two names at once?! send guid?
             req.Method = Grapevine.HttpMethod.POST;
             req.ContentType = Grapevine.ContentType.JSON; //TODO: async and await
             req.Payload = data.ToString();
@@ -86,13 +84,17 @@ namespace TTPClient
                 String text = sr.ReadToEnd();
 
                 var client = new RESTClient("http://" + ip + ":6555");
-                var req = new RESTRequest("/file/");
-                req.Method = Grapevine.HttpMethod.POST;
-                req.ContentType = Grapevine.ContentType.JSON;
-                JObject data = new JObject();
-                data.Add("fileName", file.Name);
-                data.Add("email", email);
-                data.Add("data", Security.Base64Encode(text));
+                var req = new RESTRequest("/file/")
+                {
+                    Method = Grapevine.HttpMethod.POST,
+                    ContentType = Grapevine.ContentType.JSON
+                };
+                JObject data = new JObject
+                {
+                    {"fileName", file.Name},
+                    {"email", email},
+                    {"data", Security.Base64Encode(text)}
+                };
                 req.Payload = data.ToString();
                 //req.Payload = text;
                 try

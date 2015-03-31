@@ -1,18 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.OpenSsl;
-using Org.BouncyCastle.Security;
-using TTPClient.Properties;
 
 namespace TTPClient
 {
@@ -59,28 +46,14 @@ namespace TTPClient
 
         private void ttpBox_Validated(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(ttpBox.Text))
-            {
-                errorProvider1.SetError(ttpBox,"TTP cannot be empty");
-            }
-            else
-            {
-                errorProvider1.SetError(ttpBox, String.Empty);
-            }
+            errorProvider1.SetError(ttpBox,
+                string.IsNullOrWhiteSpace(ttpBox.Text) ? "TTP cannot be empty" : String.Empty);
         }
 
         private void emailBox_Validated(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(emailBox.Text))
-            {
-                errorProvider1.SetError(emailBox, "Email cannot be empty");
-            }
-            else
-            {
-                errorProvider1.SetError(emailBox,String.Empty);
-            }
+            errorProvider1.SetError(emailBox,
+                string.IsNullOrWhiteSpace(emailBox.Text) ? "Email cannot be empty" : String.Empty);
         }
-
-
     }
 }

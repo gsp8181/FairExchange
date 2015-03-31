@@ -27,33 +27,26 @@ namespace TTPClient
                     email = x.Value<String>("email"); //TODO: find off tracker or reject
                     data = x.Value<String>("data");
                 }
-                catch (NullReferenceException e)
+                catch (NullReferenceException)
                 {
-                    JObject eresponse = new JObject();
-                    eresponse.Add("accepted", false);
-                    eresponse.Add("error", "malformed JSON");
+                    JObject eresponse = new JObject {{"accepted", false}, {"error", "malformed JSON"}};
                     context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     this.SendJsonResponse(context, eresponse);
                     return;
                 }
-                FileSend fs = new FileSend();
-                fs.data = Security.Base64Decode(data);
-                fs.email = email;
-                fs.fileName = filename;
+                FileSend fs = new FileSend {data = Security.Base64Decode(data), email = email, fileName = filename};
                 //this.SendTextResponse(context, x);
                 NotifyArgs args = new NotifyArgs();
                 FileRecieved(this, fs, args);
                 if (args.hasSet)
                 {
-                    JObject response = new JObject();
-                    response.Add("accepted", true); //TODO: sign!!
+                    JObject response = new JObject {{"accepted", true}};
+                    //TODO: sign!!
                     this.SendJsonResponse(context, response);
                 }
                 else
                 {
-                    JObject response = new JObject();
-                    response.Add("accepted", false);
-                    response.Add("error", "cancelled");
+                    JObject response = new JObject {{"accepted", false}, {"error", "cancelled"}};
                     context.Response.StatusCode = (int)HttpStatusCode.Gone;
                     this.SendJsonResponse(context, response);
                 }
@@ -66,8 +59,7 @@ namespace TTPClient
                 if (vars == null)
                     return;
 
-                JObject response = new JObject();
-                response.Add("accepted", true);
+                JObject response = new JObject {{"accepted", true}};
                 this.SendJsonResponse(context, response);
                 NotifyRecieved(this, vars);
 
@@ -84,19 +76,15 @@ namespace TTPClient
                 }
                 catch (NullReferenceException e)
                 {
-                    JObject eresponse = new JObject();
-                    eresponse.Add("accepted", false);
-                    eresponse.Add("error", "malformed JSON");
+                    JObject eresponse = new JObject {{"accepted", false}, {"error", "malformed JSON"}};
                     context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
                     this.SendJsonResponse(context, eresponse);
                     return null;
                 }
                 var ip = context.Request.RemoteEndPoint.Address.ToString();
 
-                var output = new NotifyRequest();
-                output.email = email; //TODO: err?
-                output.fileName = fileName;
-                output.ip = ip;
+                var output = new NotifyRequest {email = email, fileName = fileName, ip = ip};
+                //TODO: err?
                 return output;
             }
 
@@ -111,15 +99,12 @@ namespace TTPClient
                 StartTransmission(this, vars, args);
                 if (args.hasSet)
                 {
-                    JObject response = new JObject();
-                    response.Add("accepted", true);
+                    JObject response = new JObject {{"accepted", true}};
                     this.SendJsonResponse(context, response);
                 }
                 else
                 {
-                    JObject response = new JObject();
-                    response.Add("accepted", false);
-                    response.Add("error", "cancelled");
+                    JObject response = new JObject {{"accepted", false}, {"error", "cancelled"}};
                     context.Response.StatusCode = (int)HttpStatusCode.Gone;
                     this.SendJsonResponse(context, response);
                 }
