@@ -1,10 +1,12 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -78,19 +80,35 @@ namespace TTPClient
             progressBar1.Style = ProgressBarStyle.Continuous;
             progressBar1.Value = 25;
 
-            /* var stream = openFileDialog1.OpenFile(); //TODO: if not null and using!
-using (StreamReader sr = new StreamReader(stream))
-{
-String text = sr.ReadToEnd();
+            var stream = file.OpenRead(); //TODO: if not null and using!
+            using (StreamReader sr = new StreamReader(stream)) //TODO: all using for streams
+            {
+                String text = sr.ReadToEnd();
+
+                var client = new RESTClient("http://" + ip + ":6555");
+                var req = new RESTRequest("/file/");
+                req.Method = Grapevine.HttpMethod.POST;
+                req.ContentType = Grapevine.ContentType.JSON;
+                req.Payload = text;
+                try
+                {
+                     var q = client.Execute(req); //todo: IF NOT GONE
+                     if (q.StatusCode == HttpStatusCode.Gone) //TODO: this does not work as argumentnull always hits
+                     {
+                         progressBar1.Value = 0;
+                         progressBar1.Style = ProgressBarStyle.Continuous; //TODO: update label
+                         MessageBox.Show("Remote server did not accept the file", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                         this.Close();
+                         return;
+                     }
                     
-var client = new RESTClient("http://" + ip + ":6555");
-var req = new RESTRequest("/file/");
-req.Method = Grapevine.HttpMethod.POST;
-req.ContentType = Grapevine.ContentType.JSON;
-req.Payload = text;
-client.Execute(req);
-MessageBox.Show(text);
-}*/ //TODO: use async and await
+                }
+                catch (ArgumentNullException){}
+               
+            } //TODO: use async and await
+            progressBar1.Value = 50;
+            progressLabel.Text = "Sent file undefined behaviour now! :)";
+
         }
     }
 }

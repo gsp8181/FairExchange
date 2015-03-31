@@ -20,8 +20,23 @@ namespace TTPClient
             public void HandleFileRecievedRequest(HttpListenerContext context)
             {
                 var x = this.GetPayload(context.Request);
-                this.SendTextResponse(context, x);
-                FileRecieved(this, x);
+                //this.SendTextResponse(context, x);
+                NotifyArgs args = new NotifyArgs();
+                FileRecieved(this, x, args);
+                if (args.hasSet)
+                {
+                    JObject response = new JObject();
+                    response.Add("accepted", true);
+                    this.SendJsonResponse(context, response);
+                }
+                else
+                {
+                    JObject response = new JObject();
+                    response.Add("accepted", false);
+                    response.Add("error", "cancelled");
+                    context.Response.StatusCode = (int)HttpStatusCode.Gone;
+                    this.SendJsonResponse(context, response);
+                }
             }
 
             [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/notify/?$")]

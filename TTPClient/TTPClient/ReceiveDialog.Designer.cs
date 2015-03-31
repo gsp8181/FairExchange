@@ -76,6 +76,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "ReceiveDialog";
             this.Text = "ReceiveDialog";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ReceiveDialog_FormClosed);
             this.ResumeLayout(false);
             this.PerformLayout();
 

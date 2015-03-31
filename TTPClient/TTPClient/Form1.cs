@@ -30,7 +30,6 @@ namespace TTPClient
         {
             InitializeComponent();
             //MyResource.Notify += MyResource_Click;
-            MyResource.FileRecieved += MyResource_FileRecieved;
             MyResource.NotifyRecieved += MyResource_NotifyRecieved;   
         }
 
@@ -51,11 +50,6 @@ namespace TTPClient
         {
             ShowBalloonTip(60000, "Incoming File",
                 nr.email + " wants to send you " + nr.fileName + ". Click to accept", ToolTipIcon.Info, nr);
-        }
-
-        void MyResource_FileRecieved(object sender, string fileName)
-        {
-            ShowBalloonTip(5000, "File Recieved", fileName, ToolTipIcon.Info);
         }
 
         //void MyResource_Click(object sender, string myValue)
@@ -268,6 +262,13 @@ namespace TTPClient
 
             emailBox.Text = email;
             textBox1.Text = ttp;
+        }
+
+        private void quitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            //Application.Exit();
+            Environment.Exit(0);
         }
     }
 }
