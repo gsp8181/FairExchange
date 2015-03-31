@@ -9,7 +9,7 @@ namespace TTPClient
 {
     static class Program
     {
-        public static RESTServer server = new RESTServer("*","6555","http","index.html",null,5);
+        public static RESTServer server = new RESTServer("+","6555","http","index.html",null,5);
         public static Form1 form;
 
         /// <summary>

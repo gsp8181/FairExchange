@@ -156,14 +156,14 @@ namespace TTPClient
                 var filename = openFileDialog1.FileName;
                 string ip = Microsoft.VisualBasic.Interaction.InputBox("IP", "IP ADDRESS", "127.0.0.1", -1, -1); //TODO: Transition to email/ip combo?
                 IPAddress ipObj;
-                if (!IPAddress.TryParse(ip,out ipObj))
+                /*if (!IPAddress.TryParse(ip,out ipObj))
                 {
                     MessageBox.Show("Failed to parse IP");
                     return;
-                }
+                }*/
                 
                 var sendDialog = new SendDialog(ip, filename);
-                sendDialog.ShowDialog();
+                sendDialog.Show();
 
 
             }
@@ -176,15 +176,15 @@ namespace TTPClient
             Program.server.Start();
             loadProperties();
             RegWithTracker(textBox1.Text, emailBox.Text);
-            if (!Program.server.IsListening)
+            if (!Program.server.IsListening) //TODO: maybe sort out with a timer
             {
                 NetAclChecker.AddAddress("http://+:6555/");
                 Program.server.Start();
-                if (!Program.server.IsListening)
+                /*if (!Program.server.IsListening)
                 {
-                    MessageBox.Show("Could not bind port 6555", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Could not bind port 6555", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error); //todo: does not work
                     Environment.Exit(-1);
-                }
+                }*/
             }
         }
 
@@ -235,6 +235,9 @@ namespace TTPClient
             {
                 return;
             }
+            var receiveDialog = new ReceiveDialog(currentTipReq.ip, currentTipReq.fileName);
+            receiveDialog.Show();
+
             var client = new RESTClient("http://" + currentTipReq.ip + ":6555");
             var req = new RESTRequest("/start/");
             JObject data = new JObject();
@@ -244,8 +247,9 @@ namespace TTPClient
             req.ContentType = Grapevine.ContentType.JSON;
             req.Payload = data.ToString();
             var response = client.Execute(req);
-            MessageBox.Show("Status Code: " + response.StatusCode);
+            //MessageBox.Show("Status Code: " + response.StatusCode);
         }
+
         private void saveProperties()
         {
             var email = emailBox.Text;
