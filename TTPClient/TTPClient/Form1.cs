@@ -16,6 +16,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TTPClient.Properties;
 
 namespace TTPClient
 {
@@ -173,6 +174,7 @@ namespace TTPClient
             createFirewallException(6555);
             Program.server.OnStart = onServerStartNotify;
             Program.server.Start();
+            loadProperties();
             RegWithTracker(textBox1.Text, emailBox.Text);
         }
 
@@ -183,6 +185,7 @@ namespace TTPClient
 
         private void emailBox_Validated(object sender, EventArgs e)
         {
+            saveProperties();
             RegWithTracker(textBox1.Text, emailBox.Text);
         }
 
@@ -197,6 +200,7 @@ namespace TTPClient
 
         private void textBox1_Validated(object sender, EventArgs e)
         {
+            saveProperties();
             RegWithTracker(textBox1.Text,emailBox.Text);
         }
 
@@ -231,6 +235,25 @@ namespace TTPClient
             req.Payload = data.ToString();
             var response = client.Execute(req);
             MessageBox.Show("Status Code: " + response.StatusCode);
+        }
+        private void saveProperties()
+        {
+            var email = emailBox.Text;
+            var ttp = textBox1.Text;
+
+            Settings.Default["Email"] = email;
+            Settings.Default["TTP"] = ttp;
+
+            Settings.Default.Save();
+        }
+
+        private void loadProperties()
+        {
+            var email = (string)Settings.Default["Email"];
+            var ttp = (string)Settings.Default["TTP"];
+
+            emailBox.Text = email;
+            textBox1.Text = ttp;
         }
     }
 }

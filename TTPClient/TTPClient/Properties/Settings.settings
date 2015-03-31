@@ -5,5 +5,8 @@
     <Setting Name="Email" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="TTP" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://osttp.gsp8181.co.uk</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
