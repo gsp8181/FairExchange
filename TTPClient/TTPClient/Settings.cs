@@ -27,7 +27,7 @@ namespace TTPClient
         private void button1_Click(object sender, EventArgs e)
         {
             SaveSettings();
-            settings.regWithTracker();
+            settings.RegWithTracker();
             this.Close();
         }
 

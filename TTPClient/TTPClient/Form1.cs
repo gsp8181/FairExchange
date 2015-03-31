@@ -63,7 +63,7 @@ namespace TTPClient
 
         private void regWithTrackerButton_Click(object sender, EventArgs e)
         {
-            var response = settings.regWithTracker();
+            var response = settings.RegWithTracker();
             MessageBox.Show(response.ToString());
         }
 
@@ -115,7 +115,7 @@ namespace TTPClient
             createFirewallException(6555);
             Program.server.OnStart = onServerStartNotify;
             Program.server.Start();
-            settings.regWithTracker();
+            settings.RegWithTracker();
             if (!Program.server.IsListening) //TODO: maybe sort out with a timer
             {
                 NetAclChecker.AddAddress("http://+:6555/");

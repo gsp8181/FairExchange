@@ -8,47 +8,56 @@ using TTPClient.Properties;
 
 namespace TTPClient
 {
+    public interface SettingsWrapperI
+    {
+        string Email { get; set; }
+        string TTP { get; set; }
+        bool IsSet { get; }
+
+        bool RegWithTracker();
+
+        bool RegWithTracker(string email, string ttp);
+    }
+
     public class SettingsWrapper : SettingsWrapperI
     {
-        public void setEmail(string email)
+        public string Email
         {
-            throw new NotImplementedException();
+            get { return (string)Settings.Default["Email"]; }
+            set
+            {
+                Settings.Default["Email"] = value;
+                Settings.Default.Save();
+            }
         }
 
-        public void setTTP(string ttp)
+        public string TTP
         {
-            throw new NotImplementedException();
+            get { return (string)Settings.Default["TTP"]; }
+            set
+            {
+                Settings.Default["TTP"] = value;
+                Settings.Default.Save();
+            }
         }
 
-        public string loadTTP()
+        public bool IsSet
         {
-            throw new NotImplementedException();
+            get { return (!(string.IsNullOrWhiteSpace(TTP) || string.IsNullOrWhiteSpace(Email))); }
+
         }
 
-        public string loadEmail()
+        public bool RegWithTracker() //TODO: IS SET
         {
-            throw new NotImplementedException();
+            return RegWithTracker(Email, TTP);
         }
 
-        public bool isSet()
-        {
-            throw new NotImplementedException();
-        }
-
-        public  bool regWithTracker()
-        {
-            var email = (string)Settings.Default["Email"];
-            var ttp = (string)Settings.Default["TTP"];
-
-            return regWithTracker(email, ttp);
-        }
-
-        public   bool regWithTracker(string email, string tracker)
+        public bool RegWithTracker(string email, string ttp)
         {
             try
             {
                 byte[] emailBytes = System.Text.Encoding.UTF8.GetBytes(email);
-                var url = tracker + "/rest/sessions/";
+                var url = ttp + "/rest/sessions/";
                 var request = (HttpWebRequest)WebRequest.CreateHttp(url);
                 request.Method = "POST";
                 request.ContentLength = emailBytes.Length;

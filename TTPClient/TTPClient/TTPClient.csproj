@@ -99,7 +99,6 @@
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
     <Compile Include="SettingsWrapper.cs" />
-    <Compile Include="SettingsWrapperI.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
