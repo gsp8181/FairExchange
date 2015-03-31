@@ -89,7 +89,12 @@ namespace TTPClient
                 var req = new RESTRequest("/file/");
                 req.Method = Grapevine.HttpMethod.POST;
                 req.ContentType = Grapevine.ContentType.JSON;
-                req.Payload = text;
+                JObject data = new JObject();
+                data.Add("fileName", file.Name);
+                data.Add("email", email);
+                data.Add("data", Security.Base64Encode(text));
+                req.Payload = data.ToString();
+                //req.Payload = text;
                 try
                 {
                      var q = client.Execute(req); //todo: IF NOT GONE

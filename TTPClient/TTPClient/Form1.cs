@@ -60,7 +60,7 @@ namespace TTPClient
 
         private void whatMyIp_Click(object sender, EventArgs e)
         {
-            var url = textBox1.Text + "/rest/config/ip/";
+            var url = (string)Settings.Default["TTP"] + "/rest/config/ip/";
 
             var content = syncClient.DownloadString(url);
             MessageBox.Show(content);
@@ -68,11 +68,19 @@ namespace TTPClient
 
         private void regWithTrackerButton_Click(object sender, EventArgs e)
         {
-            var response = RegWithTracker(textBox1.Text, emailBox.Text);
+            var response = RegWithTracker((string)Settings.Default["TTP"], (string)Settings.Default["Email"]);
             MessageBox.Show(response.ToString());
         }
 
-        private bool RegWithTracker(string tracker, string email)
+        public static bool RegBySettings()
+        {
+            var email = (string)Settings.Default["Email"];
+            var ttp = (string)Settings.Default["TTP"];
+
+            return RegWithTracker(ttp, email);
+        }
+
+        private static bool RegWithTracker(string tracker, string email)
         {
             try
             {
@@ -97,7 +105,7 @@ namespace TTPClient
 
         private void getRemoteStatus_Click(object sender, EventArgs e)
         {
-            var url = textBox1.Text + "/rest/sessions/";
+            var url = (string)Settings.Default["TTP"] + "/rest/sessions/";
             string input = Microsoft.VisualBasic.Interaction.InputBox("Prompt", "Title", "Default", -1, -1);
 
             url = url + input;
@@ -168,8 +176,7 @@ namespace TTPClient
             createFirewallException(6555);
             Program.server.OnStart = onServerStartNotify;
             Program.server.Start();
-            loadProperties();
-            RegWithTracker(textBox1.Text, emailBox.Text);
+            RegBySettings();
             if (!Program.server.IsListening) //TODO: maybe sort out with a timer
             {
                 NetAclChecker.AddAddress("http://+:6555/");
@@ -187,27 +194,6 @@ namespace TTPClient
             ShowBalloonTip(5000, "Started", "Server started and is listening on port 6555", ToolTipIcon.Info);
         }
 
-        private void emailBox_Validated(object sender, EventArgs e)
-        {
-            saveProperties();
-            RegWithTracker(textBox1.Text, emailBox.Text);
-        }
-
-        private void emailBox_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if(e.KeyChar == (char)13)
-             {
-                 label2.Focus();
-                this.ActiveControl = null;
-            }
-        }
-
-        private void textBox1_Validated(object sender, EventArgs e)
-        {
-            saveProperties();
-            RegWithTracker(textBox1.Text,emailBox.Text);
-        }
-
         private void createFirewallException(int port) //Stackoverflow how to diusplay windows firewall has blocked some features of this program;
         {
             IPAddress ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList[0]; //TODO: is this needed in the presence of the other listener?
@@ -216,11 +202,6 @@ namespace TTPClient
             TcpListener t = new TcpListener(ipLocalEndPoint);
             t.Start();
             t.Stop();
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            new SendDialog("123", null).Show();
         }
 
         private void notifyIcon1_BalloonTipClicked_1(object sender, EventArgs e)
@@ -236,7 +217,7 @@ namespace TTPClient
             var req = new RESTRequest("/start/");
             JObject data = new JObject();
             data.Add("fileName",currentTipReq.fileName);
-            data.Add("email", emailBox.Text);
+            data.Add("email", (string)Settings.Default["Email"]);
             req.Method = Grapevine.HttpMethod.POST;
             req.ContentType = Grapevine.ContentType.JSON;
             req.Payload = data.ToString();
@@ -244,31 +225,16 @@ namespace TTPClient
             //MessageBox.Show("Status Code: " + response.StatusCode);
         }
 
-        private void saveProperties()
-        {
-            var email = emailBox.Text;
-            var ttp = textBox1.Text;
-
-            Settings.Default["Email"] = email;
-            Settings.Default["TTP"] = ttp;
-
-            Settings.Default.Save();
-        }
-
-        private void loadProperties()
-        {
-            var email = (string)Settings.Default["Email"];
-            var ttp = (string)Settings.Default["TTP"];
-
-            emailBox.Text = email;
-            textBox1.Text = ttp;
-        }
-
         private void quitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
             //Application.Exit();
             Environment.Exit(0);
+        }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new SettingsDialog().ShowDialog();
         }
     }
 }

@@ -23,9 +23,9 @@ namespace TTPClient
             MyResource.FileRecieved += MyResource_FileRecieved;
         }
 
-        private void MyResource_FileRecieved(object sender, string fileName, NotifyArgs callbackArgs)
+        private void MyResource_FileRecieved(object sender, FileSend file, NotifyArgs callbackArgs)
         {
-            if (this.fileName == fileName)
+            if (this.fileName == file.fileName)
             {
                 callbackArgs.hasSet = true;
             }

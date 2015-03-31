@@ -10,7 +10,7 @@ namespace TTPClient
     static class Program
     {
         public static RESTServer server = new RESTServer("+","6555","http","index.html",null,5);
-        public static Form1 form;
+        public static Context form;
 
         /// <summary>
         /// The main entry point for the application.
@@ -20,7 +20,7 @@ namespace TTPClient
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(form = new Form1());
+            Application.Run(form = new Context());
         }
     }
 }

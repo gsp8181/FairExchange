@@ -58,6 +58,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Context.cs" />
+    <Compile Include="FileSend.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -77,11 +79,18 @@
     </Compile>
     <Compile Include="res.cs" />
     <Compile Include="res.Events.cs" />
+    <Compile Include="Security.cs" />
     <Compile Include="SendDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SendDialog.Designer.cs">
       <DependentUpon>SendDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Settings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Settings.Designer.cs">
+      <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
@@ -100,6 +109,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SendDialog.resx">
       <DependentUpon>SendDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Settings.resx">
+      <DependentUpon>Settings.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

@@ -19,14 +19,34 @@ namespace TTPClient
             [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/file/?$")]
             public void HandleFileRecievedRequest(HttpListenerContext context)
             {
-                var x = this.GetPayload(context.Request);
+                var x = this.GetJsonPayload(context.Request);
+                string filename, email, data;
+                try
+                {
+                    filename = x.Value<String>("fileName");
+                    email = x.Value<String>("email"); //TODO: find off tracker or reject
+                    data = x.Value<String>("data");
+                }
+                catch (NullReferenceException e)
+                {
+                    JObject eresponse = new JObject();
+                    eresponse.Add("accepted", false);
+                    eresponse.Add("error", "malformed JSON");
+                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    this.SendJsonResponse(context, eresponse);
+                    return;
+                }
+                FileSend fs = new FileSend();
+                fs.data = Security.Base64Decode(data);
+                fs.email = email;
+                fs.fileName = filename;
                 //this.SendTextResponse(context, x);
                 NotifyArgs args = new NotifyArgs();
-                FileRecieved(this, x, args);
+                FileRecieved(this, fs, args);
                 if (args.hasSet)
                 {
                     JObject response = new JObject();
-                    response.Add("accepted", true);
+                    response.Add("accepted", true); //TODO: sign!!
                     this.SendJsonResponse(context, response);
                 }
                 else
