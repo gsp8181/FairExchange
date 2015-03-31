@@ -64,6 +64,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="NetAclChecker.cs" />
     <Compile Include="NotifyArgs.cs" />
     <Compile Include="NotifyRequest.cs" />
     <Compile Include="Program.cs" />

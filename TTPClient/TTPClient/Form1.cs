@@ -176,6 +176,16 @@ namespace TTPClient
             Program.server.Start();
             loadProperties();
             RegWithTracker(textBox1.Text, emailBox.Text);
+            if (!Program.server.IsListening)
+            {
+                NetAclChecker.AddAddress("http://+:6555/");
+                Program.server.Start();
+                if (!Program.server.IsListening)
+                {
+                    MessageBox.Show("Could not bind port 6555", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Environment.Exit(-1);
+                }
+            }
         }
 
         private void onServerStartNotify()
