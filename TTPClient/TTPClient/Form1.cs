@@ -55,7 +55,7 @@ namespace TTPClient
 
         private void whatMyIp_Click(object sender, EventArgs e)
         {
-            var url = (string)Settings.Default["TTP"] + "/rest/config/ip/";
+            var url = settings.TTP + "/rest/config/ip/";
 
             var content = syncClient.DownloadString(url);
             MessageBox.Show(content);
@@ -69,7 +69,7 @@ namespace TTPClient
 
         private void getRemoteStatus_Click(object sender, EventArgs e)
         {
-            var url = (string)Settings.Default["TTP"] + "/rest/sessions/";
+            var url = settings.TTP + "/rest/sessions/";
             string input = Microsoft.VisualBasic.Interaction.InputBox("Prompt", "Title", "Default", -1, -1);
 
             url = url + input;
@@ -156,7 +156,7 @@ namespace TTPClient
             var req = new RESTRequest("/start/");
             JObject data = new JObject();
             data.Add("fileName",currentTipReq.fileName);
-            data.Add("email", (string)Settings.Default["Email"]);
+            data.Add("email", settings.Email);
             req.Method = Grapevine.HttpMethod.POST;
             req.ContentType = Grapevine.ContentType.JSON;
             req.Payload = data.ToString();

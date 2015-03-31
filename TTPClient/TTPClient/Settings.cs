@@ -34,16 +34,14 @@ namespace TTPClient
         public void SaveSettings()
         {
 
-            Settings.Default["Email"] = this.emailBox.Text;
-            Settings.Default["TTP"] = this.textBox1.Text;
-
-            Settings.Default.Save();
+            settings.Email = this.emailBox.Text;
+            settings.TTP = this.textBox1.Text;
         }
 
         public void LoadSettings()
         {
-            emailBox.Text = (string) Settings.Default["Email"];
-            textBox1.Text = (string) Settings.Default["TTP"];
+            emailBox.Text = settings.Email;
+            textBox1.Text = settings.TTP;
 
         }
 
