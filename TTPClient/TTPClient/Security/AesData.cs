@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TTPClient.Security
 {
-    class AesData
+    public class AesData
     {
         public AesKeys Key { get; set; }
 

@@ -24,8 +24,8 @@ namespace TTPClient
         public SendDialog(string ip, string fileName)
         {
             InitializeComponent();
-            MyResource.StartTransmission += MyResource_StartTransmission;
-            MyResource.StartTransmissionAndRespSent += MyResource_StartTransmissionAndRespSent;
+            ClientRestApi.StartTransmission += MyResource_StartTransmission;
+            ClientRestApi.StartTransmissionAndRespSent += MyResource_StartTransmissionAndRespSent;
             this.ip = ip;
             this.file = new FileInfo(fileName);
 
@@ -67,8 +67,8 @@ namespace TTPClient
 
         private void SendDialog_FormClosed(object sender, FormClosedEventArgs e)
         {
-            MyResource.StartTransmission -= MyResource_StartTransmission;
-            MyResource.StartTransmissionAndRespSent -= MyResource_StartTransmissionAndRespSent;
+            ClientRestApi.StartTransmission -= MyResource_StartTransmission;
+            ClientRestApi.StartTransmissionAndRespSent -= MyResource_StartTransmissionAndRespSent;
             this.Dispose();
             //file.Close();
         }

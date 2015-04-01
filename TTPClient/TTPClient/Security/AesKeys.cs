@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 
 namespace TTPClient.Security
 {
-    class AesKeys
+    public class AesKeys
     {
         public string keyStr { get { return Convert.ToBase64String(Key); }
             set { Key = Convert.FromBase64String(value); }

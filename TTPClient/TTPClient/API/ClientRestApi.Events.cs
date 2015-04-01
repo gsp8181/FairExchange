@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TTPClient
 {
-    public sealed partial class MyResource
+    public sealed partial class ClientRestApi
     {
         //public delegate void NotifyHandler(object sender, string myValue);
         //public static event NotifyHandler Notify = delegate { };

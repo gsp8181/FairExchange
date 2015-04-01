@@ -32,8 +32,8 @@ namespace TTPClient
         public Form1()
         {
             InitializeComponent();
-            //MyResource.Notify += MyResource_Click;
-            MyResource.NotifyRecieved += MyResource_NotifyRecieved;   
+            //ClientRestApi.Notify += MyResource_Click;
+            ClientRestApi.NotifyRecieved += MyResource_NotifyRecieved;   
         }
 
         private void ShowBalloonTip(int timeout, string tipTitle, string tipText, ToolTipIcon tipIcon, NotifyRequest nr = null)

@@ -3,7 +3,7 @@ using System.Text;
 
 namespace TTPClient.Security
 {
-    class Base64
+    public class Base64
     {
         public static string Base64Encode(string plainText)
         {

@@ -10,7 +10,7 @@ using Org.BouncyCastle.Security;
 
 namespace TTPClient.Security
 {
-    static class Rsa
+    public static class Rsa
     {
         private static CspParameters csparams = new CspParameters(1) { KeyContainerName = "ttpclient" };
 
@@ -43,7 +43,7 @@ namespace TTPClient.Security
 
         public static EncryptedData EncryptData(string data, RSACryptoServiceProvider rsa) //TODO: this encrypts to self
         {
-            var ad = AES.Encrypt(data);
+            var ad = Aes.Encrypt(data);
 
             var keyStr = ad.Key.ToString();
 
@@ -140,7 +140,7 @@ namespace TTPClient.Security
                 var aeskey = keyObj.Value<string>("key");
                 var aesiv = keyObj.Value<string>("iv");
 
-                return AES.Decrypt(payload, aeskey, aesiv);
+                return Aes.Decrypt(payload, aeskey, aesiv);
         }
 
         public static string DecryptKey(string encryptedKey)

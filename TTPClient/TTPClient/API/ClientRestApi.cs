@@ -14,7 +14,7 @@ using TTPClient.Security;
 namespace TTPClient
 {
 
-        public sealed partial class MyResource : RESTResource
+        public sealed partial class ClientRestApi : RESTResource
         {
 
 

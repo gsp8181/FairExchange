@@ -59,12 +59,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context.cs" />
-    <Compile Include="Security\AES.cs" />
+    <Compile Include="Security\Aes.cs" />
     <Compile Include="Security\AesData.cs" />
     <Compile Include="Security\AesKeys.cs" />
     <Compile Include="Security\Base64.cs" />
     <Compile Include="Security\EncryptedData.cs" />
-    <Compile Include="FileSend.cs" />
+    <Compile Include="API\FileSend.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,8 +72,8 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="NotMyCode\NetAclChecker.cs" />
-    <Compile Include="NotifyArgs.cs" />
-    <Compile Include="NotifyRequest.cs" />
+    <Compile Include="API\NotifyArgs.cs" />
+    <Compile Include="API\NotifyRequest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReceiveDialog.cs">
@@ -83,8 +83,8 @@
       <DependentUpon>ReceiveDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="NotMyCode\RegexUtilities.cs" />
-    <Compile Include="res.cs" />
-    <Compile Include="res.Events.cs" />
+    <Compile Include="API\ClientRestApi.cs" />
+    <Compile Include="API\ClientRestApi.Events.cs" />
     <Compile Include="Security\RSASecurity.cs" />
     <Compile Include="SendDialog.cs">
       <SubType>Form</SubType>
@@ -146,9 +146,7 @@
   <ItemGroup>
     <Content Include="Icojam-Blue-Bits-Document-arrow-down.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="API\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -24,8 +24,8 @@ namespace TTPClient
             progressLabel.Text += fileName;
             this.ip = ip;
             this.fileName = fileName;
-            MyResource.FileRecieved += MyResource_FileRecieved;
-            MyResource.FileRecievedAndRespSent += MyResource_FileRecievedAndRespSent;
+            ClientRestApi.FileRecieved += MyResource_FileRecieved;
+            ClientRestApi.FileRecievedAndRespSent += MyResource_FileRecievedAndRespSent;
             backgroundWorker1.RunWorkerAsync();
         }
 
@@ -58,8 +58,8 @@ namespace TTPClient
 
         private void ReceiveDialog_FormClosed(object sender, FormClosedEventArgs e)
         {
-            MyResource.FileRecieved -= MyResource_FileRecieved;
-            MyResource.FileRecievedAndRespSent -= MyResource_FileRecievedAndRespSent;
+            ClientRestApi.FileRecieved -= MyResource_FileRecieved;
+            ClientRestApi.FileRecievedAndRespSent -= MyResource_FileRecievedAndRespSent;
             this.Dispose();
         }
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TTPClient.Security
 {
-    class AES
+    public class Aes
     {
         public static string Decrypt(string payload, byte[] aeskey, byte[] aesiv)
         {

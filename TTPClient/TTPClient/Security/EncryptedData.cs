@@ -2,7 +2,7 @@
 
 namespace TTPClient.Security
 {
-    class EncryptedData
+    public class EncryptedData
     {
         public string Data { get; set; }
 
