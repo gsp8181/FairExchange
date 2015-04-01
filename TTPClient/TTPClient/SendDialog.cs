@@ -98,15 +98,17 @@ namespace TTPClient
                 };
                 req.Payload = data.ToString();
                 //req.Payload = text;
-                var q = client.Execute(req); //todo: IF ACCEPTED = TRUE
-                if (q.StatusCode == HttpStatusCode.Gone) //TODO: this does not work as argumentnull always hits
+                var response = client.Execute(req);
+                if (response.ReturnedError || !string.IsNullOrEmpty(response.Error)) //TODO: accepted? TODO: better response checking for example timeout
                 {
                     progressBar1.Value = 0;
                     progressBar1.Style = ProgressBarStyle.Continuous; //TODO: update label
-                    MessageBox.Show("Remote server did not accept the file", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Remote server did not accept the file" + Environment.NewLine + response.Error, "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     this.Close();
                     return;
                 }
+                var json = new JObject(response.Content);
+                MessageBox.Show(json.Value<string>("signature"));
 
 
             } //TODO: use async and await
