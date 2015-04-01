@@ -37,7 +37,7 @@ namespace TTPClient
         private void ShowBalloonTip(int timeout, string tipTitle, string tipText, ToolTipIcon tipIcon, NotifyRequest nr = null)
         {
             currentTipReq = nr;
-            notifyIcon1.ShowBalloonTip(timeout, tipTitle, tipText, tipIcon);
+            notifyIcon.ShowBalloonTip(timeout, tipTitle, tipText, tipIcon);
         }
 
         private void MyResource_NotifyRecieved(object sender, NotifyRequest nr)
@@ -81,26 +81,6 @@ namespace TTPClient
         private void PortOpenButton_Click(object sender, EventArgs e)
         {
 
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                var filename = openFileDialog1.FileName;
-                string ip = Microsoft.VisualBasic.Interaction.InputBox("IP", "IP ADDRESS", "127.0.0.1"); //TODO: Transition to email/ip combo?
-                IPAddress ipObj;
-                /*if (!IPAddress.TryParse(ip,out ipObj))
-                {
-                    MessageBox.Show("Failed to parse IP");
-                    return;
-                }*/
-                
-                var sendDialog = new SendDialog(ip, filename);
-                sendDialog.Show();
-
-
-            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -173,6 +153,11 @@ namespace TTPClient
             {
                 so.ShowDialog();
             }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            SettingsWrapper.Instance.RegWithTracker();
         }
     }
 }

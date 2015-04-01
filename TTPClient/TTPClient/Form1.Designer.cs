@@ -34,15 +34,13 @@
             this.regWithTrackerButton = new System.Windows.Forms.Button();
             this.PortOpenButton = new System.Windows.Forms.Button();
             this.getRemoteStatus = new System.Windows.Forms.Button();
-            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.button1 = new System.Windows.Forms.Button();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.contextMenuStrip1.SuspendLayout();
+            this.regTimer = new System.Windows.Forms.Timer(this.components);
+            this.notifyIconMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // whatsMyIpButton
@@ -85,22 +83,22 @@
             this.getRemoteStatus.UseVisualStyleBackColor = true;
             this.getRemoteStatus.Click += new System.EventHandler(this.getRemoteStatus_Click);
             // 
-            // notifyIcon1
+            // notifyIcon
             // 
-            this.notifyIcon1.ContextMenuStrip = this.contextMenuStrip1;
-            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
-            this.notifyIcon1.Text = "notifyIcon1";
-            this.notifyIcon1.Visible = true;
-            this.notifyIcon1.BalloonTipClicked += new System.EventHandler(this.notifyIcon1_BalloonTipClicked_1);
+            this.notifyIcon.ContextMenuStrip = this.notifyIconMenu;
+            this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
+            this.notifyIcon.Text = "TTP Client";
+            this.notifyIcon.Visible = true;
+            this.notifyIcon.BalloonTipClicked += new System.EventHandler(this.notifyIcon1_BalloonTipClicked_1);
             // 
-            // contextMenuStrip1
+            // notifyIconMenu
             // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.notifyIconMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.startToolStripMenuItem,
             this.quitToolStripMenuItem,
             this.settingsToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(117, 70);
+            this.notifyIconMenu.Name = "contextMenuStrip1";
+            this.notifyIconMenu.Size = new System.Drawing.Size(117, 70);
             // 
             // startToolStripMenuItem
             // 
@@ -123,30 +121,16 @@
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
-            // button1
+            // regTimer
             // 
-            this.button1.Location = new System.Drawing.Point(197, 85);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 10;
-            this.button1.Text = "Send";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.FileName = "openFileDialog1";
-            // 
-            // timer1
-            // 
-            this.timer1.Interval = 600000;
+            this.regTimer.Interval = 600000;
+            this.regTimer.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.getRemoteStatus);
             this.Controls.Add(this.PortOpenButton);
             this.Controls.Add(this.regWithTrackerButton);
@@ -155,7 +139,7 @@
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.contextMenuStrip1.ResumeLayout(false);
+            this.notifyIconMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -166,14 +150,12 @@
         private System.Windows.Forms.Button regWithTrackerButton;
         private System.Windows.Forms.Button PortOpenButton;
         private System.Windows.Forms.Button getRemoteStatus;
-        private System.Windows.Forms.NotifyIcon notifyIcon1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.NotifyIcon notifyIcon;
+        private System.Windows.Forms.ContextMenuStrip notifyIconMenu;
         private System.Windows.Forms.ToolStripMenuItem startToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer regTimer;
     }
 }
 
