@@ -33,7 +33,6 @@
             this.whatsMyIpButton = new System.Windows.Forms.Button();
             this.regWithTrackerButton = new System.Windows.Forms.Button();
             this.PortOpenButton = new System.Windows.Forms.Button();
-            this.getRemoteStatus = new System.Windows.Forms.Button();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -73,16 +72,6 @@
             this.PortOpenButton.Text = "6555 Open?";
             this.PortOpenButton.UseVisualStyleBackColor = true;
             this.PortOpenButton.Click += new System.EventHandler(this.PortOpenButton_Click);
-            // 
-            // getRemoteStatus
-            // 
-            this.getRemoteStatus.Location = new System.Drawing.Point(12, 173);
-            this.getRemoteStatus.Name = "getRemoteStatus";
-            this.getRemoteStatus.Size = new System.Drawing.Size(106, 23);
-            this.getRemoteStatus.TabIndex = 3;
-            this.getRemoteStatus.Text = "Get IP";
-            this.getRemoteStatus.UseVisualStyleBackColor = true;
-            this.getRemoteStatus.Click += new System.EventHandler(this.getRemoteStatus_Click);
             // 
             // notifyIcon
             // 
@@ -143,7 +132,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.getRemoteStatus);
             this.Controls.Add(this.PortOpenButton);
             this.Controls.Add(this.regWithTrackerButton);
             this.Controls.Add(this.whatsMyIpButton);
@@ -161,7 +149,6 @@
         private System.Windows.Forms.Button whatsMyIpButton;
         private System.Windows.Forms.Button regWithTrackerButton;
         private System.Windows.Forms.Button PortOpenButton;
-        private System.Windows.Forms.Button getRemoteStatus;
         private System.Windows.Forms.NotifyIcon notifyIcon;
         private System.Windows.Forms.ContextMenuStrip notifyIconMenu;
         private System.Windows.Forms.ToolStripMenuItem startToolStripMenuItem;

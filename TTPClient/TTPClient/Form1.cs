@@ -60,24 +60,6 @@ namespace TTPClient
             MessageBox.Show(response.ToString());
         }
 
-        private void getRemoteStatus_Click(object sender, EventArgs e)
-        {
-            var url = settings.TTP + "/rest/sessions/";
-            string input = Microsoft.VisualBasic.Interaction.InputBox("Prompt", "Title", "Default");
-
-            url = url + input;
-            try
-            {
-                var content = syncClient.DownloadString(url);
-                MessageBox.Show(content);
-            }
-            catch (WebException ex)
-            {
-                MessageBox.Show("Could not find. " + ex.Message);
-            }
-
-        }
-
         private void PortOpenButton_Click(object sender, EventArgs e)
         {
 
