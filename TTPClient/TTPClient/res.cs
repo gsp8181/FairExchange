@@ -8,6 +8,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using TTPClient.Security;
 
 namespace TTPClient
 {
@@ -34,7 +35,7 @@ namespace TTPClient
                     this.SendJsonResponse(context, eresponse);
                     return;
                 }
-                FileSend fs = new FileSend {data = Security.Base64Decode(data), email = email, fileName = filename};
+                FileSend fs = new FileSend {data = Base64.Base64Decode(data), email = email, fileName = filename};
                 //this.SendTextResponse(context, x);
                 NotifyArgs args = new NotifyArgs();
                 FileRecieved(this, fs, args);
@@ -113,7 +114,7 @@ namespace TTPClient
             [RESTRoute(Method = HttpMethod.GET, PathInfo = @"^/key/?$")]
             public void HandleGetKeyRequest(HttpListenerContext context)
             {
-                this.SendTextResponse(context, Security.getPublicKey());
+                this.SendTextResponse(context, Rsa.getPublicKey());
             }
 
 #if DEBUG
@@ -124,7 +125,7 @@ namespace TTPClient
                 var data = payload.Value<string>("data");
                 var key = payload.Value<string>("key");
                 context.Response.ContentType = "text/plain";
-                this.SendTextResponse(context, Security.DecryptData(data,key));
+                this.SendTextResponse(context, Rsa.DecryptData(data,key));
             }
 
             [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/encrypt/?$")]
@@ -133,7 +134,7 @@ namespace TTPClient
                 //JObject response = new JObject();
                 //response.Add("Key",key);
                 //response.Add("data", data);
-                this.SendJsonResponse(context,Security.EncryptData(this.GetPayload(context.Request)));
+                this.SendJsonResponse(context,Rsa.EncryptData(this.GetPayload(context.Request)));
             }
             [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/encryptTo/?$")]
             public void HandleEncryptToRequest(HttpListenerContext context)
@@ -141,7 +142,7 @@ namespace TTPClient
                 var payload = JObject.Parse(this.GetPayload(context.Request));
                 var data = payload.Value<string>("data");
                 var key = payload.Value<string>("key");
-                this.SendJsonResponse(context, Security.EncryptData(data,key));
+                this.SendJsonResponse(context, Rsa.EncryptData(data,key));
             }
 #endif
 

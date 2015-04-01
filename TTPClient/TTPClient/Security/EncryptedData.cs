@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace TTPClient
+namespace TTPClient.Security
 {
     class EncryptedData
     {

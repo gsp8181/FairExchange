@@ -17,6 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TTPClient.Properties;
+using TTPClient.Security;
 
 namespace TTPClient
 {
@@ -144,7 +145,7 @@ namespace TTPClient
 
         private void button1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(Security.getPublicKey())
+            MessageBox.Show(Rsa.getPublicKey())
             ;
         }
     }

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Grapevine.Client;
 using Newtonsoft.Json.Linq;
+using TTPClient.Security;
 
 namespace TTPClient
 {
@@ -93,7 +94,7 @@ namespace TTPClient
                 {
                     {"fileName", file.Name},
                     {"email", email},
-                    {"data", Security.Base64Encode(text)}
+                    {"data", Base64.Base64Encode(text)}
                 };
                 req.Payload = data.ToString();
                 //req.Payload = text;

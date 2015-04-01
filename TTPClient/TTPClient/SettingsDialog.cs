@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using TTPClient.Security;
 
 namespace TTPClient
 {
@@ -40,7 +41,7 @@ namespace TTPClient
 
         private void GenDSAKeysButton_Click(object sender, EventArgs e)
         {
-            Security.Regenerate_RSA();
+            Rsa.Regenerate_RSA();
             MessageBox.Show("Regenerated Keys", "Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 

@@ -59,7 +59,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context.cs" />
-    <Compile Include="EncryptedData.cs" />
+    <Compile Include="Security\Base64.cs" />
+    <Compile Include="Security\EncryptedData.cs" />
     <Compile Include="FileSend.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -81,7 +82,7 @@
     <Compile Include="RegexUtilities.cs" />
     <Compile Include="res.cs" />
     <Compile Include="res.Events.cs" />
-    <Compile Include="Security.cs" />
+    <Compile Include="Security\RSASecurity.cs" />
     <Compile Include="SendDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -141,6 +142,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icojam-Blue-Bits-Document-arrow-down.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="API\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
