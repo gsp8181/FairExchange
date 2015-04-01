@@ -68,7 +68,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="NetAclChecker.cs" />
+    <Compile Include="NotMyCode\NetAclChecker.cs" />
     <Compile Include="NotifyArgs.cs" />
     <Compile Include="NotifyRequest.cs" />
     <Compile Include="Program.cs" />
@@ -79,7 +79,7 @@
     <Compile Include="ReceiveDialog.Designer.cs">
       <DependentUpon>ReceiveDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="RegexUtilities.cs" />
+    <Compile Include="NotMyCode\RegexUtilities.cs" />
     <Compile Include="res.cs" />
     <Compile Include="res.Events.cs" />
     <Compile Include="Security\RSASecurity.cs" />
