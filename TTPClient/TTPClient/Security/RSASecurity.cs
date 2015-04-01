@@ -41,15 +41,6 @@ namespace TTPClient.Security
             }
         }
 
-        public static string SignData(string data)
-        {
-            using (var rsa = new RSACryptoServiceProvider(2048, csparams))
-            {
-                throw new NotImplementedException();
-                //return rsa.SignData(Encoding.UTF8.GetBytes(data)).ToString();
-            }
-        }
-
         public static EncryptedData EncryptData(string data, RSACryptoServiceProvider rsa) //TODO: this encrypts to self
         {
             var ad = AES.Encrypt(data);
@@ -64,6 +55,29 @@ namespace TTPClient.Security
             return output;
 
 
+        }
+
+        public static bool VerifySignature(string data, string signature, string pubKey)
+        {
+                var RSAKeyInfo = GetPublicKeyParams(pubKey);
+
+                using (var rsa = new RSACryptoServiceProvider())
+                {
+                    rsa.PersistKeyInCsp = false;
+                    rsa.ImportParameters(RSAKeyInfo);
+                    return false;
+                    //return rsa.VerifyData(data, rsa);
+                }
+        }
+
+        public static string SignData(string data)
+        {
+            using (var rsa = new RSACryptoServiceProvider(2048, csparams))
+            {
+                var bytes = Encoding.UTF8.GetBytes(data);
+                var signature = rsa.SignData(bytes, new SHA1CryptoServiceProvider());
+                return Convert.ToBase64String(signature);
+            }
         }
 
         private static string EncryptKey(RSACryptoServiceProvider rsa, string keyStr)
@@ -84,13 +98,7 @@ namespace TTPClient.Security
 
         public static EncryptedData EncryptData(string data, string key)
         {
-            var keyStream = new MemoryStream(Encoding.UTF8.GetBytes(key ?? ""));
-            var keyStreamReader = new StreamReader(keyStream);
-            var pemRead = new PemReader(keyStreamReader);
-            var keyParameter = (AsymmetricKeyParameter)pemRead.ReadObject();
-            RsaKeyParameters rsaKeyParameters = (RsaKeyParameters)keyParameter;
-
-            RSAParameters RSAKeyInfo = DotNetUtilities.ToRSAParameters(rsaKeyParameters);
+            var RSAKeyInfo = GetPublicKeyParams(key);
 
             using (var rsa = new RSACryptoServiceProvider())
             {
@@ -98,6 +106,18 @@ namespace TTPClient.Security
                 rsa.ImportParameters(RSAKeyInfo);
                 return EncryptData(data, rsa);
             }
+        }
+
+        private static RSAParameters GetPublicKeyParams(string pemKey)
+        {
+            var keyStream = new MemoryStream(Encoding.UTF8.GetBytes(pemKey ?? ""));
+            var keyStreamReader = new StreamReader(keyStream);
+            var pemRead = new PemReader(keyStreamReader);
+            var keyParameter = (AsymmetricKeyParameter) pemRead.ReadObject();
+            RsaKeyParameters rsaKeyParameters = (RsaKeyParameters) keyParameter;
+
+            RSAParameters rsaKeyInfo = DotNetUtilities.ToRSAParameters(rsaKeyParameters);
+            return rsaKeyInfo;
         }
 
         public static string DecryptData(string payload, string key)

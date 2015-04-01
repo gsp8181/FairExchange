@@ -136,6 +136,13 @@ namespace TTPClient
                 //response.Add("data", data);
                 this.SendJsonResponse(context,Rsa.EncryptData(this.GetPayload(context.Request)));
             }
+
+            [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/sign/?$")]
+            public void HandleSignRequest(HttpListenerContext context)
+            {
+                context.Response.ContentType = "text/plain";
+                this.SendTextResponse(context,Rsa.SignData(this.GetPayload(context.Request)));
+            }
             [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/encryptTo/?$")]
             public void HandleEncryptToRequest(HttpListenerContext context)
             {
