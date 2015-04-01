@@ -5,7 +5,7 @@ namespace TTPClient
 {
     public partial class SettingsDialog : Form
     {
-        private SettingsWrapper settings = new SettingsWrapper();
+        private SettingsWrapper settings = SettingsWrapper.Instance;
         public SettingsDialog() //TODO: cancelbutton, regen enabled as a boolean [default true]
         {
             InitializeComponent();

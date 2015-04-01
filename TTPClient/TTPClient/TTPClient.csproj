@@ -77,6 +77,7 @@
     <Compile Include="ReceiveDialog.Designer.cs">
       <DependentUpon>ReceiveDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="RegexUtilities.cs" />
     <Compile Include="res.cs" />
     <Compile Include="res.Events.cs" />
     <Compile Include="Security.cs" />

@@ -7,16 +7,17 @@ namespace TTPClient
     public class Context : ApplicationContext
     {
         public Form1 form1;
-        public SettingsWrapper settings = new SettingsWrapper();
         public Context()
         {
-            while (!settings.IsSet)
+            while (!SettingsWrapper.Instance.IsSet)
             {
                 using (SettingsDialog dialog = new SettingsDialog())
                 {
-                    dialog.ShowDialog();
+                    dialog.ShowDialog(); //TODO: if cancel then quit
                 }
             }
+
+            SettingsWrapper.Instance.RegWithTracker();
 
             form1 = new Form1();
             this.MainForm = form1;

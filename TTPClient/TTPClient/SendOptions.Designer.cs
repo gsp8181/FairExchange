@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -38,6 +39,8 @@
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.browseButton = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // textBox1
@@ -46,6 +49,7 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(199, 20);
             this.textBox1.TabIndex = 0;
+            this.textBox1.Validated += new System.EventHandler(this.textBox1_Validated);
             // 
             // label1
             // 
@@ -114,6 +118,7 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(118, 20);
             this.textBox2.TabIndex = 7;
+            this.textBox2.Validated += new System.EventHandler(this.textBox2_Validated);
             // 
             // browseButton
             // 
@@ -129,6 +134,10 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
+            // 
+            // errorProvider
+            // 
+            this.errorProvider.ContainerControl = this;
             // 
             // SendOptions
             // 
@@ -151,6 +160,7 @@
             this.MinimizeBox = false;
             this.Name = "SendOptions";
             this.Text = "SendOptions";
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -168,5 +178,6 @@
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Button browseButton;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.ErrorProvider errorProvider;
     }
 }

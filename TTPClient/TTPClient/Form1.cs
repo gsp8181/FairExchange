@@ -24,7 +24,7 @@ namespace TTPClient
     {
         WebClient syncClient = new WebClient();
         NotifyRequest currentTipReq;
-        SettingsWrapper settings = new SettingsWrapper();
+        SettingsWrapper settings = SettingsWrapper.Instance;
         //RESTClient restClient = new RESTClient(textBox1.Text);
 
         public Form1()
