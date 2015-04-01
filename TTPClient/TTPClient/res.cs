@@ -41,8 +41,8 @@ namespace TTPClient
                 FileRecieved(this, fs, args);
                 if (args.hasSet)
                 {
-                    JObject response = new JObject {{"accepted", true}};
-                    //TODO: sign!!
+                    var sig = Rsa.SignData(Base64.Base64Decode(data));
+                    JObject response = new JObject {{"accepted", true}, {"signature", sig}};
                     this.SendJsonResponse(context, response);
                 }
                 else

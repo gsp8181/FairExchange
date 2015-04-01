@@ -47,15 +47,15 @@ namespace TTPClient
             if (addrSender.fileName != file.Name)
                 return;
             callbackArgs.hasSet = true; //TODO: check filename and dispatch another thread which updates progress, maybe have a positive event firing
-            this.Invoke((MethodInvoker) delegate
+            this.Invoke((MethodInvoker)delegate
             {
                 timer1.Stop();
                 timer2_Tick();
             });
             //timer1.Stop();
-            
+
             //timer2.Start();
-            
+
         }
 
         private void SendDialog_FormClosed(object sender, FormClosedEventArgs e)
@@ -98,21 +98,17 @@ namespace TTPClient
                 };
                 req.Payload = data.ToString();
                 //req.Payload = text;
-                try
+                var q = client.Execute(req); //todo: IF ACCEPTED = TRUE
+                if (q.StatusCode == HttpStatusCode.Gone) //TODO: this does not work as argumentnull always hits
                 {
-                     var q = client.Execute(req); //todo: IF ACCEPTED = TRUE
-                     if (q.StatusCode == HttpStatusCode.Gone) //TODO: this does not work as argumentnull always hits
-                     {
-                         progressBar1.Value = 0;
-                         progressBar1.Style = ProgressBarStyle.Continuous; //TODO: update label
-                         MessageBox.Show("Remote server did not accept the file", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                         this.Close();
-                         return;
-                     }
-                    
+                    progressBar1.Value = 0;
+                    progressBar1.Style = ProgressBarStyle.Continuous; //TODO: update label
+                    MessageBox.Show("Remote server did not accept the file", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.Close();
+                    return;
                 }
-                catch (ArgumentNullException){}
-               
+
+
             } //TODO: use async and await
             progressBar1.Value = 50;
             progressLabel.Text = "Sent file undefined behaviour now! :)";

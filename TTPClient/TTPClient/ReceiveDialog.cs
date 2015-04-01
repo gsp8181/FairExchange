@@ -27,10 +27,11 @@ namespace TTPClient
 
         private void MyResource_FileRecieved(object sender, FileSend file, NotifyArgs callbackArgs)
         {
-            if (this.fileName == file.fileName) //TODO: email!! or guid!
+            if (this.fileName != file.fileName) //TODO: email!! or guid!
             {
-                callbackArgs.hasSet = true;
+                return;
             }
+            callbackArgs.hasSet = true;
             using (StreamWriter sw = new StreamWriter(localFile.OpenWrite())) //TODO: on another thread
             {
                 sw.Write(file.data);
