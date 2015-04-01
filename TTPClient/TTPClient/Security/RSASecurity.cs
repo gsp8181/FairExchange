@@ -87,6 +87,18 @@ namespace TTPClient.Security
             return encryptedKey;
         }
 
+        private static string EncryptKey(string pemKey, string keyStr)
+        {
+            var RSAKeyInfo = GetPublicKeyParams(pemKey);
+
+            using (var rsa = new RSACryptoServiceProvider())
+            {
+                rsa.PersistKeyInCsp = false;
+                rsa.ImportParameters(RSAKeyInfo);
+                return EncryptKey(rsa,keyStr);
+            }
+        }
+
 
         public static EncryptedData EncryptData(string data) //encrypts with OWN KEY
         {
