@@ -166,5 +166,13 @@ namespace TTPClient
         {
             new SettingsDialog().ShowDialog();
         }
+
+        private void startToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (SendOptions so = new SendOptions())
+            {
+                so.ShowDialog();
+            }
+        }
     }
 }
