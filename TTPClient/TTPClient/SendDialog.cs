@@ -110,7 +110,7 @@ namespace TTPClient
                     this.Close();
                     return;
                 }
-                var json = new JObject(response.Content);
+                var json = JObject.Parse(response.Content);
                 MessageBox.Show(json.Value<string>("signature"));
 
 

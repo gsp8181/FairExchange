@@ -25,7 +25,22 @@ namespace TTPClient
             this.ip = ip;
             this.fileName = fileName;
             MyResource.FileRecieved += MyResource_FileRecieved;
+            MyResource.FileRecievedAndRespSent += MyResource_FileRecievedAndRespSent;
             backgroundWorker1.RunWorkerAsync();
+        }
+
+        void MyResource_FileRecievedAndRespSent(object sender, FileSend file)
+        {
+            using (StreamWriter sw = new StreamWriter(localFile.OpenWrite())) //TODO: on another thread
+            {
+                sw.Write(file.data);
+            }
+            this.Invoke((MethodInvoker)delegate
+            {
+                progressBar1.Style = ProgressBarStyle.Continuous;
+                progressBar1.Value = 33;
+                progressLabel.Text = "File recieved, processing";
+            });
         }
 
         private void MyResource_FileRecieved(object sender, FileSend file, NotifyArgs callbackArgs)
@@ -35,26 +50,18 @@ namespace TTPClient
                 return;
             }
             callbackArgs.hasSet = true;
-            using (StreamWriter sw = new StreamWriter(localFile.OpenWrite())) //TODO: on another thread
-            {
-                sw.Write(file.data);
-            }
-            this.Invoke((MethodInvoker) delegate
-            {
-                progressBar1.Style = ProgressBarStyle.Continuous;
-                progressBar1.Value = 33;
-                progressLabel.Text = "File recieved, processing";
-            });
+
             //ShowBalloonTip(5000, "File Recieved", fileName, ToolTipIcon.Info);
         }
 
         private void ReceiveDialog_FormClosed(object sender, FormClosedEventArgs e)
         {
             MyResource.FileRecieved -= MyResource_FileRecieved;
+            MyResource.FileRecievedAndRespSent -= MyResource_FileRecievedAndRespSent;
             this.Dispose();
         }
 
-        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e) //TODO: does this have to be separate
         {
             var client = new RESTClient("http://" + ip + ":6555");
             var req = new RESTRequest("/start/");

@@ -15,6 +15,9 @@ namespace TTPClient
         public delegate void FileRecievedHandler(object sender, FileSend file, NotifyArgs callbackArgs);
         public static event FileRecievedHandler FileRecieved = delegate { };
 
+        public delegate void FileRecievedAndRespSendHandler(object sender, FileSend file);
+        public static event FileRecievedAndRespSendHandler FileRecievedAndRespSent = delegate { };
+
         public delegate void NotifyRecievedHandler(object sender, NotifyRequest vars);
         public static event NotifyRecievedHandler NotifyRecieved = delegate { };
 

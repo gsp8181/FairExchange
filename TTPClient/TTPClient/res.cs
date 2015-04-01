@@ -2,6 +2,7 @@
 using Grapevine.Server;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq; 
 using System.Net;
@@ -20,7 +21,10 @@ namespace TTPClient
             [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/file/?$")]
             public void HandleFileRecievedRequest(HttpListenerContext context)
             {
+
                 var x = this.GetJsonPayload(context.Request);
+                Debug.WriteLine("/file/ " + x);
+
                 string filename, email, data;
                 try
                 {
@@ -35,7 +39,7 @@ namespace TTPClient
                     this.SendJsonResponse(context, eresponse);
                     return;
                 }
-                FileSend fs = new FileSend {data = Base64.Base64Decode(data), email = email, fileName = filename};
+                FileSend fs = new FileSend {data = Base64.Base64Decode(data), email = email, fileName = filename}; //TODO: send null data
                 //this.SendTextResponse(context, x);
                 NotifyArgs args = new NotifyArgs();
                 FileRecieved(this, fs, args);
@@ -44,6 +48,7 @@ namespace TTPClient
                     var sig = Rsa.SignData(Base64.Base64Decode(data));
                     JObject response = new JObject {{"accepted", true}, {"signature", sig}};
                     this.SendJsonResponse(context, response);
+                    FileRecievedAndRespSent(this, fs); 
                 }
                 else
                 {
