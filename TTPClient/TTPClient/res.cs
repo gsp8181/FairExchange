@@ -110,6 +110,41 @@ namespace TTPClient
                 }
             }
 
+            [RESTRoute(Method = HttpMethod.GET, PathInfo = @"^/key/?$")]
+            public void HandleGetKeyRequest(HttpListenerContext context)
+            {
+                this.SendTextResponse(context, Security.getPublicKey());
+            }
+
+#if DEBUG
+            [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/decrypt/?$")]
+            public void HandleDecryptRequest(HttpListenerContext context)
+            {
+                var payload = JObject.Parse(this.GetPayload(context.Request));
+                var data = payload.Value<string>("data");
+                var key = payload.Value<string>("key");
+                context.Response.ContentType = "text/plain";
+                this.SendTextResponse(context, Security.DecryptData(data,key));
+            }
+
+            [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/encrypt/?$")]
+            public void HandleEncryptRequest(HttpListenerContext context)
+            {
+                //JObject response = new JObject();
+                //response.Add("Key",key);
+                //response.Add("data", data);
+                this.SendJsonResponse(context,Security.EncryptData(this.GetPayload(context.Request)));
+            }
+            [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/encryptTo/?$")]
+            public void HandleEncryptToRequest(HttpListenerContext context)
+            {
+                var payload = JObject.Parse(this.GetPayload(context.Request));
+                var data = payload.Value<string>("data");
+                var key = payload.Value<string>("key");
+                this.SendJsonResponse(context, Security.EncryptData(data,key));
+            }
+#endif
+
 
             [RESTRoute]
             public void HandleAllGetRequests(HttpListenerContext context)
