@@ -52,24 +52,15 @@ namespace TTPClient.Security
 
         public static EncryptedData EncryptData(string data, RSACryptoServiceProvider rsa) //TODO: this encrypts to self
         {
-            AesCryptoServiceProvider aesCSP = new AesCryptoServiceProvider();
-            //aesCSP.GenerateKey();
-            //aesCSP.GenerateIV();
-            byte[] inBlock = Encoding.UTF8.GetBytes(data);
-            ICryptoTransform xfrm = aesCSP.CreateEncryptor();
-            byte[] outBlock = xfrm.TransformFinalBlock(inBlock, 0, inBlock.Length);
+            var ad = AES.Encrypt(data);
 
-            string encrypted = Convert.ToBase64String(outBlock);
-            var keyStr = new JObject
-                {
-                    {"key", Convert.ToBase64String(aesCSP.Key)},
-                    {"iv", Convert.ToBase64String(aesCSP.IV)} //TODO: nono make this a serialisable object
-                }.ToString();
+            var keyStr = ad.Key.ToString();
+
             var encryptedKeyBytes = rsa.Encrypt(Encoding.UTF8.GetBytes(keyStr), false);
             var encryptedKey = Convert.ToBase64String(encryptedKeyBytes);
 
             var output = new EncryptedData();
-            output.Data = encrypted;
+            output.Data = ad.DataStr;
             output.Key = encryptedKey;
             return output;
 
@@ -95,14 +86,6 @@ namespace TTPClient.Security
 
             RSAParameters RSAKeyInfo = DotNetUtilities.ToRSAParameters(rsaKeyParameters);
 
-            //var val = (RsaKeyParameters)PublicKey.GetKey();
-            //var ModulusVal = Encoding.UTF8.GetBytes(val.Modulus.ToString());
-            //var ExponentVal = Encoding.UTF8.GetBytes(val.Exponent.ToString());
-
-            //var RSAKeyInfo = new RSAParameters();
-            //RSAKeyInfo.Modulus = ModulusVal;
-            //RSAKeyInfo.Exponent = ExponentVal;
-
             using (var rsa = new RSACryptoServiceProvider())
             {
                 rsa.PersistKeyInCsp = false;
@@ -119,22 +102,13 @@ namespace TTPClient.Security
                 var keyStr = Encoding.UTF8.GetString(rsa.Decrypt(keyBytes, false));
                 var keyObj = JObject.Parse(keyStr);
 
-                AesCryptoServiceProvider aesCSP = new AesCryptoServiceProvider();
-
                 var aeskey = keyObj.Value<string>("key");
                 var aesiv = keyObj.Value<string>("iv");
 
-                aesCSP.Key = Convert.FromBase64String(aeskey);
-                aesCSP.IV = Convert.FromBase64String(aesiv);
-
-                var encrypted = Convert.FromBase64String(payload);
-
-
-                ICryptoTransform xfrm = aesCSP.CreateDecryptor();
-                byte[] outBlock = xfrm.TransformFinalBlock(encrypted, 0, encrypted.Length);
-
-                return Encoding.UTF8.GetString(outBlock);
+                return AES.Decrypt(payload, aeskey, aesiv);
             }
         }
+
+        
     }
 }
