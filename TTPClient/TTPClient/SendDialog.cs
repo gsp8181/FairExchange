@@ -80,11 +80,13 @@ namespace TTPClient
             progressBar1.Value = 25;
 
             var stream = file.OpenRead(); //TODO: if not null and using!
+            string text;
             using (StreamReader sr = new StreamReader(stream)) //TODO: all using for streams
             {
-                String text = sr.ReadToEnd();
-
-                var client = new RESTClient("http://" + ip + ":6555");
+                
+                text = sr.ReadToEnd();
+            }
+            var client = new RESTClient("http://" + ip + ":6555");
                 var req = new RESTRequest("/file/")
                 {
                     Method = Grapevine.HttpMethod.POST,
@@ -97,6 +99,7 @@ namespace TTPClient
                     {"data", Base64.Base64Encode(text)}
                 };
                 req.Payload = data.ToString();
+                req.Timeout = 10*1000;
                 //req.Payload = text;
                 var response = client.Execute(req);
                 if (response.ReturnedError || !string.IsNullOrEmpty(response.Error)) //TODO: accepted? TODO: better response checking for example timeout
@@ -111,7 +114,7 @@ namespace TTPClient
                 MessageBox.Show(json.Value<string>("signature"));
 
 
-            } //TODO: use async and await
+             //TODO: use async and await
             progressBar1.Value = 50;
             progressLabel.Text = "Sent file undefined behaviour now! :)";
 

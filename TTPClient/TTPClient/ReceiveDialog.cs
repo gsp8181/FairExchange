@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Grapevine.Client;
+using Newtonsoft.Json.Linq;
 
 namespace TTPClient
 {
@@ -23,6 +25,7 @@ namespace TTPClient
             this.ip = ip;
             this.fileName = fileName;
             MyResource.FileRecieved += MyResource_FileRecieved;
+            backgroundWorker1.RunWorkerAsync();
         }
 
         private void MyResource_FileRecieved(object sender, FileSend file, NotifyArgs callbackArgs)
@@ -49,6 +52,17 @@ namespace TTPClient
         {
             MyResource.FileRecieved -= MyResource_FileRecieved;
             this.Dispose();
+        }
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            var client = new RESTClient("http://" + ip + ":6555");
+            var req = new RESTRequest("/start/");
+            JObject data = new JObject { { "fileName", fileName }, { "email", SettingsWrapper.Instance.Email } };
+            req.Method = Grapevine.HttpMethod.POST;
+            req.ContentType = Grapevine.ContentType.JSON;
+            req.Payload = data.ToString();
+            var response = client.Execute(req);
         }
     }
 }

@@ -109,13 +109,13 @@ namespace TTPClient
             var receiveDialog = new ReceiveDialog(currentTipReq.ip, currentTipReq.fileName);
             receiveDialog.Show();
 
-            var client = new RESTClient("http://" + currentTipReq.ip + ":6555");
+            /*var client = new RESTClient("http://" + currentTipReq.ip + ":6555");
             var req = new RESTRequest("/start/");
             JObject data = new JObject {{"fileName", currentTipReq.fileName}, {"email", settings.Email}};
             req.Method = Grapevine.HttpMethod.POST;
             req.ContentType = Grapevine.ContentType.JSON;
             req.Payload = data.ToString();
-            var response = client.Execute(req);
+            var response = client.Execute(req);*/
             //MessageBox.Show("Status Code: " + response.StatusCode);
         }
 
