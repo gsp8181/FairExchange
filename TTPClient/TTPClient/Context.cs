@@ -17,7 +17,7 @@ namespace TTPClient
                 }
             }
 
-            SettingsWrapper.Instance.RegWithTracker();
+            SettingsWrapper.Instance.RegWithTracker(); //TODO: is port open? notify registration balloon?
 
             form1 = new Form1();
             this.MainForm = form1;

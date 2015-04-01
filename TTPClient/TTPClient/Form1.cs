@@ -159,5 +159,11 @@ namespace TTPClient
         {
             SettingsWrapper.Instance.RegWithTracker();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(Security.getPublicKey())
+            ;
+        }
     }
 }

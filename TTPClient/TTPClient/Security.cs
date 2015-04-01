@@ -13,7 +13,7 @@ namespace TTPClient
 {
     static class Security
     {
-        private static CspParameters csparams = new CspParameters(13) { KeyContainerName = "ttpclient" };
+        private static CspParameters csparams = new CspParameters(1) { KeyContainerName = "ttpclient" };
         public static string Base64Encode(string plainText)
         {
             var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
@@ -27,13 +27,13 @@ namespace TTPClient
 
         public static string getPublicKey()
         {
-            using (var rsa = new DSACryptoServiceProvider(1024, csparams))
+            using (var rsa = new RSACryptoServiceProvider(2048, csparams))
             {
                 //string publicPrivateKeyXML = rsa.ToXmlString(true);
-              // string publicOnlyKeyXML = rsa.ToXmlString(false);
-                AsymmetricCipherKeyPair dsaKey = DotNetUtilities.GetDsaKeyPair(rsa);
-                StringWriter sw = new StringWriter();
-                PemWriter pw = new PemWriter(sw);
+               //string publicOnlyKeyXML = rsa.ToXmlString(false);
+                var dsaKey = DotNetUtilities.GetRsaKeyPair(rsa);
+                var sw = new StringWriter();
+                var pw = new PemWriter(sw);
                 pw.WriteObject(dsaKey.Public);
                 String rsakeypem = sw.ToString();
                 return rsakeypem;
@@ -42,14 +42,14 @@ namespace TTPClient
 
         }
 
-        public static void Regenerate_DSA()
+        public static void Regenerate_RSA()
         {
-            using (var rsa = new DSACryptoServiceProvider(1024, csparams))
+            using (var rsa = new RSACryptoServiceProvider(2048, csparams))
             {
                 rsa.PersistKeyInCsp = false;
                 rsa.Clear();
             }
-            using (var rsa = new DSACryptoServiceProvider(1024, csparams))
+            using (var rsa = new RSACryptoServiceProvider(2048, csparams))
             {
                 rsa.PersistKeyInCsp = true;
             }
@@ -57,15 +57,16 @@ namespace TTPClient
 
         public static string SignData(string data)
         {
-            using (var rsa = new DSACryptoServiceProvider(1024, csparams))
+            using (var rsa = new RSACryptoServiceProvider(2048, csparams))
             {
-                return rsa.SignData(Encoding.UTF8.GetBytes(data)).ToString();
+                throw new NotImplementedException();
+                //return rsa.SignData(Encoding.UTF8.GetBytes(data)).ToString();
             }
         }
 
         public static string EncryptData(string data)
         {
-            using (var rsa = new DSACryptoServiceProvider(1024, csparams))
+            using (var rsa = new RSACryptoServiceProvider(2048, csparams))
             {
                 throw new NotImplementedException();
             }

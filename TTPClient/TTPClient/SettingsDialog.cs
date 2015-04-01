@@ -40,7 +40,7 @@ namespace TTPClient
 
         private void GenDSAKeysButton_Click(object sender, EventArgs e)
         {
-            Security.Regenerate_DSA();
+            Security.Regenerate_RSA();
             MessageBox.Show("Regenerated Keys", "Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
