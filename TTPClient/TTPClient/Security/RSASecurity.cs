@@ -56,8 +56,7 @@ namespace TTPClient.Security
 
             var keyStr = ad.Key.ToString();
 
-            var encryptedKeyBytes = rsa.Encrypt(Encoding.UTF8.GetBytes(keyStr), false);
-            var encryptedKey = Convert.ToBase64String(encryptedKeyBytes);
+            var encryptedKey = EncryptKey(rsa, keyStr);
 
             var output = new EncryptedData();
             output.Data = ad.DataStr;
@@ -65,6 +64,13 @@ namespace TTPClient.Security
             return output;
 
 
+        }
+
+        private static string EncryptKey(RSACryptoServiceProvider rsa, string keyStr)
+        {
+            var encryptedKeyBytes = rsa.Encrypt(Encoding.UTF8.GetBytes(keyStr), false);
+            var encryptedKey = Convert.ToBase64String(encryptedKeyBytes);
+            return encryptedKey;
         }
 
 
@@ -96,16 +102,22 @@ namespace TTPClient.Security
 
         public static string DecryptData(string payload, string key)
         {
-            using (var rsa = new RSACryptoServiceProvider(2048, csparams))
-            {
-                var keyBytes = Convert.FromBase64String(key);
-                var keyStr = Encoding.UTF8.GetString(rsa.Decrypt(keyBytes, false));
+                var keyStr = DecryptKey(key);
                 var keyObj = JObject.Parse(keyStr);
 
                 var aeskey = keyObj.Value<string>("key");
                 var aesiv = keyObj.Value<string>("iv");
 
                 return AES.Decrypt(payload, aeskey, aesiv);
+        }
+
+        public static string DecryptKey(string encryptedKey)
+        {
+            using (var rsa = new RSACryptoServiceProvider(2048, csparams))
+            {
+                var keyBytes = Convert.FromBase64String(encryptedKey);
+                var decryptedKey =  Encoding.UTF8.GetString(rsa.Decrypt(keyBytes, false));
+                return decryptedKey;
             }
         }
 
