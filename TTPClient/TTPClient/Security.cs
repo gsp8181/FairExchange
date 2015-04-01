@@ -67,34 +67,34 @@ namespace TTPClient
             }
         }
 
-        public static JObject EncryptData(string data, RSACryptoServiceProvider rsa) //TODO: this encrypts to self
+        public static EncryptedData EncryptData(string data, RSACryptoServiceProvider rsa) //TODO: this encrypts to self
         {
-                AesCryptoServiceProvider aesCSP = new AesCryptoServiceProvider();
-                //aesCSP.GenerateKey();
-                //aesCSP.GenerateIV();
-                byte[] inBlock = Encoding.UTF8.GetBytes(data);
-                ICryptoTransform xfrm = aesCSP.CreateEncryptor();
-                byte[] outBlock = xfrm.TransformFinalBlock(inBlock, 0, inBlock.Length);
+            AesCryptoServiceProvider aesCSP = new AesCryptoServiceProvider();
+            //aesCSP.GenerateKey();
+            //aesCSP.GenerateIV();
+            byte[] inBlock = Encoding.UTF8.GetBytes(data);
+            ICryptoTransform xfrm = aesCSP.CreateEncryptor();
+            byte[] outBlock = xfrm.TransformFinalBlock(inBlock, 0, inBlock.Length);
 
-                string encrypted =  Convert.ToBase64String(outBlock);
-                var keyStr = new JObject
+            string encrypted = Convert.ToBase64String(outBlock);
+            var keyStr = new JObject
                 {
                     {"key", Convert.ToBase64String(aesCSP.Key)},
-                    {"iv", Convert.ToBase64String(aesCSP.IV)} //TODO: nono
+                    {"iv", Convert.ToBase64String(aesCSP.IV)} //TODO: nono make this a serialisable object
                 }.ToString();
-                var encryptedKeyBytes = rsa.Encrypt(Encoding.UTF8.GetBytes(keyStr), false);
-                var encryptedKey = Convert.ToBase64String(encryptedKeyBytes);
+            var encryptedKeyBytes = rsa.Encrypt(Encoding.UTF8.GetBytes(keyStr), false);
+            var encryptedKey = Convert.ToBase64String(encryptedKeyBytes);
 
-                var output = new JObject();
-                output.Add("data",encrypted);
-                output.Add("key", encryptedKey);
-                return output;
-
-
-            }
+            var output = new EncryptedData();
+            output.Data = encrypted;
+            output.Key = encryptedKey;
+            return output;
 
 
-        public static JObject EncryptData(string data) //encrypts with OWN KEY
+        }
+
+
+        public static EncryptedData EncryptData(string data) //encrypts with OWN KEY
         {
             using (var rsa = new RSACryptoServiceProvider(2048, csparams))
             {
@@ -102,9 +102,9 @@ namespace TTPClient
             }
         }
 
-        public static JObject EncryptData(string data, string key)
+        public static EncryptedData EncryptData(string data, string key)
         {
-            var keyStream =  new MemoryStream(Encoding.UTF8.GetBytes(key ?? ""));
+            var keyStream = new MemoryStream(Encoding.UTF8.GetBytes(key ?? ""));
             var keyStreamReader = new StreamReader(keyStream);
             var pemRead = new PemReader(keyStreamReader);
             var keyParameter = (AsymmetricKeyParameter)pemRead.ReadObject();
@@ -146,7 +146,7 @@ namespace TTPClient
 
                 var encrypted = Convert.FromBase64String(payload);
 
-                
+
                 ICryptoTransform xfrm = aesCSP.CreateDecryptor();
                 byte[] outBlock = xfrm.TransformFinalBlock(encrypted, 0, encrypted.Length);
 

@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context.cs" />
+    <Compile Include="EncryptedData.cs" />
     <Compile Include="FileSend.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
