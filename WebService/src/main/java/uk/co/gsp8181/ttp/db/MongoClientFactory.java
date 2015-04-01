@@ -12,7 +12,7 @@ import java.util.Arrays;
  */
 public class MongoClientFactory {
 
-    private static final MongoClientFactory INSTANCE = new MongoClientFactory();
+    private static final MongoClientFactory INSTANCE = new MongoClientFactory(); //TODO: auth lapses
     private final Datastore datastore; //TODO: persistance
     public final String dbname;
     public boolean usingOpenshift;
