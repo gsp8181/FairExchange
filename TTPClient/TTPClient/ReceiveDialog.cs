@@ -31,6 +31,8 @@ namespace TTPClient
 
         void MyResource_FileRecievedAndRespSent(object sender, FileSend file)
         {
+            if (fileName != file.fileName)
+                return;
             using (StreamWriter sw = new StreamWriter(localFile.OpenWrite())) //TODO: on another thread
             {
                 sw.Write(file.data);

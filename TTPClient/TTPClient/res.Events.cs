@@ -23,5 +23,8 @@ namespace TTPClient
 
         public delegate void StartTransmissionHandler(object sender, NotifyRequest vars, NotifyArgs callbackArgs);
         public static event StartTransmissionHandler StartTransmission = delegate { };
+
+        public delegate void StartTransmissionAndRespSentHandler(object sender, NotifyRequest vars);
+        public static event StartTransmissionAndRespSentHandler StartTransmissionAndRespSent = delegate { };
     }
 }

@@ -39,7 +39,7 @@ namespace TTPClient
                     this.SendJsonResponse(context, eresponse);
                     return;
                 }
-                FileSend fs = new FileSend {data = Base64.Base64Decode(data), email = email, fileName = filename}; //TODO: send null data
+                FileSend fs = new FileSend {email = email, fileName = filename}; //TODO: tidy up, dont reuse?
                 //this.SendTextResponse(context, x);
                 NotifyArgs args = new NotifyArgs();
                 FileRecieved(this, fs, args);
@@ -48,6 +48,7 @@ namespace TTPClient
                     var sig = Rsa.SignData(Base64.Base64Decode(data));
                     JObject response = new JObject {{"accepted", true}, {"signature", sig}};
                     this.SendJsonResponse(context, response);
+                    fs.data = data;
                     FileRecievedAndRespSent(this, fs); 
                 }
                 else
@@ -107,6 +108,7 @@ namespace TTPClient
                 {
                     JObject response = new JObject {{"accepted", true}};
                     this.SendJsonResponse(context, response);
+                    StartTransmissionAndRespSent(this, vars);
                 }
                 else
                 {

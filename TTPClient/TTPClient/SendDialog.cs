@@ -25,6 +25,7 @@ namespace TTPClient
         {
             InitializeComponent();
             MyResource.StartTransmission += MyResource_StartTransmission;
+            MyResource.StartTransmissionAndRespSent += MyResource_StartTransmissionAndRespSent;
             this.ip = ip;
             this.file = new FileInfo(fileName);
 
@@ -42,6 +43,16 @@ namespace TTPClient
 
         }
 
+        private void MyResource_StartTransmissionAndRespSent(object sender, NotifyRequest vars)
+        {
+            if (vars.fileName != file.Name)
+                return;
+            this.Invoke((MethodInvoker)delegate
+            {
+                timer2_Tick();
+            }); //TODO: maybe another timeout timer?
+        }
+
         private void MyResource_StartTransmission(object sender, NotifyRequest addrSender, NotifyArgs callbackArgs)
         {
             if (addrSender.fileName != file.Name)
@@ -50,17 +61,14 @@ namespace TTPClient
             this.Invoke((MethodInvoker)delegate
             {
                 timer1.Stop();
-                timer2_Tick();
             });
-            //timer1.Stop();
-
-            //timer2.Start();
 
         }
 
         private void SendDialog_FormClosed(object sender, FormClosedEventArgs e)
         {
             MyResource.StartTransmission -= MyResource_StartTransmission;
+            MyResource.StartTransmissionAndRespSent -= MyResource_StartTransmissionAndRespSent;
             this.Dispose();
             //file.Close();
         }
@@ -83,38 +91,38 @@ namespace TTPClient
             string text;
             using (StreamReader sr = new StreamReader(stream)) //TODO: all using for streams
             {
-                
+
                 text = sr.ReadToEnd();
             }
             var client = new RESTClient("http://" + ip + ":6555");
-                var req = new RESTRequest("/file/")
-                {
-                    Method = Grapevine.HttpMethod.POST,
-                    ContentType = Grapevine.ContentType.JSON
-                };
-                JObject data = new JObject
+            var req = new RESTRequest("/file/")
+            {
+                Method = Grapevine.HttpMethod.POST,
+                ContentType = Grapevine.ContentType.JSON
+            };
+            JObject data = new JObject
                 {
                     {"fileName", file.Name},
                     {"email", email},
                     {"data", Base64.Base64Encode(text)}
                 };
-                req.Payload = data.ToString();
-                req.Timeout = 10*1000;
-                //req.Payload = text;
-                var response = client.Execute(req);
-                if (response.ReturnedError || !string.IsNullOrEmpty(response.Error)) //TODO: accepted? TODO: better response checking for example timeout
-                {
-                    progressBar1.Value = 0;
-                    progressBar1.Style = ProgressBarStyle.Continuous; //TODO: update label
-                    MessageBox.Show("Remote server did not accept the file" + Environment.NewLine + response.Error, "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    this.Close();
-                    return;
-                }
-                var json = JObject.Parse(response.Content);
-                MessageBox.Show(json.Value<string>("signature"));
+            req.Payload = data.ToString();
+            req.Timeout = 10 * 1000;
+            //req.Payload = text;
+            var response = client.Execute(req);
+            if (response.ReturnedError || !string.IsNullOrEmpty(response.Error)) //TODO: accepted? TODO: better response checking for example timeout
+            {
+                progressBar1.Value = 0;
+                progressBar1.Style = ProgressBarStyle.Continuous; //TODO: update label
+                MessageBox.Show("Remote server did not accept the file" + Environment.NewLine + response.Error, "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Close();
+                return;
+            }
+            var json = JObject.Parse(response.Content);
+            MessageBox.Show(json.Value<string>("signature"));
 
 
-             //TODO: use async and await
+            //TODO: use async and await
             progressBar1.Value = 50;
             progressLabel.Text = "Sent file undefined behaviour now! :)";
 
