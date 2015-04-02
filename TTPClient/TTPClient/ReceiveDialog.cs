@@ -17,13 +17,15 @@ namespace TTPClient
     {
         private string fileName;
         private string ip;
+        private string guid;
         private FileInfo localFile = new FileInfo(Path.GetTempFileName());
-        public ReceiveDialog(string ip, string fileName)
+        public ReceiveDialog(string ip, string fileName, string guid)
         {
             InitializeComponent();
             progressLabel.Text += fileName;
             this.ip = ip;
             this.fileName = fileName;
+            this.guid = guid;
             ClientRestApi.FileRecieved += MyResource_FileRecieved;
             ClientRestApi.FileRecievedAndRespSent += MyResource_FileRecievedAndRespSent;
             backgroundWorker1.RunWorkerAsync();
@@ -31,8 +33,9 @@ namespace TTPClient
 
         void MyResource_FileRecievedAndRespSent(object sender, FileSend file)
         {
-            if (fileName != file.fileName)
+            if (guid != file.guid)
                 return;
+
             using (StreamWriter sw = new StreamWriter(localFile.OpenWrite())) //TODO: on another thread
             {
                 sw.Write(file.data);
@@ -67,7 +70,7 @@ namespace TTPClient
         {
             var client = new RESTClient("http://" + ip + ":6555");
             var req = new RESTRequest("/start/");
-            JObject data = new JObject { { "fileName", fileName }, { "email", SettingsWrapper.Instance.Email } };
+            JObject data = new JObject { { "fileName", fileName }, { "email", SettingsWrapper.Instance.Email }, {"ttp", SettingsWrapper.Instance.TTP}, {"guid", guid} };
             req.Method = Grapevine.HttpMethod.POST;
             req.ContentType = Grapevine.ContentType.JSON;
             req.Payload = data.ToString();

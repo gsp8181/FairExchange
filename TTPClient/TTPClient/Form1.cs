@@ -106,7 +106,7 @@ namespace TTPClient
             {
                 return;
             }
-            var receiveDialog = new ReceiveDialog(currentTipReq.ip, currentTipReq.fileName);
+            var receiveDialog = new ReceiveDialog(currentTipReq.ip, currentTipReq.fileName, currentTipReq.guid);
             receiveDialog.Show();
 
             /*var client = new RESTClient("http://" + currentTipReq.ip + ":6555");

@@ -26,12 +26,13 @@ namespace TTPClient
                 var x = this.GetJsonPayload(context.Request);
                 Debug.WriteLine("/file/ " + x);
 
-                string filename, email, data, signature;
+                string filename, email, data, signature, guid;
                 try
                 {
                     filename = x.Value<string>("fileName");
                     email = x.Value<string>("email"); //TODO: find off tracker or reject
                     data = x.Value<string>("data"); //TODO: encrypted
+                    guid = x.Value<string>("guid");
                     signature = x.Value<string>("signature");
                 }
                 catch (NullReferenceException)
@@ -64,11 +65,12 @@ namespace TTPClient
             [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/notify/?$")]
             public void HandleNotifyRecievedRequest(HttpListenerContext context)
             {
+                Debug.WriteLine("/notify/ (cont)");
                 var vars = NotifySend(context);
                 if (vars == null)
                     return;
 
-                JObject response = new JObject {{"accepted", true}};
+                JObject response = new JObject {{"accepted", true}}; //TODO: email
                 this.SendJsonResponse(context, response);
                 NotifyRecieved(this, vars);
 
@@ -77,11 +79,14 @@ namespace TTPClient
             private NotifyRequest NotifySend(HttpListenerContext context)//TODO: rename
             {
                 var jsonStr = this.GetJsonPayload(context.Request); //TODO: validate here with Json.NET Schema
-                string fileName, email;
+                Debug.WriteLine(jsonStr);
+                string fileName, email, ttp, guid;
                 try
                 {
-                    fileName = jsonStr.Value<String>("fileName");
-                    email = jsonStr.Value<String>("email"); //TODO: find off tracker or reject
+                    fileName = jsonStr.Value<string>("fileName");
+                    email = jsonStr.Value<string>("email"); //TODO: find off tracker or reject
+                    ttp = jsonStr.Value<string>("ttp");
+                    guid = jsonStr.Value<string>("guid");
                 }
                 catch (NullReferenceException e)
                 {
@@ -90,9 +95,18 @@ namespace TTPClient
                     this.SendJsonResponse(context, eresponse);
                     return null;
                 }
+
+                if (ttp != SettingsWrapper.Instance.TTP)
+                {
+                    JObject eresponse = new JObject { { "accepted", false }, { "error", "this server is using the TTP at " + SettingsWrapper.Instance.TTP } };
+                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    this.SendJsonResponse(context, eresponse);
+                    return null;
+                }
+
                 var ip = context.Request.RemoteEndPoint.Address.ToString();
 
-                var output = new NotifyRequest {email = email, fileName = fileName, ip = ip};
+                var output = new NotifyRequest {email = email, fileName = fileName, ip = ip, guid=guid};
                 //TODO: err?
                 return output;
             }
@@ -100,6 +114,7 @@ namespace TTPClient
             [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/start/?$")]
             public void HandleStartTransmissionRequest(HttpListenerContext context)
             {
+                Debug.WriteLine("/start/ cont");
                 NotifyArgs args = new NotifyArgs();
                 var vars = NotifySend(context);
                 if (vars == null)

@@ -20,8 +20,9 @@ namespace TTPClient
     {
         private string ip;
         private FileInfo file;
-        private string email = "test@email.com";
         private AesKeys key;
+        private string guid;
+
         public SendDialog(string ip, string fileName)
         {
             InitializeComponent();
@@ -32,21 +33,26 @@ namespace TTPClient
 
             progressLabel.Text += ip;
 
+            guid = Guid.NewGuid().ToString();
+
             var client = new RESTClient("http://" + ip + ":6555");
             var req = new RESTRequest("/notify/");
-            JObject data = new JObject { { "fileName", file.Name }, { "email", email } };//TODO: two names at once?! send guid?
+            JObject data = new JObject { { "fileName", file.Name }, { "email", SettingsWrapper.Instance.Email }, {"ttp",SettingsWrapper.Instance.TTP}, {"guid",guid} };//TODO: two names at once?! send guid?
             req.Method = Grapevine.HttpMethod.POST;
             req.ContentType = Grapevine.ContentType.JSON; //TODO: async and await
             req.Payload = data.ToString();
             var response = client.Execute(req);
-            //MessageBox.Show("Status Code: " + response.StatusCode); //TODO: if 200
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                MessageBox.Show("error");
+            }//TODO: if 200
             timer1.Start();
 
         }
 
         private void MyResource_StartTransmissionAndRespSent(object sender, NotifyRequest vars)
         {
-            if (vars.fileName != file.Name)
+            if (vars.guid != guid)
                 return;
             this.Invoke((MethodInvoker)delegate
             {
@@ -106,7 +112,8 @@ namespace TTPClient
             JObject data = new JObject
                 {
                     {"fileName", file.Name},
-                    {"email", email},
+                    {"email", SettingsWrapper.Instance.Email},
+                    {"guid", guid},
                     //{"data", Base64.Base64Encode(text)}
                     {"data", aesData.DataStr},
                     {"signature", "NYI"}
