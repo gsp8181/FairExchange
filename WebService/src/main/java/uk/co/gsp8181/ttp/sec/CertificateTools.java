@@ -1,5 +1,9 @@
 package uk.co.gsp8181.ttp.sec;
 
+import org.bouncycastle.openssl.PEMWriter;
+
+import java.io.IOException;
+import java.io.StringWriter;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.KeyFactory;
@@ -31,12 +35,12 @@ public class CertificateTools {
      */
     public static TestData getTestData(String dataToSign) throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, SignatureException
     {
-        KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DSA");
+        KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
         SecureRandom random = SecureRandom.getInstance("SHA1PRNG", "SUN");
-        keyGen.initialize(1024, random);
+        keyGen.initialize(2048, random);
         KeyPair pair = keyGen.generateKeyPair();
 
-        Signature dsa = Signature.getInstance("SHA1withDSA");
+        Signature dsa = Signature.getInstance("SHA1withRSA");
 
         PrivateKey priv = pair.getPrivate();
         dsa.initSign(priv);
@@ -45,10 +49,23 @@ public class CertificateTools {
 
         PublicKey pub = pair.getPublic();
 
-        TestData out = new TestData(encodeDSA(pub), dataToSign, encodeBase64(sig), encodeDSA(priv));
+        TestData out = new TestData(encodeRSA(pub), dataToSign, encodeBase64(sig), encodeRSA(priv));
 
 
         return out;
+    }
+
+    public static String getPemForKey(PublicKey publicKey)
+    {
+        StringWriter stringWriter = new StringWriter();
+        PEMWriter pemWriter = new PEMWriter(stringWriter);
+        try {
+            pemWriter.writeObject( publicKey);
+        pemWriter.close();
+        } catch (IOException e) { //THIS WILL NOT THROW
+            e.printStackTrace();
+        }
+        return stringWriter.toString();
     }
 
     /*
@@ -56,7 +73,7 @@ public class CertificateTools {
      */
     public static void main(String[] args) throws Exception
     {
-        PrivateKey priv = decodeDSAPriv(args[0]);
+        PrivateKey priv = decodeRSAPriv(args[0]);
         PublicKey pub = decodeDSAPub(args[1]);
         KeyPair pubpriv = new KeyPair(pub,priv);
 
@@ -70,7 +87,7 @@ public class CertificateTools {
 
     public static String signData(String dataToSign, PrivateKey priv) throws InvalidKeyException, SignatureException, NoSuchAlgorithmException
     {
-        Signature dsa = Signature.getInstance("SHA1withDSA");
+        Signature dsa = Signature.getInstance("SHA1withRSA");
 
         dsa.initSign(priv);
         dsa.update(dataToSign.getBytes());
@@ -96,21 +113,21 @@ public class CertificateTools {
      * @param key The PublicKey or PrivateKey to encode
      * @return The base64 encoded key string
      */
-    public static String encodeDSA(Key key)
+    public static String encodeRSA(Key key)
     {
         byte[] array = key.getEncoded();
         return encodeBase64(array);
     }
 
-    public static PrivateKey decodeDSAPriv(String key) throws NoSuchAlgorithmException, InvalidKeySpecException{
+    public static PrivateKey decodeRSAPriv(String key) throws NoSuchAlgorithmException, InvalidKeySpecException{
         byte[] byteKey = decodeBase64(key);
         PKCS8EncodedKeySpec pkcs8Private = new PKCS8EncodedKeySpec(byteKey);
-        KeyFactory kf = KeyFactory.getInstance("DSA");
+        KeyFactory kf = KeyFactory.getInstance("RSA");
 
         return kf.generatePrivate(pkcs8Private);
     }
 
-    public static boolean verifyTimestamp(PublicKey key, Instant timestamp, String signedStamp) throws InvalidKeyException, SignatureException, NoSuchAlgorithmException
+    /*public static boolean verifyTimestamp(PublicKey key, Instant timestamp, String signedStamp) throws InvalidKeyException, SignatureException, NoSuchAlgorithmException
     {
         Duration between = Duration.between(timestamp,Instant.now());
         long duration = between.toMinutes();
@@ -139,12 +156,12 @@ public class CertificateTools {
         String signedDataEncoded = base64urlencode(signedData);
         TimeStampedKey out = new TimeStampedKey(signedDataEncoded,timeStampLong);
         return out;
-    }
+    }*/
 
     public static PublicKey decodeDSAPub(String key) throws NoSuchAlgorithmException, InvalidKeySpecException{
         byte[] byteKey = decodeBase64(key);
         X509EncodedKeySpec X509publicKey = new X509EncodedKeySpec(byteKey);
-        KeyFactory kf = KeyFactory.getInstance("DSA");
+        KeyFactory kf = KeyFactory.getInstance("RSA");
 
         return kf.generatePublic(X509publicKey);
     }
@@ -191,7 +208,7 @@ public class CertificateTools {
 
     public static boolean verify(PublicKey key, String signedData, String sigBase64) throws SignatureException, NoSuchAlgorithmException, InvalidKeyException
     {
-        Signature dsa = Signature.getInstance("SHA1withDSA");
+        Signature dsa = Signature.getInstance("SHA1withRSA");
         dsa.initVerify(key);
         dsa.update(signedData.getBytes());
         return dsa.verify(decodeBase64(sigBase64));

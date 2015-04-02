@@ -1,5 +1,8 @@
 package uk.co.gsp8181.ttp.ws.configcheck;
 
+import uk.co.gsp8181.ttp.sec.CertificateTools;
+import uk.co.gsp8181.ttp.sec.TestData;
+
 import javax.ejb.Stateless;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
@@ -7,6 +10,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.net.Socket;
+import java.security.*;
 
 @Path("/config")
 //@Consumes(MediaType.APPLICATION_JSON)
@@ -20,6 +24,21 @@ public class ConfigCheckRESTService {
     {
         return new Ip(req.getRemoteAddr());
         //return req.getRemoteAddr();
+    }
+
+    @GET
+    @Path("/cert")
+    public TestData returnTestData()
+    {
+        try {
+            TestData td =  CertificateTools.getTestData("wazzup");
+            PublicKey pub = CertificateTools.decodeDSAPub(td.getPublicKeyBase64());
+            String pem = CertificateTools.getPemForKey(pub);
+            return new TestData(pem,td.getEmail(),td.getSigBase64(),td.getPrivateKeyBase64());
+        } catch (Exception e)
+        {
+            throw new WebApplicationException(e);
+        }
     }
 
     @GET
