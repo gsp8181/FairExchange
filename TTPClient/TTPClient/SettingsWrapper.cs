@@ -8,18 +8,14 @@ using TTPClient.Properties;
 
 namespace TTPClient
 {
-    public interface SettingsWrapperI //TODO: getInstance()
+    public interface ISettingsWrapper //TODO: getInstance()
     {
         string Email { get; set; }
-        string TTP { get; set; }
+
         bool IsSet { get; }
-
-        bool RegWithTracker();
-
-        bool RegWithTracker(string email, string ttp);
     }
 
-    public class SettingsWrapper : SettingsWrapperI
+    public class SettingsWrapper : ISettingsWrapper
     {
         private static SettingsWrapper _SettingsWrapper = new SettingsWrapper();
         private SettingsWrapper() { }
@@ -35,6 +31,7 @@ namespace TTPClient
             }
         }
 
+        [Obsolete]
         public string TTP
         {
             get { return (string)Settings.Default["TTP"]; }
@@ -51,14 +48,16 @@ namespace TTPClient
 
         }
 
+        [Obsolete]
         public bool RegWithTracker() //TODO: IS SET
         {
             return RegWithTracker(Email, TTP);
         }
 
+        [Obsolete]
         public bool RegWithTracker(string email, string ttp)
         {
-            try
+            /*try
             {
                 byte[] emailBytes = System.Text.Encoding.UTF8.GetBytes(email);
                 var url = ttp + "/rest/sessions/";
@@ -77,7 +76,9 @@ namespace TTPClient
             catch (Exception e)
             {
                 return false;
-            }
+            }*/
+            return true;
+
         }
     }
 }

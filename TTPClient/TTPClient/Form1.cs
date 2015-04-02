@@ -24,7 +24,6 @@ namespace TTPClient
 {
     public partial class Form1 : Form
     {
-        WebClient syncClient = new WebClient();
         NotifyRequest currentTipReq;
         SettingsWrapper settings = SettingsWrapper.Instance;
         //RESTClient restClient = new RESTClient(textBox1.Text);
@@ -48,31 +47,11 @@ namespace TTPClient
                 nr.email + " wants to send you " + nr.fileName + ". Click to accept", ToolTipIcon.Info, nr);
         }
 
-        private void whatMyIp_Click(object sender, EventArgs e)
-        {
-            var url = settings.TTP + "/rest/config/ip/";
-
-            var content = syncClient.DownloadString(url);
-            MessageBox.Show(content);
-        }
-
-        private void regWithTrackerButton_Click(object sender, EventArgs e)
-        {
-            var response = settings.RegWithTracker();
-            MessageBox.Show(response.ToString());
-        }
-
-        private void PortOpenButton_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void Form1_Load(object sender, EventArgs e)
         {
             createFirewallException(6555);
             Program.server.OnStart = onServerStartNotify;
             Program.server.Start();
-            settings.RegWithTracker();
             if (!Program.server.IsListening) //TODO: maybe sort out with a timer
             {
                 NetAclChecker.AddAddress("http://+:6555/");
@@ -137,11 +116,6 @@ namespace TTPClient
             {
                 so.ShowDialog();
             }
-        }
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            SettingsWrapper.Instance.RegWithTracker();
         }
 
         private void button1_Click(object sender, EventArgs e)
