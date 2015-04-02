@@ -44,8 +44,8 @@ namespace TTPClient
             var response = client.Execute(req);
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                MessageBox.Show("error");
-            }//TODO: if 200
+                MessageBox.Show("error"); //TODO; this needs to be better, maybe a handle error method which tries to get the error string
+            }
             timer1.Start();
 
         }
@@ -64,7 +64,7 @@ namespace TTPClient
         {
             if (addrSender.fileName != file.Name)
                 return;
-            callbackArgs.hasSet = true; //TODO: check filename and dispatch another thread which updates progress, maybe have a positive event firing
+            callbackArgs.hasSet = true;
             this.Invoke((MethodInvoker)delegate
             {
                 timer1.Stop();
@@ -90,10 +90,12 @@ namespace TTPClient
 
         private void timer2_Tick()
         {
+            // Updates progress label to show file is sending
             progressLabel.Text = "Sending " + file.Name;
             progressBar1.Style = ProgressBarStyle.Continuous;
             progressBar1.Value = 25;
 
+            // Opens and reads the file to the end
             var stream = file.OpenRead(); //TODO: if not null and using!
             string text;
             using (StreamReader sr = new StreamReader(stream)) //TODO: all using for streams
@@ -101,14 +103,21 @@ namespace TTPClient
 
                 text = sr.ReadToEnd();
             }
+
+            //Encrypts the data
             var aesData = Aes.Encrypt(text);
+            //Stores the encryption key as a global variable
             key = aesData.Key;
+
+            // Creates a new POST request to the remote client
             var client = new RESTClient("http://" + ip + ":6555");
             var req = new RESTRequest("/file/")
             {
                 Method = Grapevine.HttpMethod.POST,
                 ContentType = Grapevine.ContentType.JSON
             };
+
+            //Embeds the data (fig 1)
             JObject data = new JObject
                 {
                     {"fileName", file.Name},
@@ -120,9 +129,10 @@ namespace TTPClient
                     // NRO (sSa(F nro, B, L, C)
                 };
             req.Payload = data.ToString();
-            req.Timeout = 10 * 1000;
-            //req.Payload = text;
+            //Sends the request
             var response = client.Execute(req);
+
+            //If there was an error then fail and quit
             if (response.ReturnedError || !string.IsNullOrEmpty(response.Error)) //TODO: accepted? TODO: better response checking for example timeout
             {
                 progressBar1.Value = 0;
@@ -135,9 +145,10 @@ namespace TTPClient
             //MessageBox.Show(json.Value<string>("signature"));
 
 
+            // Update the progress box
             //TODO: use async and await
             progressBar1.Value = 50;
-            progressLabel.Text = "Sent file undefined behaviour now! :)";
+            progressLabel.Text = "Sent file, contacting TTP";
 
         }
     }

@@ -149,5 +149,10 @@ namespace TTPClient
             MessageBox.Show(Rsa.getPublicKey())
             ;
         }
+
+        private void logsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

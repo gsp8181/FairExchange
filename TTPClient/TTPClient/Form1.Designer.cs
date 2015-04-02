@@ -36,6 +36,7 @@
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.logsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.regTimer = new System.Windows.Forms.Timer(this.components);
@@ -76,7 +77,7 @@
             // notifyIcon
             // 
             this.notifyIcon.ContextMenuStrip = this.notifyIconMenu;
-            this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
+            this.notifyIcon.Icon = ((System.Drawing.Icon) (Properties.Resources.Icojam_Blue_Bits_Document_arrow_down));//resources.GetObject("notifyIcon.Icon")));
             this.notifyIcon.Text = "TTP Client";
             this.notifyIcon.Visible = true;
             this.notifyIcon.BalloonTipClicked += new System.EventHandler(this.notifyIcon1_BalloonTipClicked_1);
@@ -85,10 +86,11 @@
             // 
             this.notifyIconMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.startToolStripMenuItem,
-            this.quitToolStripMenuItem,
-            this.settingsToolStripMenuItem});
+            this.settingsToolStripMenuItem,
+            this.logsToolStripMenuItem,
+            this.quitToolStripMenuItem});
             this.notifyIconMenu.Name = "contextMenuStrip1";
-            this.notifyIconMenu.Size = new System.Drawing.Size(117, 70);
+            this.notifyIconMenu.Size = new System.Drawing.Size(117, 92);
             // 
             // startToolStripMenuItem
             // 
@@ -96,6 +98,13 @@
             this.startToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.startToolStripMenuItem.Text = "&Start";
             this.startToolStripMenuItem.Click += new System.EventHandler(this.startToolStripMenuItem_Click);
+            // 
+            // logsToolStripMenuItem
+            // 
+            this.logsToolStripMenuItem.Name = "logsToolStripMenuItem";
+            this.logsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.logsToolStripMenuItem.Text = "Logs";
+            this.logsToolStripMenuItem.Click += new System.EventHandler(this.logsToolStripMenuItem_Click);
             // 
             // quitToolStripMenuItem
             // 
@@ -156,6 +165,7 @@
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.Timer regTimer;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ToolStripMenuItem logsToolStripMenuItem;
     }
 }
 

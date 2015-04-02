@@ -39,6 +39,7 @@ namespace TTPClient
                 {
                     JObject eresponse = new JObject {{"accepted", false}, {"error", "malformed JSON"}};
                     context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    Debug.WriteLine("/file/ SENT " + eresponse);
                     this.SendJsonResponse(context, eresponse);
                     return;
                 }
@@ -50,6 +51,7 @@ namespace TTPClient
                 {
                     var sig = Rsa.SignData(Base64.Base64Decode(data));
                     JObject response = new JObject {{"accepted", true}, {"signature", sig}};
+                    Debug.WriteLine("/file/ SENT " + response);
                     this.SendJsonResponse(context, response);
                     fs.data = data;
                     FileRecievedAndRespSent(this, fs); 
@@ -58,6 +60,7 @@ namespace TTPClient
                 {
                     JObject response = new JObject {{"accepted", false}, {"error", "cancelled"}};
                     context.Response.StatusCode = (int)HttpStatusCode.Gone;
+                    Debug.WriteLine("/file/ SENT " + response);
                     this.SendJsonResponse(context, response);
                 }
             }
@@ -71,6 +74,7 @@ namespace TTPClient
                     return;
 
                 JObject response = new JObject {{"accepted", true}}; //TODO: email
+                Debug.WriteLine("/notify/ SENT " + response);
                 this.SendJsonResponse(context, response);
                 NotifyRecieved(this, vars);
 
@@ -92,6 +96,7 @@ namespace TTPClient
                 {
                     JObject eresponse = new JObject {{"accepted", false}, {"error", "malformed JSON"}};
                     context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                    Debug.WriteLine("/notify/ OR /start/ SENT " + eresponse);
                     this.SendJsonResponse(context, eresponse);
                     return null;
                 }
@@ -100,6 +105,7 @@ namespace TTPClient
                 {
                     JObject eresponse = new JObject { { "accepted", false }, { "error", "this server is using the TTP at " + SettingsWrapper.Instance.TTP } };
                     context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    Debug.WriteLine("/notify/ OR /start/ SENT " + eresponse);
                     this.SendJsonResponse(context, eresponse);
                     return null;
                 }
@@ -124,6 +130,7 @@ namespace TTPClient
                 if (args.hasSet)
                 {
                     JObject response = new JObject {{"accepted", true}};
+                    Debug.WriteLine("/start/ SENT " + response);
                     this.SendJsonResponse(context, response);
                     StartTransmissionAndRespSent(this, vars);
                 }
@@ -131,6 +138,7 @@ namespace TTPClient
                 {
                     JObject response = new JObject {{"accepted", false}, {"error", "cancelled"}};
                     context.Response.StatusCode = (int)HttpStatusCode.Gone;
+                    Debug.WriteLine("/start/ SENT " + response);
                     this.SendJsonResponse(context, response);
                 }
             }
