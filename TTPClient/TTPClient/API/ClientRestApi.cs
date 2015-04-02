@@ -9,6 +9,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using Org.BouncyCastle.Asn1.Ocsp;
 using TTPClient.Security;
 
 namespace TTPClient
@@ -25,12 +26,13 @@ namespace TTPClient
                 var x = this.GetJsonPayload(context.Request);
                 Debug.WriteLine("/file/ " + x);
 
-                string filename, email, data;
+                string filename, email, data, signature;
                 try
                 {
-                    filename = x.Value<String>("fileName");
-                    email = x.Value<String>("email"); //TODO: find off tracker or reject
-                    data = x.Value<String>("data");
+                    filename = x.Value<string>("fileName");
+                    email = x.Value<string>("email"); //TODO: find off tracker or reject
+                    data = x.Value<string>("data"); //TODO: encrypted
+                    signature = x.Value<string>("signature");
                 }
                 catch (NullReferenceException)
                 {

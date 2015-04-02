@@ -21,6 +21,7 @@ namespace TTPClient
         private string ip;
         private FileInfo file;
         private string email = "test@email.com";
+        private AesKeys key;
         public SendDialog(string ip, string fileName)
         {
             InitializeComponent();
@@ -94,6 +95,8 @@ namespace TTPClient
 
                 text = sr.ReadToEnd();
             }
+            var aesData = Aes.Encrypt(text);
+            key = aesData.Key;
             var client = new RESTClient("http://" + ip + ":6555");
             var req = new RESTRequest("/file/")
             {
@@ -104,7 +107,10 @@ namespace TTPClient
                 {
                     {"fileName", file.Name},
                     {"email", email},
-                    {"data", Base64.Base64Encode(text)}
+                    //{"data", Base64.Base64Encode(text)}
+                    {"data", aesData.DataStr},
+                    {"signature", "NYI"}
+                    // NRO (sSa(F nro, B, L, C)
                 };
             req.Payload = data.ToString();
             req.Timeout = 10 * 1000;
@@ -119,7 +125,7 @@ namespace TTPClient
                 return;
             }
             var json = JObject.Parse(response.Content);
-            MessageBox.Show(json.Value<string>("signature"));
+            //MessageBox.Show(json.Value<string>("signature"));
 
 
             //TODO: use async and await
