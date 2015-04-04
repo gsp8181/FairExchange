@@ -8,8 +8,10 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
 using Org.BouncyCastle.Asn1.Ocsp;
+using TTPClient.API;
 using TTPClient.Security;
 
 namespace TTPClient
@@ -26,7 +28,7 @@ namespace TTPClient
                 var x = this.GetJsonPayload(context.Request);
                 Debug.WriteLine("/file/ " + x);
 
-                string filename, email, data, signature, guid;
+                string filename, email, data, signature, guid, iv;
                 try
                 {
                     filename = x.Value<string>("fileName");
@@ -34,6 +36,7 @@ namespace TTPClient
                     data = x.Value<string>("data"); //TODO: encrypted
                     guid = x.Value<string>("guid");
                     signature = x.Value<string>("signature");
+                    iv = x.Value<string>("iv");
                 }
                 catch (NullReferenceException)
                 {
@@ -43,7 +46,7 @@ namespace TTPClient
                     this.SendJsonResponse(context, eresponse);
                     return;
                 }
-                FileSend fs = new FileSend {email = email, fileName = filename}; //TODO: tidy up, dont reuse?
+                FileSend fs = new FileSend {email = email, fileName = filename, iv = iv, guid=guid}; //TODO: tidy up, dont reuse?
                 //this.SendTextResponse(context, x);
                 NotifyArgs args = new NotifyArgs();
                 FileRecieved(this, fs, args);
@@ -120,7 +123,28 @@ namespace TTPClient
             [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/key/?$")]
             public void HandleKeySend(HttpListenerContext context)
             {
-                Debug.WriteLine("/key/");
+                JObject args = this.GetJsonPayload(context.Request);
+                Debug.WriteLine("/key/ " + args);
+                var kArgs = new KeyArgs();
+                kArgs.guid = args.Value<string>("guid");
+                kArgs.i = args.Value<int>("i");
+                kArgs.key = args.Value<string>("key");
+                var callback = new NotifyArgs();
+                KeyRecieved(this, kArgs, callback);
+
+                if (callback.hasSet)
+                {
+                    JObject response = new JObject { { "accepted", true }, { "signature", "sig" } }; //TODO: implement
+                    Debug.WriteLine("/key/ SENT " + response);
+                    this.SendJsonResponse(context, response);
+                }
+                else
+                {
+                    JObject response = new JObject { { "accepted", false }, { "error", "cancelled" } };
+                    context.Response.StatusCode = (int)HttpStatusCode.Gone;
+                    Debug.WriteLine("/key/ SENT " + response);
+                    this.SendJsonResponse(context, response);
+                }
 
             }
 

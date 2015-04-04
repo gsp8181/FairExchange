@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\KeyArgs.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="Security\Aes.cs" />
     <Compile Include="Security\AesData.cs" />

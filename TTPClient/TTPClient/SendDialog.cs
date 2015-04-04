@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Grapevine.Client;
@@ -20,12 +21,12 @@ namespace TTPClient
 {
     public partial class SendDialog : Form
     {
-        private string ip;
+        private readonly string ip;
         private FileInfo file;
         private AesKeys key;
-        private string guid;
-        public Queue<byte[]> fakeKeys = new Queue<byte[]>();
-        private int amount;
+        private readonly string guid;
+        public Queue<string> fakeKeys = new Queue<string>();
+        private readonly int amount;
 
         public SendDialog(string ip, string fileName, int amount)
         {
@@ -112,9 +113,9 @@ namespace TTPClient
                     {"email", SettingsWrapper.Instance.Email},
                     {"guid", guid},
                     {"iv",key.ivStr},
-                    {"timeout",5},//TODO: change
+                    //{"timeout",5},//TODO: change
                     //{"data", Base64.Base64Encode(text)}
-                    {"data", aesData.DataStr},
+                    {"data", aesData.DataStr}, //TODO: RSA SIGN!!
                     {"signature", "NYI"}
                     // NRO (sSa(F nro, B, L, C)
                 };
@@ -136,7 +137,8 @@ namespace TTPClient
 
             // Update the progress box
             //TODO: use async and await
-            progressLabel.Text = "Sent file";
+            progressLabel.Text = "Sending Keys";
+            backgroundWorker1.RunWorkerAsync();
 
         }
 
@@ -145,14 +147,14 @@ namespace TTPClient
             int bytes;
             using (AesCryptoServiceProvider aesCSP = new AesCryptoServiceProvider())
             {
-                bytes = aesCSP.KeySize/8;
+                bytes = aesCSP.KeySize / 8;
             }
             RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
             for (int i = 0; i < amount; i++)
             {
                 byte[] randBytes = new byte[bytes];
                 rng.GetBytes(randBytes);
-                fakeKeys.Enqueue(randBytes);
+                fakeKeys.Enqueue(Convert.ToBase64String(randBytes));
             }
 
 
@@ -170,6 +172,66 @@ namespace TTPClient
                 MessageBox.Show("error"); //TODO; this needs to be better, maybe a handle error method which tries to get the error string
             }
             timer1.Start();
+        }
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            var client = new RESTClient("http://" + ip + ":6555");
+            for (int i = 0; i < amount; i++)
+            { //Check cancellation
+                var fkey = fakeKeys.Dequeue();
+
+                JObject data = new JObject {{"key", fkey},{"guid",this.guid},{"i",i}};
+
+                var req = new RESTRequest("/key/");
+                req.Timeout = 5000;
+                req.Method = Grapevine.HttpMethod.POST;
+                req.ContentType = Grapevine.ContentType.JSON; //TODO: async and await
+                req.Payload = data.ToString();
+                var response = client.Execute(req);
+                if (response.StatusCode != HttpStatusCode.OK) //TODO: OR IF TIMEOUT
+                {
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        MessageBox.Show("Error");
+                    });
+                    return;
+                }
+
+                //TODO:Check Sig
+
+                backgroundWorker1.ReportProgress((100/amount*i));
+            }
+
+            JObject realData = new JObject {{"key", key.keyStr}, {"guid", this.guid}, {"i", amount}}; //TODO: encrypt keys??
+
+
+            var realReq = new RESTRequest("/key/");//TODO: split into method with above bit
+            realReq.Timeout = 5000;
+            realReq.Method = Grapevine.HttpMethod.POST;
+            realReq.ContentType = Grapevine.ContentType.JSON; //TODO: async and await
+            realReq.Payload = realData.ToString();
+            var realResponse = client.Execute(realReq);
+            if (realResponse.StatusCode != HttpStatusCode.OK) //TODO: OR IF TIMEOUT
+            {
+                this.Invoke((MethodInvoker)delegate
+                {
+                    MessageBox.Show("Error");
+                    this.Close();
+                });
+                return;
+            }
+
+
+            backgroundWorker1.ReportProgress(100);
+            //Check Sig
+
+
+        }
+
+        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            progressBar1.Value = e.ProgressPercentage;
         }
     }
 }

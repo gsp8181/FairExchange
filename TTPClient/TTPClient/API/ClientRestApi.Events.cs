@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using TTPClient.API;
 
 namespace TTPClient
 {
@@ -14,6 +16,9 @@ namespace TTPClient
 
         public delegate void FileRecievedHandler(object sender, FileSend file, NotifyArgs callbackArgs);
         public static event FileRecievedHandler FileRecieved = delegate { };
+
+        public delegate void KeyRecievedHandler(object sender, KeyArgs key, NotifyArgs callbackArgs);
+        public static event KeyRecievedHandler KeyRecieved = delegate { };
 
         public delegate void FileRecievedAndRespSendHandler(object sender, FileSend file);
         public static event FileRecievedAndRespSendHandler FileRecievedAndRespSent = delegate { };
