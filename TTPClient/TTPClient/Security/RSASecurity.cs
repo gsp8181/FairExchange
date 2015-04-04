@@ -139,8 +139,9 @@ namespace TTPClient.Security
 
                 var aeskey = keyObj.Value<string>("key");
                 var aesiv = keyObj.Value<string>("iv");
+                var rounds = keyObj.Value<int>("rounds");
 
-                return Aes.Decrypt(payload, aeskey, aesiv);
+                return Aes.Decrypt(payload, aeskey, aesiv, rounds);
         }
 
         public static string DecryptKey(string encryptedKey)

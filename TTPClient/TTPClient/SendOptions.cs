@@ -57,7 +57,7 @@ namespace TTPClient
             }
 
 
-            var sendDialog = new SendDialog(ip, textBox2.Text); //TODO:RESOLVE EMAIL OR IP??
+            var sendDialog = new SendDialog(ip, textBox2.Text, 100); //TODO:RESOLVE EMAIL OR IP??
             sendDialog.Show(); //TODO: validate
             this.Close();
         }

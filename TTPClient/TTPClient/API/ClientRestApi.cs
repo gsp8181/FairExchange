@@ -117,6 +117,13 @@ namespace TTPClient
                 return output;
             }
 
+            [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/key/?$")]
+            public void HandleKeySend(HttpListenerContext context)
+            {
+                Debug.WriteLine("/key/");
+
+            }
+
             [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/start/?$")]
             public void HandleStartTransmissionRequest(HttpListenerContext context)
             {

@@ -57,9 +57,9 @@
             this.progressLabel.AutoSize = true;
             this.progressLabel.Location = new System.Drawing.Point(13, 60);
             this.progressLabel.Name = "progressLabel";
-            this.progressLabel.Size = new System.Drawing.Size(111, 13);
+            this.progressLabel.Size = new System.Drawing.Size(84, 13);
             this.progressLabel.TabIndex = 2;
-            this.progressLabel.Text = "Attempting to contact ";
+            this.progressLabel.Text = "Generating keys";
             // 
             // timer1
             // 
@@ -78,6 +78,7 @@
             this.Name = "SendDialog";
             this.Text = "SendDialog";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SendDialog_FormClosed);
+            this.Load += new System.EventHandler(this.SendDialog_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

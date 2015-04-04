@@ -8,13 +8,19 @@ namespace TTPClient.Security
 {
     public class AesKeys
     {
-        public string keyStr { get { return Convert.ToBase64String(Key); }
+        public string keyStr
+        {
+            get { return Convert.ToBase64String(Key); }
             set { Key = Convert.FromBase64String(value); }
         }
 
-        public string ivStr { get { return Convert.ToBase64String(IV); }
+        public string ivStr
+        {
+            get { return Convert.ToBase64String(IV); }
             set { Key = Convert.FromBase64String(value); }
         }
+
+        public int Rounds { get; set; }
 
         public byte[] Key { get; set; }
 
@@ -25,7 +31,8 @@ namespace TTPClient.Security
             return new JObject
             {
                 {"key", keyStr},
-                {"iv", ivStr} //TODO: nono make this a serialisable object
+                {"iv", ivStr}, //TODO: nono make this a serialisable object
+                {"rounds", Rounds}
             };
         }
 

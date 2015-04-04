@@ -7,12 +7,14 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Grapevine.Client;
 using Newtonsoft.Json.Linq;
 using TTPClient.Security;
+using Aes = TTPClient.Security.Aes;
 
 namespace TTPClient
 {
@@ -22,8 +24,10 @@ namespace TTPClient
         private FileInfo file;
         private AesKeys key;
         private string guid;
+        public Queue<byte[]> fakeKeys = new Queue<byte[]>();
+        private int amount;
 
-        public SendDialog(string ip, string fileName)
+        public SendDialog(string ip, string fileName, int amount)
         {
             InitializeComponent();
             ClientRestApi.StartTransmission += MyResource_StartTransmission;
@@ -31,22 +35,8 @@ namespace TTPClient
             this.ip = ip;
             this.file = new FileInfo(fileName);
 
-            progressLabel.Text += ip;
-
             guid = Guid.NewGuid().ToString();
-
-            var client = new RESTClient("http://" + ip + ":6555");
-            var req = new RESTRequest("/notify/");
-            JObject data = new JObject { { "fileName", file.Name }, { "email", SettingsWrapper.Instance.Email }, {"ttp",SettingsWrapper.Instance.TTP}, {"guid",guid} };//TODO: two names at once?! send guid?
-            req.Method = Grapevine.HttpMethod.POST;
-            req.ContentType = Grapevine.ContentType.JSON; //TODO: async and await
-            req.Payload = data.ToString();
-            var response = client.Execute(req);
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                MessageBox.Show("error"); //TODO; this needs to be better, maybe a handle error method which tries to get the error string
-            }
-            timer1.Start();
+            this.amount = amount;
 
         }
 
@@ -82,7 +72,6 @@ namespace TTPClient
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            progressBar1.Value = 0;
             progressBar1.Style = ProgressBarStyle.Continuous;
             MessageBox.Show("Remote user did not respond in time", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             this.Close();
@@ -93,7 +82,6 @@ namespace TTPClient
             // Updates progress label to show file is sending
             progressLabel.Text = "Sending " + file.Name;
             progressBar1.Style = ProgressBarStyle.Continuous;
-            progressBar1.Value = 25;
 
             // Opens and reads the file to the end
             var stream = file.OpenRead(); //TODO: if not null and using!
@@ -123,6 +111,8 @@ namespace TTPClient
                     {"fileName", file.Name},
                     {"email", SettingsWrapper.Instance.Email},
                     {"guid", guid},
+                    {"iv",key.ivStr},
+                    {"timeout",5},//TODO: change
                     //{"data", Base64.Base64Encode(text)}
                     {"data", aesData.DataStr},
                     {"signature", "NYI"}
@@ -135,7 +125,6 @@ namespace TTPClient
             //If there was an error then fail and quit
             if (response.ReturnedError || !string.IsNullOrEmpty(response.Error)) //TODO: accepted? TODO: better response checking for example timeout
             {
-                progressBar1.Value = 0;
                 progressBar1.Style = ProgressBarStyle.Continuous; //TODO: update label
                 MessageBox.Show("Remote server did not accept the file" + Environment.NewLine + response.Error, "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();
@@ -147,9 +136,40 @@ namespace TTPClient
 
             // Update the progress box
             //TODO: use async and await
-            progressBar1.Value = 50;
-            progressLabel.Text = "Sent file, contacting TTP";
+            progressLabel.Text = "Sent file";
 
+        }
+
+        private void SendDialog_Load(object sender, EventArgs e)
+        {
+            int bytes;
+            using (AesCryptoServiceProvider aesCSP = new AesCryptoServiceProvider())
+            {
+                bytes = aesCSP.KeySize/8;
+            }
+            RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
+            for (int i = 0; i < amount; i++)
+            {
+                byte[] randBytes = new byte[bytes];
+                rng.GetBytes(randBytes);
+                fakeKeys.Enqueue(randBytes);
+            }
+
+
+            progressLabel.Text = "Attempting to contact " + ip;
+
+            var client = new RESTClient("http://" + ip + ":6555");
+            var req = new RESTRequest("/notify/");
+            JObject data = new JObject { { "fileName", file.Name }, { "email", SettingsWrapper.Instance.Email }, { "ttp", SettingsWrapper.Instance.TTP }, { "guid", guid } };//TODO: two names at once?! send guid?
+            req.Method = Grapevine.HttpMethod.POST;
+            req.ContentType = Grapevine.ContentType.JSON; //TODO: async and await
+            req.Payload = data.ToString();
+            var response = client.Execute(req);
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                MessageBox.Show("error"); //TODO; this needs to be better, maybe a handle error method which tries to get the error string
+            }
+            timer1.Start();
         }
     }
 }
