@@ -14,7 +14,7 @@ namespace FEClient
         private static RESTServer server = new RESTServer("+", "6555", "http", "index.html", null, 5);
         public Context()
         {
-            do
+            while (!SettingsWrapper.Instance.IsSet)
             {
                 using (SettingsDialog dialog = new SettingsDialog())
                 {
@@ -24,7 +24,7 @@ namespace FEClient
                         Environment.Exit(-1);
                     }
                 }
-            } while (!SettingsWrapper.Instance.IsSet);
+            }
 
             //TODO: is port open?
 

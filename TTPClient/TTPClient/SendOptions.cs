@@ -138,7 +138,7 @@ namespace FEClient
             else
             {
                 roundsBox.Text = "1000";
-                complexityBox.Text = "18";
+                complexityBox.Text = "1300000";
                 timeoutBox.Text = "5";
                 roundsBox.Enabled = false;
                 complexityBox.Enabled = false;

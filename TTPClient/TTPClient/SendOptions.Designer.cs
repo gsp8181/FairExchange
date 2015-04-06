@@ -160,7 +160,7 @@
             this.complexityBox.Name = "complexityBox";
             this.complexityBox.Size = new System.Drawing.Size(199, 20);
             this.complexityBox.TabIndex = 4;
-            this.complexityBox.Text = "18";
+            this.complexityBox.Text = "1300000";
             this.complexityBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.roundsBox_KeyPress);
             // 
             // label4

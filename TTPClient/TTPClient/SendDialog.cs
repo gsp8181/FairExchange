@@ -3,6 +3,7 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -25,9 +26,11 @@ namespace FEClient
         private readonly string ip;
         private FileInfo file;
         private AesKeys key;
+        private AesData aesData;
         private readonly string guid;
         public Queue<string> fakeKeys = new Queue<string>();
         private readonly int amount;
+        private readonly int timeout = 2500;
 
         public SendDialog(string ip, string fileName, int amount)
         {
@@ -85,20 +88,6 @@ namespace FEClient
             progressLabel.Text = "Sending " + file.Name;
             progressBar1.Style = ProgressBarStyle.Continuous;
 
-            // Opens and reads the file to the end
-            var stream = file.OpenRead(); //TODO: if not null and using!
-            string text;
-            using (StreamReader sr = new StreamReader(stream)) //TODO: all using for streams
-            {
-
-                text = sr.ReadToEnd();
-            }
-
-            //Encrypts the data
-            var aesData = Aes.Encrypt(text);
-            //Stores the encryption key as a global variable
-            key = aesData.Key;
-
             // Creates a new POST request to the remote client
             var client = new RESTClient("http://" + ip + ":6555");
             var req = new RESTRequest("/file/")
@@ -145,39 +134,14 @@ namespace FEClient
 
         private void SendDialog_Load(object sender, EventArgs e)
         {
-            int bytes;
-            using (AesCryptoServiceProvider aesCSP = new AesCryptoServiceProvider())
-            {
-                bytes = aesCSP.KeySize / 8;
-            }
-            RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
-            for (int i = 0; i < amount; i++)
-            {
-                byte[] randBytes = new byte[bytes];
-                rng.GetBytes(randBytes);
-                fakeKeys.Enqueue(Convert.ToBase64String(randBytes));
-            }
-
-
-            progressLabel.Text = "Attempting to contact " + ip;
-
-            var client = new RESTClient("http://" + ip + ":6555");
-            var req = new RESTRequest("/notify/");
-            JObject data = new JObject { { "fileName", file.Name }, { "email", SettingsWrapper.Instance.Email }, { "ttp", SettingsWrapper.Instance.TTP }, { "guid", guid } };//TODO: two names at once?! send guid?
-            req.Method = Grapevine.HttpMethod.POST;
-            req.ContentType = Grapevine.ContentType.JSON; //TODO: async and await
-            req.Payload = data.ToString();
-            var response = client.Execute(req);
-            if (response.StatusCode != HttpStatusCode.OK)
-            {
-                MessageBox.Show("error"); //TODO; this needs to be better, maybe a handle error method which tries to get the error string
-            }
-            timer1.Start();
+            backgroundWorker2.RunWorkerAsync();
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
+            var stopwatch = new Stopwatch();
             var client = new RESTClient("http://" + ip + ":6555");
+            stopwatch.Start();
             for (int i = 0; i < amount; i++)
             { //Check cancellation
                 var fkey = fakeKeys.Dequeue();
@@ -185,12 +149,20 @@ namespace FEClient
                 JObject data = new JObject {{"key", fkey},{"guid",this.guid},{"i",i}};
 
                 var req = new RESTRequest("/key/");
-                req.Timeout = 5000;
+                
+                req.Timeout = timeout; //TODO actually take from input AND set a timer
                 req.Method = Grapevine.HttpMethod.POST;
                 req.ContentType = Grapevine.ContentType.JSON; //TODO: async and await
                 req.Payload = data.ToString();
                 var response = client.Execute(req);
-                if (response.StatusCode != HttpStatusCode.OK) //TODO: OR IF TIMEOUT
+                if (stopwatch.ElapsedMilliseconds > timeout)
+                {
+                    //TODO: STOP
+                    MessageBox.Show("Timed out!");
+                }
+                stopwatch.Restart();
+                    
+                    if(response.StatusCode != HttpStatusCode.OK) //TODO: OR IF TIMEOUT
                 {
                     this.Invoke((MethodInvoker)delegate
                     {
@@ -201,14 +173,14 @@ namespace FEClient
 
                 //TODO:Check Sig
 
-                backgroundWorker1.ReportProgress((100/amount*i));
+                backgroundWorker1.ReportProgress((i/amount)*100); //TODO: fix
             }
 
             JObject realData = new JObject {{"key", key.keyStr}, {"guid", this.guid}, {"i", amount}}; //TODO: encrypt keys??
 
 
             var realReq = new RESTRequest("/key/");//TODO: split into method with above bit
-            realReq.Timeout = 5000;
+            realReq.Timeout = timeout;
             realReq.Method = Grapevine.HttpMethod.POST;
             realReq.ContentType = Grapevine.ContentType.JSON; //TODO: async and await
             realReq.Payload = realData.ToString();
@@ -233,6 +205,62 @@ namespace FEClient
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             progressBar1.Value = e.ProgressPercentage;
+        }
+
+        private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
+        {
+            // Opens and reads the file to the end
+            var stream = file.OpenRead(); //TODO: if not null and using!
+            string text;
+            using (StreamReader sr = new StreamReader(stream)) //TODO: all using for streams
+            {
+
+                text = sr.ReadToEnd();
+            }
+
+            //Encrypts the data
+            aesData = Aes.Encrypt(text);
+            //Stores the encryption key as a global variable
+            key = aesData.Key;
+
+            int bytes;
+            using (AesCryptoServiceProvider aesCSP = new AesCryptoServiceProvider())
+            {
+                bytes = aesCSP.KeySize / 8;
+            }
+            RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
+            for (int i = 0; i < amount; i++)
+            {
+                byte[] randBytes = new byte[bytes];
+                rng.GetBytes(randBytes);
+                fakeKeys.Enqueue(Convert.ToBase64String(randBytes)); 
+            }
+        }
+
+        private void backgroundWorker2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+
+
+
+            progressLabel.Text = "Attempting to contact " + ip;
+
+            var client = new RESTClient("http://" + ip + ":6555");
+            var req = new RESTRequest("/notify/");
+            JObject data = new JObject { { "fileName", file.Name }, { "email", SettingsWrapper.Instance.Email }, { "ttp", SettingsWrapper.Instance.TTP }, { "guid", guid } };//TODO: two names at once?! send guid?
+            req.Method = Grapevine.HttpMethod.POST;
+            req.ContentType = Grapevine.ContentType.JSON; //TODO: async and await
+            req.Payload = data.ToString();
+            var response = client.Execute(req);
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                MessageBox.Show("error"); //TODO; this needs to be better, maybe a handle error method which tries to get the error string
+            }
+            timer1.Start();
+        }
+
+        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            this.progressLabel.Text = "Finished";
         }
     }
 }

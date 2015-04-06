@@ -9,13 +9,13 @@ namespace FEClient.Security
 {
     public class Aes
     {
-        private const int ROUNDS = 16; //TODO:to user specified?? but this can't be static for reasons of thread safety
+        private const int ROUNDS = 1300000; //TODO:to user specified?? but this can't be static for reasons of thread safety
 
-        public static string Decrypt(string payload, byte[] aeskey, byte[] aesiv, int rounds) //TODO: needs some validity method like check against sig?
+        public static string Decrypt(string payload, byte[] aeskey, byte[] aesiv, int rounds = ROUNDS) //TODO: needs some validity method like check against sig?
         {
             AesCryptoServiceProvider aesCSP = new AesCryptoServiceProvider();
 
-            aesCSP.Key = Strengthen(aeskey, rounds);
+            aesCSP.Key = Strengthen(aeskey, aesiv, rounds);
             aesCSP.IV = aesiv;
 
             var encrypted = Convert.FromBase64String(payload);
@@ -37,7 +37,10 @@ namespace FEClient.Security
             ae.IV = aesCSP.IV;
             ae.Rounds = ROUNDS;
 
-            aesCSP.Key = Strengthen(aesCSP.Key, rounds);
+
+            aesCSP.Key = Strengthen(aesCSP.Key, aesCSP.IV, rounds);
+
+
 
             byte[] inBlock = Encoding.UTF8.GetBytes(data);
             ICryptoTransform xfrm = aesCSP.CreateEncryptor();
@@ -49,13 +52,15 @@ namespace FEClient.Security
             return ad;
         }
 
-        private static byte[] Strengthen(byte[] p, int rounds)
+        private static byte[] Strengthen(byte[] p, byte[] s, int rounds = ROUNDS)
         {
-            return p; //TODO: implement
+            Rfc2898DeriveBytes rfcKey = new Rfc2898DeriveBytes(p, s, rounds);
+            
+            return rfcKey.GetBytes(p.Length);
         }
 
 
-        public static string Decrypt(string payload, string aeskey, string aesiv, int rounds)
+        public static string Decrypt(string payload, string aeskey, string aesiv, int rounds = ROUNDS)
         {
             var aesKeyBytes = Convert.FromBase64String(aeskey);
             var aesIvBytes = Convert.FromBase64String(aesiv);

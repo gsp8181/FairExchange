@@ -34,6 +34,8 @@ namespace FEClient
             ClientRestApi.FileRecieved += MyResource_FileRecieved;
             ClientRestApi.FileRecievedAndRespSent += MyResource_FileRecievedAndRespSent;
             ClientRestApi.KeyRecieved += ClientRestApi_KeyRecieved;
+            saveFileDialog1.FileName = fileName;
+            saveFileDialog1.DefaultExt = new FileInfo(fileName).Extension;
             backgroundWorker1.RunWorkerAsync();
         }
 
@@ -60,14 +62,14 @@ namespace FEClient
 
             using (StreamWriter sw = new StreamWriter(localFile.OpenWrite())) //TODO: on another thread
             {
-                sw.Write(file.data);
+                sw.Write(file.data); //TODO: WHY?
             }
             iv = file.iv;
             this.Invoke((MethodInvoker)delegate //TODO; does this happen AFTER keys start coming?
             {
                 progressBar1.Style = ProgressBarStyle.Continuous;
                 progressBar1.Value = 50;
-                progressLabel.Text = "File recieved, processing";
+                progressLabel.Text = "File recieved, obtaining decryption keys";
                 timer2.Start();
             });
         }
@@ -110,24 +112,27 @@ namespace FEClient
             //try and decrypt or close and display error
             var key = dict.Peek();
             var str = File.ReadAllText(localFile.FullName);
-            this.progressBar1.Value = 66;
+            this.progressBar1.Value = 90;
             this.progressLabel.Text = "Decrypting";
 
-            var decrypted = Security.Aes.Decrypt(str, key, this.iv, 16);
+            var decrypted = Security.Aes.Decrypt(str, key, this.iv);
 
-            this.progressBar1.Value = 100;
+            File.WriteAllText(localFile.FullName,decrypted);
 
-            //saveFileDialog1.ShowDialog();
+            this.progressBar1.Value = 100; //TODO: another thread
 
-            MessageBox.Show(decrypted);
+            saveFileDialog1.ShowDialog();
 
-            MessageBox.Show(localFile.FullName);
-            this.Close();
+            //MessageBox.Show(decrypted);
+
+            //MessageBox.Show(localFile.FullName);
+            Close();
         }
 
         private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
-
+            var senderDialog = (SaveFileDialog) sender;
+            File.Copy(localFile.FullName,senderDialog.FileName,true);
         }
     }
 }
