@@ -36,7 +36,7 @@ namespace TTPClient
                 return;
             }
             string ip = ""; //TODO: does not need to be used?!
-            if (addressBoxIsEmail)
+            /*if (addressBoxIsEmail)
             {
                 var url = settings.TTP + "/rest/sessions/";
 
@@ -51,13 +51,13 @@ namespace TTPClient
                     MessageBox.Show("Could not find. " + ex.Message);
                     return;
                 }
-            } else if (addressBoxIsIp)
+            } else*/ if (addressBoxIsIp)
             {
                 ip = destinationBox.Text;
             }
 
 
-            var sendDialog = new SendDialog(ip, fileBox.Text, 100); //TODO:RESOLVE EMAIL OR IP??
+            var sendDialog = new SendDialog(ip, fileBox.Text, roundsBox.Text); //TODO:RESOLVE EMAIL OR IP??
             sendDialog.Show(); //TODO: validate
             this.Close();
         }
@@ -89,10 +89,10 @@ namespace TTPClient
             }
         }
 
-        private bool addressBoxIsEmail
-        {
-            get { return new RegexUtilities().IsValidEmail(destinationBox.Text); }
-        }
+        //private bool addressBoxIsEmail
+        //{
+        //    get { return new RegexUtilities().IsValidEmail(destinationBox.Text); }
+        //}
 
         private void textBox2_Validated(object sender, EventArgs e)
         {

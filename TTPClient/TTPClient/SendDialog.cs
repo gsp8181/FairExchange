@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Grapevine.Client;
 using Newtonsoft.Json.Linq;
+using TTPClient.API;
 using TTPClient.Security;
 using Aes = TTPClient.Security.Aes;
 

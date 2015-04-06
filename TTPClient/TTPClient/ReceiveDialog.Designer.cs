@@ -52,7 +52,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(14, 23);
             this.button1.TabIndex = 1;
-            this.button1.Text = "Abort";
+            this.button1.Text = "X";
             this.button1.UseVisualStyleBackColor = true;
             // 
             // progressLabel

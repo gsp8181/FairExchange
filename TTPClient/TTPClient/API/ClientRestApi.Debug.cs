@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net;
 using Grapevine;
 using Grapevine.Server;
 using Newtonsoft.Json.Linq;
 using TTPClient.Security;
 
-namespace TTPClient
+namespace TTPClient.API
 {
     public sealed partial class ClientRestApi
     {

@@ -2,6 +2,8 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Windows.Forms;
+using Grapevine.Server;
+using TTPClient.API;
 using TTPClient.NotMyCode;
 
 namespace TTPClient
@@ -9,7 +11,7 @@ namespace TTPClient
     
     public partial class Context : ApplicationContext
     {
-        //public Form1 form1;
+        public static RESTServer server = new RESTServer("+", "6555", "http", "index.html", null, 5);
         public Context()
         {
             while (!SettingsWrapper.Instance.IsSet)
@@ -26,9 +28,6 @@ namespace TTPClient
             InitializeComponent();
             //ClientRestApi.Notify += MyResource_Click;
             ClientRestApi.NotifyRecieved += MyResource_NotifyRecieved;
-            //form1 = new Form1();
-            //this.MainForm = form1;
-            //form1.Show();
 
             Form1_Load(null,null);
         }
@@ -55,12 +54,12 @@ namespace TTPClient
         private void Form1_Load(object sender, EventArgs e)
         {
             createFirewallException(6555);
-            Program.server.OnStart = onServerStartNotify;
-            Program.server.Start();
-            if (!Program.server.IsListening) //TODO: maybe sort out with a timer
+            Context.server.OnStart = onServerStartNotify;
+            Context.server.Start();
+            if (!Context.server.IsListening) //TODO: maybe sort out with a timer
             {
                 NetAclChecker.AddAddress("http://+:6555/");
-                Program.server.Start();
+                Context.server.Start();
                 /*if (!Program.server.IsListening)
                 {
                     MessageBox.Show("Could not bind port 6555", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error); //todo: does not work
