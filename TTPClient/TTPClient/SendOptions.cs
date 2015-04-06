@@ -9,7 +9,7 @@ namespace TTPClient
 {
     public partial class SendOptions : Form
     {
-        private SettingsWrapper settings = SettingsWrapper.Instance;
+        private SettingsWrapper _settings = SettingsWrapper.Instance;
         public SendOptions()
         {
             InitializeComponent();
@@ -57,14 +57,14 @@ namespace TTPClient
             }
 
 
-            var sendDialog = new SendDialog(ip, fileBox.Text, roundsBox.Text); //TODO:RESOLVE EMAIL OR IP??
+            var sendDialog = new SendDialog(ip, fileBox.Text, int.Parse(roundsBox.Text));
             sendDialog.Show(); //TODO: validate
             this.Close();
         }
 
         private bool validateAll()
         {
-            if (!addressBoxIsIp && !addressBoxIsEmail)
+            if (!addressBoxIsIp)
             {
                 errorProvider.SetError(destinationBox,"Wrong format, should be an email or IP");
                 return false;
@@ -112,9 +112,9 @@ namespace TTPClient
 
         private void textBox1_Validated(object sender, EventArgs e)
         {
-            if (!addressBoxIsIp && !addressBoxIsEmail)
+            if (!addressBoxIsIp)
             {
-                errorProvider.SetError(destinationBox, "Wrong format, should be an email or IP");
+                errorProvider.SetError(destinationBox, "Wrong format, should be an IP address");
             }
             else
             {
@@ -148,7 +148,7 @@ namespace TTPClient
 
         private void roundsBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            var textSender = (TextBox)sender;
+            //var textSender = (TextBox)sender;
             if(!Char.IsNumber(e.KeyChar) && !Char.IsControl(e.KeyChar))
             e.Handled = true;
         }

@@ -11,7 +11,7 @@ namespace TTPClient
     
     public partial class Context : ApplicationContext
     {
-        public static RESTServer server = new RESTServer("+", "6555", "http", "index.html", null, 5);
+        private static RESTServer server = new RESTServer("+", "6555", "http", "index.html", null, 5);
         public Context()
         {
             while (!SettingsWrapper.Instance.IsSet)
@@ -22,11 +22,11 @@ namespace TTPClient
                 }
             }
 
-            //SettingsWrapper.Instance.RegWithTracker(); //TODO: is port open? notify registration balloon?
+            //TODO: is port open?
 
 
             InitializeComponent();
-            //ClientRestApi.Notify += MyResource_Click;
+
             ClientRestApi.NotifyRecieved += MyResource_NotifyRecieved;
 
             Form1_Load(null,null);
@@ -35,8 +35,6 @@ namespace TTPClient
 
 
         private NotifyRequest currentTipReq;
-        private SettingsWrapper settings = SettingsWrapper.Instance;
-        //RESTClient restClient = new RESTClient(textBox1.Text);
 
         private void ShowBalloonTip(int timeout, string tipTitle, string tipText, ToolTipIcon tipIcon,
             NotifyRequest nr = null)
@@ -94,22 +92,11 @@ namespace TTPClient
             }
             var receiveDialog = new ReceiveDialog(currentTipReq.ip, currentTipReq.fileName, currentTipReq.guid);
             receiveDialog.Show();
-
-            /*var client = new RESTClient("http://" + currentTipReq.ip + ":6555");
-            var req = new RESTRequest("/start/");
-            JObject data = new JObject {{"fileName", currentTipReq.fileName}, {"email", settings.Email}};
-            req.Method = Grapevine.HttpMethod.POST;
-            req.ContentType = Grapevine.ContentType.JSON;
-            req.Payload = data.ToString();
-            var response = client.Execute(req);*/
-            //MessageBox.Show("Status Code: " + response.StatusCode);
         }
 
         private void quitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.ExitThread();
-            //Application.Exit();
-            //Environment.Exit(0);
+            ExitThread();
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
