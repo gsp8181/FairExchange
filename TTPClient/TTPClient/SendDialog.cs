@@ -12,13 +12,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FEClient.API;
+using FEClient.Security;
 using Grapevine.Client;
 using Newtonsoft.Json.Linq;
-using TTPClient.API;
-using TTPClient.Security;
-using Aes = TTPClient.Security.Aes;
+using Aes = FEClient.Security.Aes;
 
-namespace TTPClient
+namespace FEClient
 {
     public partial class SendDialog : Form
     {

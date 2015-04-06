@@ -1,4 +1,4 @@
-﻿namespace TTPClient.API
+﻿namespace FEClient.API
 {
     public sealed partial class ClientRestApi
     {

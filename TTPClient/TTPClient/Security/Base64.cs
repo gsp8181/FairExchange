@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace TTPClient.Security
+namespace FEClient.Security
 {
     public class Base64
     {

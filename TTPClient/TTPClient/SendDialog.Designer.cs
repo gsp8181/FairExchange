@@ -1,4 +1,4 @@
-﻿namespace TTPClient
+﻿namespace FEClient
 {
     partial class SendDialog
     {

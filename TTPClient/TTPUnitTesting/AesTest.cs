@@ -2,7 +2,7 @@
 using System.Security.Permissions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
-using TTPClient.Security;
+using FEClient.Security;
 
 namespace TTPUnitTesting
 {

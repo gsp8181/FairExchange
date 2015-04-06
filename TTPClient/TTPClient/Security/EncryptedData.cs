@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace TTPClient.Security
+namespace FEClient.Security
 {
     public class EncryptedData
     {

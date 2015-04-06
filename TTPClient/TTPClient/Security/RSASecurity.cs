@@ -8,7 +8,7 @@ using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Security;
 
-namespace TTPClient.Security
+namespace FEClient.Security
 {
     public static class Rsa
     {

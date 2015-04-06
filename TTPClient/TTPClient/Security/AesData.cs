@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace TTPClient.Security
+namespace FEClient.Security
 {
     public class AesData
     {

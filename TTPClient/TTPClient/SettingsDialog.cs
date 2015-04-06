@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
-using TTPClient.Security;
+using FEClient.Security;
 
-namespace TTPClient
+namespace FEClient
 {
     public partial class SettingsDialog : Form
     {
@@ -21,7 +21,7 @@ namespace TTPClient
                 return;
             }
             SaveSettings();
-            settings.RegWithTracker();
+            this.DialogResult = DialogResult.OK;
             this.Close();
         }
 

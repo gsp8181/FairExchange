@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace TTPClient.NotMyCode
+namespace FEClient.NotMyCode
 {
     public static class NetAclChecker //http://stackoverflow.com/questions/2583347/c-sharp-httplistener-without-using-netsh-to-register-a-uri
     {

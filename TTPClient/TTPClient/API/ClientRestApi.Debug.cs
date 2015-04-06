@@ -1,10 +1,10 @@
 ﻿using System.Net;
+using FEClient.Security;
 using Grapevine;
 using Grapevine.Server;
 using Newtonsoft.Json.Linq;
-using TTPClient.Security;
 
-namespace TTPClient.API
+namespace FEClient.API
 {
     public sealed partial class ClientRestApi
     {

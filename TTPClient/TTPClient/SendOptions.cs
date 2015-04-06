@@ -3,9 +3,9 @@ using System.ComponentModel;
 using System.IO;
 using System.Net;
 using System.Windows.Forms;
-using TTPClient.NotMyCode;
+using FEClient.NotMyCode;
 
-namespace TTPClient
+namespace FEClient
 {
     public partial class SendOptions : Form
     {

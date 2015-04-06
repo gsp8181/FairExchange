@@ -2,11 +2,11 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Windows.Forms;
+using FEClient.API;
+using FEClient.NotMyCode;
 using Grapevine.Server;
-using TTPClient.API;
-using TTPClient.NotMyCode;
 
-namespace TTPClient
+namespace FEClient
 {
     
     public partial class Context : ApplicationContext
@@ -14,13 +14,17 @@ namespace TTPClient
         private static RESTServer server = new RESTServer("+", "6555", "http", "index.html", null, 5);
         public Context()
         {
-            while (!SettingsWrapper.Instance.IsSet)
+            do
             {
                 using (SettingsDialog dialog = new SettingsDialog())
                 {
                     dialog.ShowDialog(); //TODO: if cancel then quit
+                    if (dialog.DialogResult == DialogResult.Cancel)
+                    {
+                        Environment.Exit(-1);
+                    }
                 }
-            }
+            } while (!SettingsWrapper.Instance.IsSet);
 
             //TODO: is port open?
 
@@ -52,12 +56,12 @@ namespace TTPClient
         private void Form1_Load(object sender, EventArgs e)
         {
             createFirewallException(6555);
-            Context.server.OnStart = onServerStartNotify;
-            Context.server.Start();
-            if (!Context.server.IsListening) //TODO: maybe sort out with a timer
+            server.OnStart = onServerStartNotify;
+            server.Start();
+            if (!server.IsListening) //TODO: maybe sort out with a timer
             {
                 NetAclChecker.AddAddress("http://+:6555/");
-                Context.server.Start();
+                server.Start();
                 /*if (!Program.server.IsListening)
                 {
                     MessageBox.Show("Could not bind port 6555", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error); //todo: does not work

@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TTPClient.Security
+namespace FEClient.Security
 {
     public class Aes
     {

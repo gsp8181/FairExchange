@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Grapevine.Server;
 
-namespace TTPClient
+namespace FEClient
 {
     static class Program
     {

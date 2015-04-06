@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TTPClient
+namespace FEClient
 {
     public partial class Context
     {
@@ -47,7 +47,7 @@ namespace TTPClient
             // notifyIcon
             // 
             this.notifyIcon.ContextMenuStrip = this.notifyIconMenu;
-            this.notifyIcon.Icon = global::TTPClient.Properties.Resources.Icojam_Blue_Bits_Document_arrow_down;
+            this.notifyIcon.Icon = global::FEClient.Properties.Resources.Icojam_Blue_Bits_Document_arrow_down;
             this.notifyIcon.Text = "TTP Client";
             this.notifyIcon.Visible = true;
             this.notifyIcon.BalloonTipClicked += new System.EventHandler(this.notifyIcon1_BalloonTipClicked_1);

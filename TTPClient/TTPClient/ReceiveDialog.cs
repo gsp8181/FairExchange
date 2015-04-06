@@ -9,11 +9,11 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FEClient.API;
 using Grapevine.Client;
 using Newtonsoft.Json.Linq;
-using TTPClient.API;
 
-namespace TTPClient
+namespace FEClient
 {
     public partial class ReceiveDialog : Form
     {

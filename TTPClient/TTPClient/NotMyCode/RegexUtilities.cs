@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace TTPClient.NotMyCode
+namespace FEClient.NotMyCode
 {
     public class RegexUtilities //https://msdn.microsoft.com/en-us/library/01escwtf%28v=vs.110%29.aspx
     {
