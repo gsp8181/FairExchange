@@ -58,9 +58,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TTPClient\TTPClient.csproj">
+    <ProjectReference Include="..\TTPClient\FEClient.csproj">
       <Project>{46c052c8-6a5b-4af9-81c2-23306616558c}</Project>
-      <Name>TTPClient</Name>
+      <Name>FEClient</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
