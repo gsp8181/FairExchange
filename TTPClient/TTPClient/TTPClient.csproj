@@ -63,18 +63,15 @@
   <ItemGroup>
     <Compile Include="API\KeyArgs.cs" />
     <Compile Include="Context.cs" />
+    <Compile Include="Context.Designer.cs">
+      <DependentUpon>Context.cs</DependentUpon>
+    </Compile>
     <Compile Include="Security\Aes.cs" />
     <Compile Include="Security\AesData.cs" />
     <Compile Include="Security\AesKeys.cs" />
     <Compile Include="Security\Base64.cs" />
     <Compile Include="Security\EncryptedData.cs" />
     <Compile Include="API\FileSend.cs" />
-    <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="NotMyCode\NetAclChecker.cs" />
     <Compile Include="API\NotifyArgs.cs" />
     <Compile Include="API\NotifyRequest.cs" />
@@ -109,9 +106,6 @@
       <DependentUpon>SettingsDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="SettingsWrapper.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

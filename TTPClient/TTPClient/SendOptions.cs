@@ -17,12 +17,12 @@ namespace TTPClient
 
         private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
-            textBox2.Text = openFileDialog1.FileName;
+            fileBox.Text = openFileDialog.FileName;
         }
 
         private void browseButton_Click(object sender, EventArgs e)
         {
-            openFileDialog1.ShowDialog();
+            openFileDialog.ShowDialog();
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
@@ -40,7 +40,7 @@ namespace TTPClient
             {
                 var url = settings.TTP + "/rest/sessions/";
 
-                url = url + textBox1.Text;
+                url = url + destinationBox.Text;
                 try
                 {
                     var content = new WebClient().DownloadString(url);
@@ -53,11 +53,11 @@ namespace TTPClient
                 }
             } else if (addressBoxIsIp)
             {
-                ip = textBox1.Text;
+                ip = destinationBox.Text;
             }
 
 
-            var sendDialog = new SendDialog(ip, textBox2.Text, 100); //TODO:RESOLVE EMAIL OR IP??
+            var sendDialog = new SendDialog(ip, fileBox.Text, 100); //TODO:RESOLVE EMAIL OR IP??
             sendDialog.Show(); //TODO: validate
             this.Close();
         }
@@ -66,13 +66,13 @@ namespace TTPClient
         {
             if (!addressBoxIsIp && !addressBoxIsEmail)
             {
-                errorProvider.SetError(textBox1,"Wrong format, should be an email or IP");
+                errorProvider.SetError(destinationBox,"Wrong format, should be an email or IP");
                 return false;
             }
-            if (string.IsNullOrWhiteSpace(textBox2.Text))
+            if (string.IsNullOrWhiteSpace(fileBox.Text))
                 return false;
 
-            var fileInfo = new FileInfo(textBox2.Text);
+            var fileInfo = new FileInfo(fileBox.Text);
             if (fileInfo.Exists && fileInfo.Length > 0)
             {
                 return true;
@@ -85,28 +85,28 @@ namespace TTPClient
             get
             {
                 IPAddress ipObj;
-                return IPAddress.TryParse(textBox1.Text, out ipObj);
+                return IPAddress.TryParse(destinationBox.Text, out ipObj);
             }
         }
 
         private bool addressBoxIsEmail
         {
-            get { return new RegexUtilities().IsValidEmail(textBox1.Text); }
+            get { return new RegexUtilities().IsValidEmail(destinationBox.Text); }
         }
 
         private void textBox2_Validated(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(textBox2.Text))
+            if (string.IsNullOrWhiteSpace(fileBox.Text))
                 return;
 
-            var fileInfo = new FileInfo(textBox2.Text);
+            var fileInfo = new FileInfo(fileBox.Text);
             if (!fileInfo.Exists || fileInfo.Length <= 0)
             {
-                errorProvider.SetError(textBox2, "File does not exist or is blank");
+                errorProvider.SetError(fileBox, "File does not exist or is blank");
             }
             else
             {
-                errorProvider.SetError(textBox2, string.Empty);
+                errorProvider.SetError(fileBox, string.Empty);
             }
         }
 
@@ -114,12 +114,43 @@ namespace TTPClient
         {
             if (!addressBoxIsIp && !addressBoxIsEmail)
             {
-                errorProvider.SetError(textBox1, "Wrong format, should be an email or IP");
+                errorProvider.SetError(destinationBox, "Wrong format, should be an email or IP");
             }
             else
             {
-                errorProvider.SetError(textBox1, string.Empty);
+                errorProvider.SetError(destinationBox, string.Empty);
             }
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (advancedCheckBox.Checked)
+            {
+                roundsBox.Enabled = true;
+                complexityBox.Enabled = true;
+                timeoutBox.Enabled = true;
+            }
+            else
+            {
+                roundsBox.Text = "1000";
+                complexityBox.Text = "18";
+                timeoutBox.Text = "5";
+                roundsBox.Enabled = false;
+                complexityBox.Enabled = false;
+                timeoutBox.Enabled = false;
+            }
+        }
+
+        private void roundsBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            var textSender = (TextBox)sender;
+            if(!Char.IsNumber(e.KeyChar) && !Char.IsControl(e.KeyChar))
+            e.Handled = true;
         }
     }
 }

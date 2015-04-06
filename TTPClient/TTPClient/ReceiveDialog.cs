@@ -119,6 +119,8 @@ namespace TTPClient
 
             //saveFileDialog1.ShowDialog();
 
+            MessageBox.Show(decrypted);
+
             MessageBox.Show(localFile.FullName);
             this.Close();
         }

@@ -56,5 +56,10 @@ namespace TTPClient
             errorProvider1.SetError(emailBox,
                 string.IsNullOrWhiteSpace(emailBox.Text) ? "Email cannot be empty" : String.Empty);
         }
+
+        private void publicKeyButton_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(Rsa.getPublicKey());
+        }
     }
 }
