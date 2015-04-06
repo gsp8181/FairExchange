@@ -8,14 +8,7 @@ using TTPClient.Properties;
 
 namespace TTPClient
 {
-    public interface ISettingsWrapper //TODO: getInstance()
-    {
-        string Email { get; set; }
-
-        bool IsSet { get; }
-    }
-
-    public class SettingsWrapper : ISettingsWrapper
+    public class SettingsWrapper
     {
         private static SettingsWrapper _SettingsWrapper = new SettingsWrapper();
         private SettingsWrapper() { }
