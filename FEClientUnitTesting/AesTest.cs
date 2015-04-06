@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
 using FEClient.Security;
 
-namespace TTPUnitTesting
+namespace FEClientUnitTesting
 {
     [TestClass]
     public class AesTest

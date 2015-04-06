@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FEClient", "TTPClient\FEClient.csproj", "{46C052C8-6A5B-4AF9-81C2-23306616558C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FEClient", "FEClient\FEClient.csproj", "{46C052C8-6A5B-4AF9-81C2-23306616558C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FEClientUnitTesting", "TTPUnitTesting\FEClientUnitTesting.csproj", "{1DE7AFD8-70A1-4E44-AB4B-31F6EE0D78DC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FEClientUnitTesting", "FEClientUnitTesting\FEClientUnitTesting.csproj", "{1DE7AFD8-70A1-4E44-AB4B-31F6EE0D78DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -6,8 +6,8 @@
     <ProjectGuid>{1DE7AFD8-70A1-4E44-AB4B-31F6EE0D78DC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TTPUnitTesting</RootNamespace>
-    <AssemblyName>TTPUnitTesting</AssemblyName>
+    <RootNamespace>FEClientUnitTesting</RootNamespace>
+    <AssemblyName>FEClientUnitTesting</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -58,7 +58,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TTPClient\FEClient.csproj">
+    <ProjectReference Include="..\FEClient\FEClient.csproj">
       <Project>{46c052c8-6a5b-4af9-81c2-23306616558c}</Project>
       <Name>FEClient</Name>
     </ProjectReference>
