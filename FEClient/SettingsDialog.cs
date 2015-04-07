@@ -16,7 +16,7 @@ namespace FEClient
         private void button1_Click(object sender, EventArgs e)
         {
             //errorProvider1.Clear();
-            if (string.IsNullOrWhiteSpace(ttpBox.Text) || string.IsNullOrWhiteSpace(emailBox.Text))
+            if (string.IsNullOrWhiteSpace(emailBox.Text))
             {
                 return;
             }
