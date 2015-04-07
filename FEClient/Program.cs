@@ -15,7 +15,7 @@ namespace FEClient
     {
         static Context form;
 
-#if SINGLEINSTANCE
+#if !MULTIINSTANCE
         private static string guid =
             ((GuidAttribute) Assembly.GetExecutingAssembly().GetCustomAttributes(typeof (GuidAttribute), true)[0]).Value;
         static Mutex mutex = new Mutex(true,guid);
@@ -28,14 +28,14 @@ namespace FEClient
         [STAThread]
         static void Main()
         {
-#if SINGLEINSTANCE
+#if !MULTIINSTANCE
             if (mutex.WaitOne(TimeSpan.Zero, true))
             {
 #endif
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(form = new Context());
-#if SINGLEINSTANCE
+#if !MULTIINSTANCE
                 mutex.ReleaseMutex();
             }
 #endif
