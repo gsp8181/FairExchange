@@ -250,7 +250,7 @@ namespace FEClient
 
             var client = new RESTClient("http://" + ip);
             var req = new RESTRequest("/notify/");
-            var data = new JObject { { "fileName", file.Name }, { "email", SettingsWrapper.Instance.Email }, { "ttp", SettingsWrapper.Instance.TTP }, { "guid", guid }, {"timeout", timeout}, {"complexity", complexity}, {"port",Context.port} };
+            var data = new JObject { { "fileName", file.Name }, { "email", SettingsWrapper.Instance.Email }, { "guid", guid }, {"timeout", timeout}, {"complexity", complexity}, {"port",Context.port} };
             req.Method = Grapevine.HttpMethod.POST;
             req.ContentType = Grapevine.ContentType.JSON; //TODO: async and await
             req.Payload = data.ToString();

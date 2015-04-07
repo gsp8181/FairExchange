@@ -9,12 +9,11 @@ namespace FEClient.Security
 {
     public class Aes
     {
-        private const int ROUNDS = 1300000; //TODO:to user specified?? but this can't be static for reasons of thread safety
 
-        public static string Decrypt(string payload, byte[] aeskey, byte[] aesiv, int rounds = ROUNDS) //TODO: needs some validity method like check against sig?
+        public static string Decrypt(string payload, byte[] aeskey, byte[] aesiv, int rounds) //TODO: needs some validity method like check against sig?
         {
-            AesCryptoServiceProvider aesCSP = new AesCryptoServiceProvider();
-
+            using (AesCryptoServiceProvider aesCSP = new AesCryptoServiceProvider())
+            { 
             aesCSP.Key = Strengthen(aeskey, aesiv, rounds);
             aesCSP.IV = aesiv;
 
@@ -25,17 +24,19 @@ namespace FEClient.Security
             byte[] outBlock = xfrm.TransformFinalBlock(encrypted, 0, encrypted.Length);
 
             return Encoding.UTF8.GetString(outBlock);
+            }
         }
 
-        public static AesData Encrypt(string data, int rounds = ROUNDS)
+        public static AesData Encrypt(string data, int rounds)
         {
-            AesCryptoServiceProvider aesCSP = new AesCryptoServiceProvider();
+            using (AesCryptoServiceProvider aesCSP = new AesCryptoServiceProvider())
+            { 
             aesCSP.GenerateIV();
             aesCSP.GenerateKey();
             AesKeys ae = new AesKeys();
             ae.Key = aesCSP.Key;
             ae.IV = aesCSP.IV;
-            ae.Rounds = ROUNDS;
+            ae.Rounds = rounds; //TODO: embed the parameter sent through rest as THIS instead, probably when RSA takes shape
 
 
             aesCSP.Key = Strengthen(aesCSP.Key, aesCSP.IV, rounds);
@@ -50,9 +51,10 @@ namespace FEClient.Security
             ad.Key = ae;
             ad.DataStr = encrypted;
             return ad;
+            }
         }
 
-        private static byte[] Strengthen(byte[] p, byte[] s, int rounds = ROUNDS)
+        private static byte[] Strengthen(byte[] p, byte[] s, int rounds)
         {
             Rfc2898DeriveBytes rfcKey = new Rfc2898DeriveBytes(p, s, rounds);
             
@@ -60,7 +62,7 @@ namespace FEClient.Security
         }
 
 
-        public static string Decrypt(string payload, string aeskey, string aesiv, int rounds = ROUNDS)
+        public static string Decrypt(string payload, string aeskey, string aesiv, int rounds)
         {
             var aesKeyBytes = Convert.FromBase64String(aeskey);
             var aesIvBytes = Convert.FromBase64String(aesiv);

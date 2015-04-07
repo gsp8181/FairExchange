@@ -41,9 +41,9 @@ namespace FEClient.Security
             }
         }
 
-        public static EncryptedData EncryptData(string data, RSACryptoServiceProvider rsa) //TODO: this encrypts to self
+        public static EncryptedData EncryptData(string data, RSACryptoServiceProvider rsa, int rounds) //TODO: this encrypts to self
         {
-            var ad = Aes.Encrypt(data);
+            var ad = Aes.Encrypt(data,rounds);
 
             var keyStr = ad.Key.ToString();
 
@@ -100,15 +100,15 @@ namespace FEClient.Security
         }
 
 
-        public static EncryptedData EncryptData(string data) //encrypts with OWN KEY
+        public static EncryptedData EncryptData(string data, int rounds) //encrypts with OWN KEY
         {
             using (var rsa = new RSACryptoServiceProvider(2048, csparams))
             {
-                return EncryptData(data, rsa);
+                return EncryptData(data, rsa, rounds);
             }
         }
 
-        public static EncryptedData EncryptData(string data, string key)
+        public static EncryptedData EncryptData(string data, string key, int rounds)
         {
             var RSAKeyInfo = GetPublicKeyParams(key);
 
@@ -116,7 +116,7 @@ namespace FEClient.Security
             {
                 rsa.PersistKeyInCsp = false;
                 rsa.ImportParameters(RSAKeyInfo);
-                return EncryptData(data, rsa);
+                return EncryptData(data, rsa, rounds);
             }
         }
 

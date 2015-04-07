@@ -13,7 +13,6 @@ namespace FEClient
 {
     static class Program
     {
-        static Context form;
 
 #if !MULTIINSTANCE
         private static string guid =
@@ -34,7 +33,7 @@ namespace FEClient
 #endif
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(form = new Context());
+                Application.Run(new Context());
 #if !MULTIINSTANCE
                 mutex.ReleaseMutex();
             }

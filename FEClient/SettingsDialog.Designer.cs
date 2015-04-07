@@ -68,11 +68,11 @@
             // 
             // ttpBox
             // 
+            this.ttpBox.Enabled = false;
             this.ttpBox.Location = new System.Drawing.Point(86, 12);
             this.ttpBox.Name = "ttpBox";
             this.ttpBox.Size = new System.Drawing.Size(186, 20);
             this.ttpBox.TabIndex = 8;
-            this.ttpBox.Validated += new System.EventHandler(this.ttpBox_Validated);
             // 
             // okButton
             // 

@@ -101,7 +101,7 @@ namespace FEClient
         {
             var client = new RESTClient("http://" + ip);
             var req = new RESTRequest("/start/");
-            JObject data = new JObject { { "fileName", fileName }, { "email", SettingsWrapper.Instance.Email }, {"ttp", SettingsWrapper.Instance.TTP}, {"guid", guid} };
+            JObject data = new JObject { { "fileName", fileName }, { "email", SettingsWrapper.Instance.Email }, {"guid", guid} };
             req.Method = Grapevine.HttpMethod.POST;
             req.ContentType = Grapevine.ContentType.JSON;
             req.Payload = data.ToString();

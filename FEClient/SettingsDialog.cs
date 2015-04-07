@@ -29,13 +29,11 @@ namespace FEClient
         {
 
             settings.Email = this.emailBox.Text;
-            settings.TTP = this.ttpBox.Text;
         }
 
         public void LoadSettings()
         {
             emailBox.Text = settings.Email;
-            ttpBox.Text = settings.TTP;
 
         }
 
@@ -43,12 +41,6 @@ namespace FEClient
         {
             Rsa.Regenerate_RSA();
             MessageBox.Show("Regenerated Keys", "Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private void ttpBox_Validated(object sender, EventArgs e)
-        {
-            errorProvider1.SetError(ttpBox,
-                string.IsNullOrWhiteSpace(ttpBox.Text) ? "TTP cannot be empty" : String.Empty);
         }
 
         private void emailBox_Validated(object sender, EventArgs e)

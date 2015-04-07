@@ -34,17 +34,5 @@ namespace FEClient.Properties {
                 this["Email"] = value;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://osttp.gsp8181.co.uk")]
-        public string TTP {
-            get {
-                return ((string)(this["TTP"]));
-            }
-            set {
-                this["TTP"] = value;
-            }
-        }
     }
 }

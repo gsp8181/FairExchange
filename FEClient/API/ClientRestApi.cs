@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 using System.Net;
 using System.Reflection;
@@ -80,30 +81,28 @@ namespace FEClient.API
             {
                 var jsonStr = this.GetJsonPayload(context.Request); //TODO: validate here with Json.NET Schema
                 Debug.WriteLine(jsonStr);
-                string fileName, email, ttp, guid, port;
+                string fileName, email, guid, port;
                 int timeout, complexity;
                 try
                 {
-                    fileName = jsonStr.Value<string>("fileName");
-                    email = jsonStr.Value<string>("email"); //TODO: find off tracker or reject
-                    ttp = jsonStr.Value<string>("ttp");
+                    fileName = jsonStr.Value<string>("fileName"); //TODO: make sure NOT NULL
+                    email = jsonStr.Value<string>("email");
                     guid = jsonStr.Value<string>("guid");
                     timeout = jsonStr.Value<int>("timeout");
                     complexity = jsonStr.Value<int>("complexity");
                     port = jsonStr.Value<string>("port");
                 }
-                catch (NullReferenceException e)
+                catch (NullReferenceException)
                 {
-                    JObject eresponse = new JObject {{"accepted", false}, {"error", "malformed JSON"}};
-                    context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                    JObject eresponse = new JObject { { "accepted", false }, { "error", "malformed JSON" } };
+                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     Debug.WriteLine("/notify/ OR /start/ SENT " + eresponse);
                     this.SendJsonResponse(context, eresponse);
                     return null;
                 }
-
-                if (ttp != SettingsWrapper.Instance.TTP)
+                catch (FormatException)
                 {
-                    JObject eresponse = new JObject { { "accepted", false }, { "error", "this server is using the TTP at " + SettingsWrapper.Instance.TTP } };
+                    JObject eresponse = new JObject { { "accepted", false }, { "error", "malformed JSON" } };
                     context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                     Debug.WriteLine("/notify/ OR /start/ SENT " + eresponse);
                     this.SendJsonResponse(context, eresponse);
