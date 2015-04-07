@@ -124,7 +124,7 @@ namespace FEClient
 
             this.progressBar1.Value = 100; //TODO: another thread
 
-            saveFileDialog1.ShowDialog();
+            saveFileDialog1.ShowDialog(); //TODO: save again??
 
             //MessageBox.Show(decrypted);
 
