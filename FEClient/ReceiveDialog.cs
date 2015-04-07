@@ -99,7 +99,7 @@ namespace FEClient
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e) //TODO: does this have to be separate
         {
-            var client = new RESTClient("http://" + ip + ":6555");
+            var client = new RESTClient("http://" + ip);
             var req = new RESTRequest("/start/");
             JObject data = new JObject { { "fileName", fileName }, { "email", SettingsWrapper.Instance.Email }, {"ttp", SettingsWrapper.Instance.TTP}, {"guid", guid} };
             req.Method = Grapevine.HttpMethod.POST;

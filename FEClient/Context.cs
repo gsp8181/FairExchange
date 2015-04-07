@@ -11,7 +11,8 @@ namespace FEClient
     
     public partial class Context : ApplicationContext
     {
-        private static RESTServer server = new RESTServer("+", "6555", "http", "index.html", null, 5);
+        private const string port = "6555";
+        private static RESTServer server = new RESTServer("+", port, "http", "index.html", null, 5);
         private NotifyRequest currentTipReq;
 
         public Context()
@@ -35,12 +36,12 @@ namespace FEClient
 
             ClientRestApi.NotifyRecieved += ClientRestApi_NotifyRecieved;
 
-            createFirewallException(6555);
+            createFirewallException(int.Parse(port));
             server.OnStart = onServerStartNotify;
             server.Start();
             if (!server.IsListening) //TODO: maybe sort out with a timer
             {
-                NetAclChecker.AddAddress("http://+:6555/");
+                NetAclChecker.AddAddress("http://+:"+port+"/");
                 server.Start();
                 /*if (!Program.server.IsListening)
                 {
@@ -66,7 +67,7 @@ namespace FEClient
         private void onServerStartNotify()
         {
 //TODO: check if port is open
-            ShowBalloonTip(5000, "Started", "Server started and is listening on port 6555", ToolTipIcon.Info);
+            ShowBalloonTip(5000, "Started", "Server started and is listening on port " + port, ToolTipIcon.Info);
         }
 
         private void createFirewallException(int port)

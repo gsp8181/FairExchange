@@ -92,7 +92,7 @@ namespace FEClient
             progressBar1.Style = ProgressBarStyle.Continuous;
 
             // Creates a new POST request to the remote client
-            var client = new RESTClient("http://" + ip + ":6555");
+            var client = new RESTClient("http://" + ip);
             var req = new RESTRequest("/file/")
             {
                 Method = Grapevine.HttpMethod.POST,
@@ -144,7 +144,7 @@ namespace FEClient
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
             var stopwatch = new Stopwatch();
-            var client = new RESTClient("http://" + ip + ":6555");
+            var client = new RESTClient("http://" + ip);
             stopwatch.Start();
             for (int i = 0; i < amount; i++)
             { //Check cancellation
@@ -248,7 +248,7 @@ namespace FEClient
 
             progressLabel.Text = "Attempting to contact " + ip;
 
-            var client = new RESTClient("http://" + ip + ":6555");
+            var client = new RESTClient("http://" + ip);
             var req = new RESTRequest("/notify/");
             JObject data = new JObject { { "fileName", file.Name }, { "email", SettingsWrapper.Instance.Email }, { "ttp", SettingsWrapper.Instance.TTP }, { "guid", guid }, {"timeout", timeout}, {"complexity", complexity} };//TODO: two names at once?! send guid?
             req.Method = Grapevine.HttpMethod.POST;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Windows.Forms;
 using FEClient.NotMyCode;
@@ -35,6 +36,7 @@ namespace FEClient
             {
                 return;
             }
+
             string ip = ""; //TODO: does not need to be used?!
             /*if (addressBoxIsEmail)
             {
@@ -54,6 +56,11 @@ namespace FEClient
             } else*/ if (addressBoxIsIp)
             {
                 ip = destinationBox.Text;
+            }
+
+            if (!ip.Contains(":"))
+            {
+                ip += ":6555";
             }
 
 
@@ -84,8 +91,14 @@ namespace FEClient
         {
             get
             {
+                var ipText = destinationBox.Text;
+                if (ipText.Contains(':'))
+                {
+                    var index = ipText.LastIndexOf(":");
+                    ipText = ipText.Remove(index, ipText.Count() - index);
+                }
                 IPAddress ipObj;
-                return IPAddress.TryParse(destinationBox.Text, out ipObj);
+                return IPAddress.TryParse(ipText, out ipObj);
             }
         }
 
