@@ -80,12 +80,15 @@ namespace FEClient.API
                 var jsonStr = this.GetJsonPayload(context.Request); //TODO: validate here with Json.NET Schema
                 Debug.WriteLine(jsonStr);
                 string fileName, email, ttp, guid;
+                int timeout, complexity;
                 try
                 {
                     fileName = jsonStr.Value<string>("fileName");
                     email = jsonStr.Value<string>("email"); //TODO: find off tracker or reject
                     ttp = jsonStr.Value<string>("ttp");
                     guid = jsonStr.Value<string>("guid");
+                    timeout = jsonStr.Value<int>("timeout");
+                    complexity = jsonStr.Value<int>("complexity");
                 }
                 catch (NullReferenceException e)
                 {
@@ -107,7 +110,7 @@ namespace FEClient.API
 
                 var ip = context.Request.RemoteEndPoint.Address.ToString();
 
-                var output = new NotifyRequest {email = email, fileName = fileName, ip = ip, guid=guid};
+                var output = new NotifyRequest {email = email, fileName = fileName, ip = ip, guid=guid, timeout=timeout, complexity=complexity};
                 //TODO: err?
                 return output;
             }

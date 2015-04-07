@@ -12,6 +12,8 @@ namespace FEClient
     public partial class Context : ApplicationContext
     {
         private static RESTServer server = new RESTServer("+", "6555", "http", "index.html", null, 5);
+        private NotifyRequest currentTipReq;
+
         public Context()
         {
             while (!SettingsWrapper.Instance.IsSet)
@@ -46,13 +48,7 @@ namespace FEClient
                     Environment.Exit(-1);
                 }*/
             }
-
-            //Form1_Load(null,null);
         }
-
-
-
-        private NotifyRequest currentTipReq;
 
         private void ShowBalloonTip(int timeout, string tipTitle, string tipText, ToolTipIcon tipIcon,
             NotifyRequest nr = null)
@@ -91,7 +87,7 @@ namespace FEClient
             {
                 return;
             }
-            var receiveDialog = new ReceiveDialog(currentTipReq.ip, currentTipReq.fileName, currentTipReq.guid);
+            var receiveDialog = new ReceiveDialog(currentTipReq);
             receiveDialog.Show();
         }
 

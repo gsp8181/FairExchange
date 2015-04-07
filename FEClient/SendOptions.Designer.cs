@@ -181,7 +181,7 @@
             this.timeoutBox.Name = "timeoutBox";
             this.timeoutBox.Size = new System.Drawing.Size(199, 20);
             this.timeoutBox.TabIndex = 5;
-            this.timeoutBox.Text = "5";
+            this.timeoutBox.Text = "5000";
             this.timeoutBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.roundsBox_KeyPress);
             // 
             // label5

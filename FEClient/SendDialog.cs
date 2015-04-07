@@ -30,7 +30,8 @@ namespace FEClient
         private readonly string guid;
         public Queue<string> fakeKeys = new Queue<string>();
         private readonly int amount;
-        private readonly int timeout = 2500;
+        private readonly int complexity;
+        private readonly int timeout;
 
         public SendDialog(string ip, string fileName, int rounds, int complexity, int timeout)
         {
@@ -42,6 +43,8 @@ namespace FEClient
 
             guid = Guid.NewGuid().ToString();
             this.amount = rounds;
+            this.complexity = complexity;
+            this.timeout = timeout;
 
         }
 
@@ -103,8 +106,9 @@ namespace FEClient
                     {"email", SettingsWrapper.Instance.Email},
                     {"guid", guid},
                     {"iv",key.ivStr},
-                    //{"timeout",5},//TODO: change
                     //{"data", Base64.Base64Encode(text)}
+                    {"complexity",this.complexity},
+                    {"timeout",this.timeout},
                     {"data", aesData.DataStr}, //TODO: RSA SIGN!!
                     {"signature", "NYI"}
                     // NRO (sSa(F nro, B, L, C)
@@ -204,7 +208,7 @@ namespace FEClient
 
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            progressBar1.Value = e.ProgressPercentage;
+            progressBar1.Value = e.ProgressPercentage; //TODO: does not work
         }
 
         private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
@@ -219,7 +223,7 @@ namespace FEClient
             }
 
             //Encrypts the data
-            aesData = Aes.Encrypt(text);
+            aesData = Aes.Encrypt(text, complexity);
             //Stores the encryption key as a global variable
             key = aesData.Key;
 
@@ -246,7 +250,7 @@ namespace FEClient
 
             var client = new RESTClient("http://" + ip + ":6555");
             var req = new RESTRequest("/notify/");
-            JObject data = new JObject { { "fileName", file.Name }, { "email", SettingsWrapper.Instance.Email }, { "ttp", SettingsWrapper.Instance.TTP }, { "guid", guid } };//TODO: two names at once?! send guid?
+            JObject data = new JObject { { "fileName", file.Name }, { "email", SettingsWrapper.Instance.Email }, { "ttp", SettingsWrapper.Instance.TTP }, { "guid", guid }, {"timeout", timeout}, {"complexity", complexity} };//TODO: two names at once?! send guid?
             req.Method = Grapevine.HttpMethod.POST;
             req.ContentType = Grapevine.ContentType.JSON; //TODO: async and await
             req.Payload = data.ToString();

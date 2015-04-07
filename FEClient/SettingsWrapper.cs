@@ -37,7 +37,7 @@ namespace FEClient
 
         public bool IsSet
         {
-            get { return (string.IsNullOrWhiteSpace(Email)); }
+            get { return (!string.IsNullOrWhiteSpace(Email)); }
 
         }
 

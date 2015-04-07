@@ -24,13 +24,16 @@ namespace FEClient
         private string iv;
         private Stack<string> dict = new Stack<string>(); //TODO: holds I
         private bool stopped = false;
-        public ReceiveDialog(string ip, string fileName, string guid)
+        private int complexity;
+        public ReceiveDialog(NotifyRequest startObj)
         {
             InitializeComponent();
             progressLabel.Text += fileName;
-            this.ip = ip;
-            this.fileName = fileName;
-            this.guid = guid;
+            this.ip = startObj.ip;
+            this.fileName = startObj.fileName;
+            this.guid = startObj.guid;
+            timer2.Interval = startObj.timeout;
+            this.complexity = startObj.complexity;
             ClientRestApi.FileRecieved += MyResource_FileRecieved;
             ClientRestApi.FileRecievedAndRespSent += MyResource_FileRecievedAndRespSent;
             ClientRestApi.KeyRecieved += ClientRestApi_KeyRecieved;
@@ -115,7 +118,7 @@ namespace FEClient
             this.progressBar1.Value = 90;
             this.progressLabel.Text = "Decrypting";
 
-            var decrypted = Security.Aes.Decrypt(str, key, this.iv);
+            var decrypted = Security.Aes.Decrypt(str, key, this.iv,complexity);
 
             File.WriteAllText(localFile.FullName,decrypted);
 
