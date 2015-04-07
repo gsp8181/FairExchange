@@ -107,8 +107,8 @@ namespace FEClient
                     {"guid", guid},
                     {"iv",key.ivStr},
                     //{"data", Base64.Base64Encode(text)}
-                    {"complexity",this.complexity},
-                    {"timeout",this.timeout},
+                    //{"complexity",this.complexity},
+                    //{"timeout",this.timeout},
                     {"data", aesData.DataStr}, //TODO: RSA SIGN!!
                     {"signature", "NYI"}
                     // NRO (sSa(F nro, B, L, C)
@@ -250,7 +250,7 @@ namespace FEClient
 
             var client = new RESTClient("http://" + ip);
             var req = new RESTRequest("/notify/");
-            JObject data = new JObject { { "fileName", file.Name }, { "email", SettingsWrapper.Instance.Email }, { "ttp", SettingsWrapper.Instance.TTP }, { "guid", guid }, {"timeout", timeout}, {"complexity", complexity} };//TODO: two names at once?! send guid?
+            var data = new JObject { { "fileName", file.Name }, { "email", SettingsWrapper.Instance.Email }, { "ttp", SettingsWrapper.Instance.TTP }, { "guid", guid }, {"timeout", timeout}, {"complexity", complexity}, {"port",Context.port} };
             req.Method = Grapevine.HttpMethod.POST;
             req.ContentType = Grapevine.ContentType.JSON; //TODO: async and await
             req.Payload = data.ToString();

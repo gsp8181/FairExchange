@@ -11,7 +11,7 @@ namespace FEClient
     
     public partial class Context : ApplicationContext
     {
-        private const string port = "6555";
+        public const string port = "6555";
         private static RESTServer server = new RESTServer("+", port, "http", "index.html", null, 5);
         private NotifyRequest currentTipReq;
 

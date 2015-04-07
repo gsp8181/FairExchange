@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Net;
+using System.Reflection;
 using FEClient.Security;
 using Grapevine;
 using Grapevine.Server;
@@ -79,7 +80,7 @@ namespace FEClient.API
             {
                 var jsonStr = this.GetJsonPayload(context.Request); //TODO: validate here with Json.NET Schema
                 Debug.WriteLine(jsonStr);
-                string fileName, email, ttp, guid;
+                string fileName, email, ttp, guid, port;
                 int timeout, complexity;
                 try
                 {
@@ -89,6 +90,7 @@ namespace FEClient.API
                     guid = jsonStr.Value<string>("guid");
                     timeout = jsonStr.Value<int>("timeout");
                     complexity = jsonStr.Value<int>("complexity");
+                    port = jsonStr.Value<string>("port");
                 }
                 catch (NullReferenceException e)
                 {
@@ -108,7 +110,7 @@ namespace FEClient.API
                     return null;
                 }
 
-                var ip = context.Request.RemoteEndPoint.Address.ToString();
+                var ip = context.Request.RemoteEndPoint.Address.ToString() + ":" + port;
 
                 var output = new NotifyRequest {email = email, fileName = fileName, ip = ip, guid=guid, timeout=timeout, complexity=complexity};
                 //TODO: err?

@@ -18,7 +18,7 @@ namespace FEClient
 #if !MULTIINSTANCE
         private static string guid =
             ((GuidAttribute) Assembly.GetExecutingAssembly().GetCustomAttributes(typeof (GuidAttribute), true)[0]).Value;
-        static Mutex mutex = new Mutex(true,guid);
+        static Mutex mutex = new Mutex(true,guid); //TODO: port specific
 #endif
 
 
