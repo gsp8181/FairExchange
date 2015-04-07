@@ -50,7 +50,7 @@ namespace FEClient
             this.notifyIcon.Icon = global::FEClient.Properties.Resources.Icojam_Blue_Bits_Document_arrow_down;
             this.notifyIcon.Text = "TTP Client";
             this.notifyIcon.Visible = true;
-            this.notifyIcon.BalloonTipClicked += new System.EventHandler(this.notifyIcon1_BalloonTipClicked_1);
+            this.notifyIcon.BalloonTipClicked += new System.EventHandler(this.notifyIcon_BalloonTipClicked);
             // 
             // notifyIconMenu
             // 

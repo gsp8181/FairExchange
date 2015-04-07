@@ -32,7 +32,7 @@ namespace FEClient
         private readonly int amount;
         private readonly int timeout = 2500;
 
-        public SendDialog(string ip, string fileName, int amount)
+        public SendDialog(string ip, string fileName, int rounds, int complexity, int timeout)
         {
             InitializeComponent();
             ClientRestApi.StartTransmission += MyResource_StartTransmission;
@@ -41,7 +41,7 @@ namespace FEClient
             this.file = new FileInfo(fileName);
 
             guid = Guid.NewGuid().ToString();
-            this.amount = amount;
+            this.amount = rounds;
 
         }
 

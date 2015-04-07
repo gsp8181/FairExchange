@@ -57,7 +57,7 @@ namespace FEClient
             }
 
 
-            var sendDialog = new SendDialog(ip, fileBox.Text, int.Parse(roundsBox.Text));
+            var sendDialog = new SendDialog(ip, fileBox.Text, int.Parse(roundsBox.Text), int.Parse(complexityBox.Text), int.Parse(timeoutBox.Text));
             sendDialog.Show(); //TODO: validate
             this.Close();
         }

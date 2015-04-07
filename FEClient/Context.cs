@@ -31,30 +31,8 @@ namespace FEClient
 
             InitializeComponent();
 
-            ClientRestApi.NotifyRecieved += MyResource_NotifyRecieved;
+            ClientRestApi.NotifyRecieved += ClientRestApi_NotifyRecieved;
 
-            Form1_Load(null,null);
-        }
-
-
-
-        private NotifyRequest currentTipReq;
-
-        private void ShowBalloonTip(int timeout, string tipTitle, string tipText, ToolTipIcon tipIcon,
-            NotifyRequest nr = null)
-        {
-            currentTipReq = nr;
-            notifyIcon.ShowBalloonTip(timeout, tipTitle, tipText, tipIcon);
-        }
-
-        private void MyResource_NotifyRecieved(object sender, NotifyRequest nr)
-        {
-            ShowBalloonTip(60000, "Incoming File",
-                nr.email + " wants to send you " + nr.fileName + ". Click to accept", ToolTipIcon.Info, nr);
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
             createFirewallException(6555);
             server.OnStart = onServerStartNotify;
             server.Start();
@@ -68,6 +46,25 @@ namespace FEClient
                     Environment.Exit(-1);
                 }*/
             }
+
+            //Form1_Load(null,null);
+        }
+
+
+
+        private NotifyRequest currentTipReq;
+
+        private void ShowBalloonTip(int timeout, string tipTitle, string tipText, ToolTipIcon tipIcon,
+            NotifyRequest nr = null)
+        {
+            currentTipReq = nr;
+            notifyIcon.ShowBalloonTip(timeout, tipTitle, tipText, tipIcon);
+        }
+
+        private void ClientRestApi_NotifyRecieved(object sender, NotifyRequest nr)
+        {
+            ShowBalloonTip(60000, "Incoming File",
+                nr.email + " wants to send you " + nr.fileName + ". Click to accept", ToolTipIcon.Info, nr);
         }
 
         private void onServerStartNotify()
@@ -88,7 +85,7 @@ namespace FEClient
             t.Stop();
         }
 
-        private void notifyIcon1_BalloonTipClicked_1(object sender, EventArgs e)
+        private void notifyIcon_BalloonTipClicked(object sender, EventArgs e)
         {
             if (currentTipReq == null)
             {
