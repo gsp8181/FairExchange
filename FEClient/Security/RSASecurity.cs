@@ -12,11 +12,11 @@ namespace FEClient.Security
 {
     public static class Rsa
     {
-        private static CspParameters csparams = new CspParameters(1) { KeyContainerName = "ttpclient" };
+        private static CspParameters _csparams = new CspParameters(1) { KeyContainerName = "ttpclient" };
 
-        public static string getPublicKey()
+        public static string GetPublicKey()
         {
-            using (var rsa = new RSACryptoServiceProvider(2048, csparams))
+            using (var rsa = new RSACryptoServiceProvider(2048, _csparams))
             {
                 var dsaKey = DotNetUtilities.GetRsaKeyPair(rsa);
                 var sw = new StringWriter();
@@ -30,12 +30,12 @@ namespace FEClient.Security
 
         public static void Regenerate_RSA()
         {
-            using (var rsa = new RSACryptoServiceProvider(2048, csparams))
+            using (var rsa = new RSACryptoServiceProvider(2048, _csparams))
             {
                 rsa.PersistKeyInCsp = false;
                 rsa.Clear();
             }
-            using (var rsa = new RSACryptoServiceProvider(2048, csparams))
+            using (var rsa = new RSACryptoServiceProvider(2048, _csparams))
             {
                 rsa.PersistKeyInCsp = true;
             }
@@ -59,12 +59,12 @@ namespace FEClient.Security
 
         public static bool VerifySignature(string data, string signature, string pubKey)
         {
-                var RSAKeyInfo = GetPublicKeyParams(pubKey);
+                var rsaKeyInfo = GetPublicKeyParams(pubKey);
 
                 using (var rsa = new RSACryptoServiceProvider())
                 {
                     rsa.PersistKeyInCsp = false;
-                    rsa.ImportParameters(RSAKeyInfo);
+                    rsa.ImportParameters(rsaKeyInfo);
                     return false;
                     //return rsa.VerifyData(data, rsa);
                 }
@@ -72,7 +72,7 @@ namespace FEClient.Security
 
         public static string SignData(string data)
         {
-            using (var rsa = new RSACryptoServiceProvider(2048, csparams))
+            using (var rsa = new RSACryptoServiceProvider(2048, _csparams))
             {
                 var bytes = Encoding.UTF8.GetBytes(data);
                 var signature = rsa.SignData(bytes, new SHA1CryptoServiceProvider());
@@ -89,12 +89,12 @@ namespace FEClient.Security
 
         private static string EncryptKey(string pemKey, string keyStr)
         {
-            var RSAKeyInfo = GetPublicKeyParams(pemKey);
+            var rsaKeyInfo = GetPublicKeyParams(pemKey);
 
             using (var rsa = new RSACryptoServiceProvider())
             {
                 rsa.PersistKeyInCsp = false;
-                rsa.ImportParameters(RSAKeyInfo);
+                rsa.ImportParameters(rsaKeyInfo);
                 return EncryptKey(rsa,keyStr);
             }
         }
@@ -102,7 +102,7 @@ namespace FEClient.Security
 
         public static EncryptedData EncryptData(string data, int rounds) //encrypts with OWN KEY
         {
-            using (var rsa = new RSACryptoServiceProvider(2048, csparams))
+            using (var rsa = new RSACryptoServiceProvider(2048, _csparams))
             {
                 return EncryptData(data, rsa, rounds);
             }
@@ -110,12 +110,12 @@ namespace FEClient.Security
 
         public static EncryptedData EncryptData(string data, string key, int rounds)
         {
-            var RSAKeyInfo = GetPublicKeyParams(key);
+            var rsaKeyInfo = GetPublicKeyParams(key);
 
             using (var rsa = new RSACryptoServiceProvider())
             {
                 rsa.PersistKeyInCsp = false;
-                rsa.ImportParameters(RSAKeyInfo);
+                rsa.ImportParameters(rsaKeyInfo);
                 return EncryptData(data, rsa, rounds);
             }
         }
@@ -146,7 +146,7 @@ namespace FEClient.Security
 
         public static string DecryptKey(string encryptedKey)
         {
-            using (var rsa = new RSACryptoServiceProvider(2048, csparams))
+            using (var rsa = new RSACryptoServiceProvider(2048, _csparams))
             {
                 var keyBytes = Convert.FromBase64String(encryptedKey);
                 var decryptedKey =  Encoding.UTF8.GetString(rsa.Decrypt(keyBytes, false));

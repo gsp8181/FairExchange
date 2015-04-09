@@ -12,10 +12,10 @@ namespace FEClient
     
     public partial class Context : ApplicationContext
     {
-        public const string port = "6555";
-        private static RESTServer server = new RESTServer("+", port, "http", "index.html", null, 5);
-        private NotifyRequest currentTipReq;
-        private Adapter adapter = Adapter.Instance;
+        public const string Port = "6555";
+        private static RESTServer _server = new RESTServer("+", Port);
+        private NotifyRequest _currentTipReq;
+        private Adapter _adapter = Adapter.Instance;
 
         public Context()
         {
@@ -37,13 +37,13 @@ namespace FEClient
 
             ClientRestApi.NotifyRecieved += ClientRestApi_NotifyRecieved;
 
-            createFirewallException(int.Parse(port));
-            server.OnStart = onServerStartNotify;
-            server.Start();
-            if (!server.IsListening) //TODO: maybe sort out with a timer
+            CreateFirewallException(int.Parse(Port));
+            _server.OnStart = OnServerStartNotify;
+            _server.Start();
+            if (!_server.IsListening) //TODO: maybe sort out with a timer
             {
-                NetAclChecker.AddAddress("http://+:"+port+"/");
-                server.Start();
+                NetAclChecker.AddAddress("http://+:"+Port+"/");
+                _server.Start();
                 /*if (!Program.server.IsListening)
                 {
                     MessageBox.Show("Could not bind port 6555", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error); //todo: does not work
@@ -55,23 +55,23 @@ namespace FEClient
         private void ShowBalloonTip(int timeout, string tipTitle, string tipText, ToolTipIcon tipIcon,
             NotifyRequest nr = null)
         {
-            currentTipReq = nr;
+            _currentTipReq = nr;
             notifyIcon.ShowBalloonTip(timeout, tipTitle, tipText, tipIcon);
         }
 
         private void ClientRestApi_NotifyRecieved(object sender, NotifyRequest nr)
         {
             ShowBalloonTip(60000, "Incoming File",
-                nr.email + " wants to send you " + nr.fileName + ". Click to accept", ToolTipIcon.Info, nr);
+                nr.Email + " wants to send you " + nr.FileName + ". Click to accept", ToolTipIcon.Info, nr);
         }
 
-        private void onServerStartNotify()
+        private void OnServerStartNotify()
         {
 //TODO: check if port is open
-            ShowBalloonTip(5000, "Started", "Server started and is listening on port " + port, ToolTipIcon.Info);
+            ShowBalloonTip(5000, "Started", "Server started and is listening on port " + Port, ToolTipIcon.Info);
         }
 
-        private void createFirewallException(int port)
+        private void CreateFirewallException(int port)
             //Stackoverflow how to diusplay windows firewall has blocked some features of this program;
         {
             var ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList[0];
@@ -85,11 +85,11 @@ namespace FEClient
 
         private void notifyIcon_BalloonTipClicked(object sender, EventArgs e)
         {
-            if (currentTipReq == null)
+            if (_currentTipReq == null)
             {
                 return;
             }
-            var receiveDialog = new ReceiveDialog(currentTipReq);
+            var receiveDialog = new ReceiveDialog(_currentTipReq);
             receiveDialog.Show();
         }
 

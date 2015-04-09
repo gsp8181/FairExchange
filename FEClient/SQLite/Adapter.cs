@@ -8,9 +8,9 @@ namespace FEClient.SQLite
         public static Adapter Instance { get { return _Instance; } }
 
 
-        public void insert(PubKey key)
+        public void Insert(PubKey key)
         {
-            var db = new FEDBContext();
+            var db = new FedbContext();
             
                 
                 //Table<PubKey> statuses = db.GetTable<PubKey>();
@@ -24,7 +24,7 @@ namespace FEClient.SQLite
 
         public PubKey GetByEmail(string email)
         {
-            var db = new FEDBContext();
+            var db = new FedbContext();
             var pubKeys = (from p in db.PubKeys
                 where p.Email == email
                 orderby p.Id descending

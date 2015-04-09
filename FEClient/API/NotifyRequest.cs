@@ -2,13 +2,13 @@
 {
     public class NotifyRequest
     {
-        public string fileName { get; set; }
-        public string email { get; set; }
-        public string ip { get; set; }
-        public string guid { get; set; }
+        public string FileName { get; set; }
+        public string Email { get; set; }
+        public string Ip { get; set; }
+        public string Guid { get; set; }
 
-        public int timeout { get; set; }
+        public int Timeout { get; set; }
 
-        public int complexity { get; set; }
+        public int Complexity { get; set; }
     }
 }

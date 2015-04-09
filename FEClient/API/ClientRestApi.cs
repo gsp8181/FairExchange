@@ -44,11 +44,11 @@ namespace FEClient.API
                     SendJsonResponse(context, eresponse);
                     return;
                 }
-                FileSend fs = new FileSend {email = email, fileName = filename, iv = iv, guid=guid}; //TODO: tidy up, dont reuse?
+                FileSend fs = new FileSend {Email = email, FileName = filename, Iv = iv, Guid=guid}; //TODO: tidy up, dont reuse?
                 //this.SendTextResponse(context, x);
                 NotifyArgs args = new NotifyArgs();
                 FileRecieved(this, fs, args);
-                if (args.hasSet)
+                if (args.HasSet)
                 {
                     var sig = Rsa.SignData(Base64.Base64Decode(data));
                     JObject response = new JObject {{"accepted", true}, {"signature", sig}};
@@ -56,7 +56,7 @@ namespace FEClient.API
                     Debug.WriteLine("/file/ SENT " + response);
 #endif
                     SendJsonResponse(context, response);
-                    fs.data = data;
+                    fs.Data = data;
                     FileRecievedAndRespSent(this, fs); 
                 }
                 else
@@ -129,7 +129,7 @@ namespace FEClient.API
 
                 var ip = context.Request.RemoteEndPoint.Address + ":" + port;
 
-                var output = new NotifyRequest {email = email, fileName = fileName, ip = ip, guid=guid, timeout=timeout, complexity=complexity};
+                var output = new NotifyRequest {Email = email, FileName = fileName, Ip = ip, Guid=guid, Timeout=timeout, Complexity=complexity};
                 //TODO: err?
                 return output;
             }
@@ -142,13 +142,13 @@ namespace FEClient.API
                 Debug.WriteLine("/key/ " + args);
 #endif
                 var kArgs = new KeyArgs();
-                kArgs.guid = args.Value<string>("guid");
-                kArgs.i = args.Value<int>("i");
-                kArgs.key = args.Value<string>("key");
+                kArgs.Guid = args.Value<string>("guid");
+                kArgs.I = args.Value<int>("i");
+                kArgs.Key = args.Value<string>("key");
                 var callback = new NotifyArgs();
                 KeyRecieved(this, kArgs, callback);
 
-                if (callback.hasSet)
+                if (callback.HasSet)
                 {
                     JObject response = new JObject { { "accepted", true }, { "signature", "sig" } }; //TODO: implement
                     #if TRACE
@@ -180,7 +180,7 @@ namespace FEClient.API
                     return;
 
                 StartTransmission(this, vars, args);
-                if (args.hasSet)
+                if (args.HasSet)
                 {
                     JObject response = new JObject {{"accepted", true}};
                     #if TRACE
@@ -203,7 +203,7 @@ namespace FEClient.API
             [RESTRoute(Method = HttpMethod.GET, PathInfo = @"^/key/?$")]
             public void HandleGetKeyRequest(HttpListenerContext context)
             {//TODO: add debug
-                SendTextResponse(context, Rsa.getPublicKey());
+                SendTextResponse(context, Rsa.GetPublicKey());
             }
 
             [RESTRoute(Method = HttpMethod.GET, PathInfo = @"^/ident/?$")]
@@ -214,7 +214,7 @@ namespace FEClient.API
 #endif
                 var returnObj = new JObject();
                 returnObj.Add("email", SettingsWrapper.Instance.Email);
-                returnObj.Add("pubKey", Rsa.getPublicKey());
+                returnObj.Add("pubKey", Rsa.GetPublicKey());
                 Debug.WriteLine("/ident/ sent " + returnObj);
                 SendJsonResponse(context, returnObj);
             }

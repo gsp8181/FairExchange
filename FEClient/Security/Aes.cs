@@ -9,15 +9,15 @@ namespace FEClient.Security
 
         public static string Decrypt(string payload, byte[] aeskey, byte[] aesiv, int rounds) //TODO: needs some validity method like check against sig?
         {
-            using (AesCryptoServiceProvider aesCSP = new AesCryptoServiceProvider())
+            using (AesCryptoServiceProvider aesCsp = new AesCryptoServiceProvider())
             { 
-            aesCSP.Key = Strengthen(aeskey, aesiv, rounds);
-            aesCSP.IV = aesiv;
+            aesCsp.Key = Strengthen(aeskey, aesiv, rounds);
+            aesCsp.IV = aesiv;
 
             var encrypted = Convert.FromBase64String(payload);
 
 
-            ICryptoTransform xfrm = aesCSP.CreateDecryptor();
+            ICryptoTransform xfrm = aesCsp.CreateDecryptor();
             byte[] outBlock = xfrm.TransformFinalBlock(encrypted, 0, encrypted.Length);
 
             return Encoding.UTF8.GetString(outBlock);
@@ -26,22 +26,22 @@ namespace FEClient.Security
 
         public static AesData Encrypt(string data, int rounds)
         {
-            using (AesCryptoServiceProvider aesCSP = new AesCryptoServiceProvider())
+            using (AesCryptoServiceProvider aesCsp = new AesCryptoServiceProvider())
             { 
-            aesCSP.GenerateIV();
-            aesCSP.GenerateKey();
+            aesCsp.GenerateIV();
+            aesCsp.GenerateKey();
             AesKeys ae = new AesKeys();
-            ae.Key = aesCSP.Key;
-            ae.IV = aesCSP.IV;
+            ae.Key = aesCsp.Key;
+            ae.Iv = aesCsp.IV;
             ae.Rounds = rounds; //TODO: embed the parameter sent through rest as THIS instead, probably when RSA takes shape
 
 
-            aesCSP.Key = Strengthen(aesCSP.Key, aesCSP.IV, rounds);
+            aesCsp.Key = Strengthen(aesCsp.Key, aesCsp.IV, rounds);
 
 
 
             byte[] inBlock = Encoding.UTF8.GetBytes(data);
-            ICryptoTransform xfrm = aesCSP.CreateEncryptor();
+            ICryptoTransform xfrm = aesCsp.CreateEncryptor();
             byte[] outBlock = xfrm.TransformFinalBlock(inBlock, 0, inBlock.Length);
             string encrypted = Convert.ToBase64String(outBlock);
             AesData ad = new AesData();

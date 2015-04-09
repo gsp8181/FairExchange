@@ -5,15 +5,15 @@ namespace FEClient.Security
 {
     public class AesKeys
     {
-        public string keyStr
+        public string KeyStr
         {
             get { return Convert.ToBase64String(Key); }
             set { Key = Convert.FromBase64String(value); }
         }
 
-        public string ivStr
+        public string IvStr
         {
-            get { return Convert.ToBase64String(IV); }
+            get { return Convert.ToBase64String(Iv); }
             set { Key = Convert.FromBase64String(value); }
         }
 
@@ -21,14 +21,14 @@ namespace FEClient.Security
 
         public byte[] Key { get; set; }
 
-        public byte[] IV { get; set; }
+        public byte[] Iv { get; set; }
 
         public JObject ToJObject()
         {
             return new JObject
             {
-                {"key", keyStr},
-                {"iv", ivStr}, //TODO: nono make this a serialisable object
+                {"key", KeyStr},
+                {"iv", IvStr}, //TODO: nono make this a serialisable object
                 {"rounds", Rounds}
             };
         }

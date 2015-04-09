@@ -6,11 +6,11 @@ namespace FEClient.NotMyCode
 {
     public class RegexUtilities //https://msdn.microsoft.com/en-us/library/01escwtf%28v=vs.110%29.aspx
     {
-        bool invalid;
+        bool _invalid;
 
         public bool IsValidEmail(string strIn)
         {
-            invalid = false;
+            _invalid = false;
             if (String.IsNullOrEmpty(strIn))
                 return false;
 
@@ -25,7 +25,7 @@ namespace FEClient.NotMyCode
                 return false;
             }
 
-            if (invalid)
+            if (_invalid)
                 return false;
 
             // Return true if strIn is in valid e-mail format. 
@@ -54,7 +54,7 @@ namespace FEClient.NotMyCode
             }
             catch (ArgumentException)
             {
-                invalid = true;
+                _invalid = true;
             }
             return match.Groups[1].Value + domainName;
         }

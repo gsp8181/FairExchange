@@ -4,9 +4,9 @@ namespace FEClient
 {
     public class SettingsWrapper
     {
-        private static SettingsWrapper _SettingsWrapper = new SettingsWrapper();
+        private static SettingsWrapper _settingsWrapper = new SettingsWrapper();
         private SettingsWrapper() { }
-        public static SettingsWrapper Instance {get { return _SettingsWrapper; }}
+        public static SettingsWrapper Instance {get { return _settingsWrapper; }}
 
         public string Email
         {

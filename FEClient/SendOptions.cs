@@ -31,7 +31,7 @@ namespace FEClient
         }
         private void okButton_Click(object sender, EventArgs e)
         {
-            if (!validateAll())
+            if (!ValidateAll())
             {
                 return;
             }
@@ -52,7 +52,7 @@ namespace FEClient
                     MessageBox.Show("Could not find. " + ex.Message);
                     return;
                 }
-            } else*/ if (addressBoxIsIp)
+            } else*/ if (AddressBoxIsIp)
             {
                 ip = destinationBox.Text;
             }
@@ -68,9 +68,9 @@ namespace FEClient
             Close();
         }
 
-        private bool validateAll()
+        private bool ValidateAll()
         {
-            if (!addressBoxIsIp)
+            if (!AddressBoxIsIp)
             {
                 errorProvider.SetError(destinationBox,"Wrong format, should be an email or IP");
                 return false;
@@ -86,7 +86,7 @@ namespace FEClient
             return false;
         }
 
-        private bool addressBoxIsIp
+        private bool AddressBoxIsIp
         {
             get
             {
@@ -124,7 +124,7 @@ namespace FEClient
 
         private void textBox1_Validated(object sender, EventArgs e)
         {
-            if (!addressBoxIsIp)
+            if (!AddressBoxIsIp)
             {
                 errorProvider.SetError(destinationBox, "Wrong format, should be an IP address");
             }

@@ -2,8 +2,8 @@
 {
     public class KeyArgs
     {
-        public string key { get; set; }
-        public string guid { get; set; }
-        public int i { get; set; }
+        public string Key { get; set; }
+        public string Guid { get; set; }
+        public int I { get; set; }
     }
 }

@@ -20,35 +20,35 @@ namespace FEClient
 {
     public partial class SendDialog : Form
     {
-        private readonly string ip;
-        private FileInfo file;
-        private AesKeys key;
-        private AesData aesData;
-        private readonly string guid;
-        public Queue<string> fakeKeys = new Queue<string>();
-        private readonly int amount;
-        private readonly int complexity;
-        private readonly int timeout;
-        private string remoteKey;
+        private readonly string _ip;
+        private FileInfo _file;
+        private AesKeys _key;
+        private AesData _aesData;
+        private readonly string _guid;
+        public Queue<string> FakeKeys = new Queue<string>();
+        private readonly int _amount;
+        private readonly int _complexity;
+        private readonly int _timeout;
+        private string _remoteKey;
 
         public SendDialog(string ip, string fileName, int rounds, int complexity, int timeout)
         {
             InitializeComponent();
             ClientRestApi.StartTransmission += MyResource_StartTransmission;
             ClientRestApi.StartTransmissionAndRespSent += MyResource_StartTransmissionAndRespSent;
-            this.ip = ip;
-            file = new FileInfo(fileName);
+            this._ip = ip;
+            _file = new FileInfo(fileName);
 
-            guid = Guid.NewGuid().ToString();
-            amount = rounds;
-            this.complexity = complexity;
-            this.timeout = timeout;
+            _guid = Guid.NewGuid().ToString();
+            _amount = rounds;
+            this._complexity = complexity;
+            this._timeout = timeout;
 
         }
 
         private void MyResource_StartTransmissionAndRespSent(object sender, NotifyRequest vars)
         {
-            if (vars.guid != guid)
+            if (vars.Guid != _guid)
                 return;
             Invoke((MethodInvoker)delegate
             {
@@ -58,9 +58,9 @@ namespace FEClient
 
         private void MyResource_StartTransmission(object sender, NotifyRequest addrSender, NotifyArgs callbackArgs)
         {
-            if (addrSender.fileName != file.Name)
+            if (addrSender.FileName != _file.Name)
                 return;
-            callbackArgs.hasSet = true;
+            callbackArgs.HasSet = true;
             Invoke((MethodInvoker)delegate
             {
                 timer1.Stop();
@@ -86,11 +86,11 @@ namespace FEClient
         private void timer2_Tick()
         {
             // Updates progress label to show file is sending
-            progressLabel.Text = "Sending " + file.Name;
+            progressLabel.Text = "Sending " + _file.Name;
             progressBar1.Style = ProgressBarStyle.Continuous;
 
             // Creates a new POST request to the remote client
-            var client = new RESTClient("http://" + ip);
+            var client = new RESTClient("http://" + _ip);
             var req = new RESTRequest("/file/")
             {
                 Method = HttpMethod.POST,
@@ -100,14 +100,14 @@ namespace FEClient
             //Embeds the data (fig 1)
             JObject data = new JObject
                 {
-                    {"fileName", file.Name},
+                    {"fileName", _file.Name},
                     {"email", SettingsWrapper.Instance.Email},
-                    {"guid", guid},
-                    {"iv",key.ivStr},
+                    {"guid", _guid},
+                    {"iv",_key.IvStr},
                     //{"data", Base64.Base64Encode(text)}
                     //{"complexity",this.complexity},
                     //{"timeout",this.timeout},
-                    {"data", aesData.DataStr}, //TODO: RSA SIGN!!
+                    {"data", _aesData.DataStr}, //TODO: RSA SIGN!!
                     {"signature", "NYI"}
                     // NRO (sSa(F nro, B, L, C)
                 };
@@ -142,22 +142,22 @@ namespace FEClient
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
             var stopwatch = new Stopwatch();
-            var client = new RESTClient("http://" + ip);
+            var client = new RESTClient("http://" + _ip);
             stopwatch.Start();
-            for (int i = 0; i < amount; i++)
+            for (int i = 0; i < _amount; i++)
             { //Check cancellation
-                var fkey = fakeKeys.Dequeue();
+                var fkey = FakeKeys.Dequeue();
 
-                JObject data = new JObject {{"key", fkey},{"guid",guid},{"i",i}};
+                JObject data = new JObject {{"key", fkey},{"guid",_guid},{"i",i}};
 
                 var req = new RESTRequest("/key/");
                 
-                req.Timeout = timeout; //TODO actually take from input AND set a timer
+                req.Timeout = _timeout; //TODO actually take from input AND set a timer
                 req.Method = HttpMethod.POST;
                 req.ContentType = ContentType.JSON; //TODO: async and await
                 req.Payload = data.ToString();
                 var response = client.Execute(req);
-                if (stopwatch.ElapsedMilliseconds > timeout)
+                if (stopwatch.ElapsedMilliseconds > _timeout)
                 {
                     //TODO: STOP
                     MessageBox.Show("Timed out!");
@@ -175,14 +175,14 @@ namespace FEClient
 
                 //TODO:Check Sig
 
-                backgroundWorker1.ReportProgress((i/amount)*100); //TODO: fix
+                backgroundWorker1.ReportProgress((i/_amount)*100); //TODO: fix
             }
 
-            JObject realData = new JObject {{"key", key.keyStr}, {"guid", guid}, {"i", amount}}; //TODO: encrypt keys??
+            JObject realData = new JObject {{"key", _key.KeyStr}, {"guid", _guid}, {"i", _amount}}; //TODO: encrypt keys??
 
 
             var realReq = new RESTRequest("/key/");//TODO: split into method with above bit
-            realReq.Timeout = timeout;
+            realReq.Timeout = _timeout;
             realReq.Method = HttpMethod.POST;
             realReq.ContentType = ContentType.JSON; //TODO: async and await
             realReq.Payload = realData.ToString();
@@ -212,7 +212,7 @@ namespace FEClient
         private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
         {
             // Opens and reads the file to the end
-            var stream = file.OpenRead(); //TODO: if not null and using!
+            var stream = _file.OpenRead(); //TODO: if not null and using!
             string text;
             using (StreamReader sr = new StreamReader(stream)) //TODO: all using for streams
             {
@@ -221,21 +221,21 @@ namespace FEClient
             }
 
             //Encrypts the data
-            aesData = Aes.Encrypt(text, complexity);
+            _aesData = Aes.Encrypt(text, _complexity);
             //Stores the encryption key as a global variable
-            key = aesData.Key;
+            _key = _aesData.Key;
 
             int bytes;
-            using (AesCryptoServiceProvider aesCSP = new AesCryptoServiceProvider())
+            using (AesCryptoServiceProvider aesCsp = new AesCryptoServiceProvider())
             {
-                bytes = aesCSP.KeySize / 8;
+                bytes = aesCsp.KeySize / 8;
             }
             RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
-            for (int i = 0; i < amount; i++)
+            for (int i = 0; i < _amount; i++)
             {
                 byte[] randBytes = new byte[bytes];
                 rng.GetBytes(randBytes);
-                fakeKeys.Enqueue(Convert.ToBase64String(randBytes)); 
+                FakeKeys.Enqueue(Convert.ToBase64String(randBytes)); 
             }
         }
 
@@ -244,10 +244,10 @@ namespace FEClient
 
 
 
-            progressLabel.Text = "Attempting to contact " + ip;
+            progressLabel.Text = "Attempting to contact " + _ip;
 
 
-            var client = new RESTClient("http://" + ip);
+            var client = new RESTClient("http://" + _ip);
 
             var keyReq = new RESTRequest("/ident/");
 
@@ -260,7 +260,7 @@ namespace FEClient
 
             var keyRespObj = JObject.Parse(keyResponse.Content);
 
-            remoteKey = keyRespObj.Value<string>("pubKey"); //TODO: flag on error
+            _remoteKey = keyRespObj.Value<string>("pubKey"); //TODO: flag on error
             var email = keyRespObj.Value<string>("email");
 
             var keyObj = Adapter.Instance.GetByEmail(email);
@@ -269,32 +269,32 @@ namespace FEClient
             {
                 var dialogResult =
                     MessageBox.Show(
-                        "The key for " + email + " has not been registered, do you wish to accept?\n" + remoteKey,
+                        "The key for " + email + " has not been registered, do you wish to accept?\n" + _remoteKey,
                         "New key", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
                 if (dialogResult == DialogResult.OK)
                 {
                     var dbObj = new PubKey();
                     dbObj.Email = email;
-                    dbObj.Pem = remoteKey;
-                    Adapter.Instance.insert(dbObj);
+                    dbObj.Pem = _remoteKey;
+                    Adapter.Instance.Insert(dbObj);
                 }
                 else
                 {
                     Close();
                     return;
                 }
-            } else if (keyObj.Pem != remoteKey)
+            } else if (keyObj.Pem != _remoteKey)
             {
                 var dialogResult =
     MessageBox.Show(
-        "The key for " + email + " has BEEN CHANGED, this could indicate interception\n Do you wish to accept?\n" + remoteKey,
+        "The key for " + email + " has BEEN CHANGED, this could indicate interception\n Do you wish to accept?\n" + _remoteKey,
         "CHANGED KEY", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
                 if (dialogResult == DialogResult.OK)
                 {
                     var dbObj = new PubKey();
                     dbObj.Email = email;
-                    dbObj.Pem = remoteKey;
-                    Adapter.Instance.insert(dbObj);
+                    dbObj.Pem = _remoteKey;
+                    Adapter.Instance.Insert(dbObj);
                 }
                 else
                 {
@@ -305,7 +305,7 @@ namespace FEClient
 
 
             var req = new RESTRequest("/notify/");
-            var data = new JObject { { "fileName", file.Name }, { "email", SettingsWrapper.Instance.Email }, { "guid", guid }, {"timeout", timeout}, {"complexity", complexity}, {"port",Context.port} };
+            var data = new JObject { { "fileName", _file.Name }, { "email", SettingsWrapper.Instance.Email }, { "guid", _guid }, {"timeout", _timeout}, {"complexity", _complexity}, {"port",Context.Port} };
             req.Method = HttpMethod.POST;
             req.ContentType = ContentType.JSON; //TODO: async and await
             req.Payload = data.ToString();

@@ -2,7 +2,7 @@
 
 namespace FEClient.SQLite
 {
-    class FEDBContext : DbContext
+    class FedbContext : DbContext
     {
         //public FEDBContext(DbConnection conn) : base(conn,true) //TODO: should use autoregister
         //{
@@ -14,17 +14,17 @@ namespace FEClient.SQLite
                 .Remove<PluralizingTableNameConvention>();
         }*/
 
-        static FEDBContext()
+        static FedbContext()
         {
             // Database initialize
 #if DROP_DB_ON_START
-            Database.SetInitializer(new DropCreateDatabaseAlways<FEDBContext>());
+            Database.SetInitializer(new DropCreateDatabaseAlways<FedbContext>());
 #elif DEBUG
             Database.SetInitializer(new DropCreateDatabaseIfModelChanges<FEDBContext>());
 #else
             Database.SetInitializer(new CreateDatabaseIfNotExists<FEDBContext>());  
 #endif
-            using (FEDBContext db = new FEDBContext())
+            using (FedbContext db = new FedbContext())
                 db.Database.Initialize(false);
         }
 

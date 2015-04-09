@@ -2,6 +2,6 @@
 {
     public class NotifyArgs
     {
-        public bool hasSet = false;
+        public bool HasSet = false;
     }
 }
