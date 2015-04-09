@@ -83,6 +83,7 @@ namespace FEClient
             // 
             // saveFileDialog1
             // 
+            this.saveFileDialog1.Filter = "All Files|*.*";
             this.saveFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog1_FileOk);
             // 
             // backgroundWorker2
