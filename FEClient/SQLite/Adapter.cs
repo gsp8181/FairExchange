@@ -3,15 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.Linq;
 using System.Data.SqlTypes;
-using System.Data.SQLite.EF6;
-using System.Data.SQLite.Linq;
-using System.Data.SQLite;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 
 namespace FEClient.SQLite
 {
@@ -33,24 +27,36 @@ namespace FEClient.SQLite
             FileInfo SqLite = new FileInfo(/*AppDir*/Application.UserAppDataPath + @"\db.sqlite3");
             connString = "Data Source=" + SqLite.FullName + ";Version=3;DbLinqProvider=sqlite;";
 
+            bool create = false;
+
             if (!SqLite.Exists)
-                Create_DB();
+                create = true;
 
             m_dbConnection = new SQLiteConnection(connString);
             m_dbConnection.Open();
+
+            if (create)
+                Create_DB();
             //context = new DataContext(connString);
 
         }
 
         private void Create_DB()
         {
-            
+            string createPubKey = @"CREATE TABLE [PubKey] (
+  [Id] INTEGER NOT NULL
+, [Email] nvarchar(100) NOT NULL
+, [Pem] nvarchar(200) NOT NULL
+, CONSTRAINT [PK_PubKey] PRIMARY KEY ([Id])
+);";
+            SQLiteCommand command = new SQLiteCommand(createPubKey, m_dbConnection);
+            command.ExecuteNonQuery();
         }
 
         public void insert(PubKey key)
         {
-            using (var db = new FEDBContext(m_dbConnection))
-            {
+            var db = new FEDBContext(m_dbConnection);
+            
                 
                 //Table<PubKey> statuses = db.GetTable<PubKey>();
                 //statuses.InsertOnSubmit(key);
@@ -58,18 +64,18 @@ namespace FEClient.SQLite
                 db.PubKeys.Add(key);
                 //db.PubKeys.InsertOnSubmit(key);
                 db.SaveChanges();
-            }
+            
         }
 
         public PubKey GetByEmail(string email)
         {
-            using (var db = new DataContext(m_dbConnection))
-            {
+            var db = new DataContext(m_dbConnection);
+            
                 var pubKey = (from p in db.GetTable<PubKey>()
                               where p.Email == email
                               select p).First();
                 return pubKey;
-            }
+            
         }
 
     }
