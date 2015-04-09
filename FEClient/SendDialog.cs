@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.Common;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Windows.Forms;
 using FEClient.API;
 using FEClient.Security;
+using FEClient.SQLite;
 using Grapevine;
 using Grapevine.Client;
 using Newtonsoft.Json.Linq;
@@ -26,6 +29,7 @@ namespace FEClient
         private readonly int amount;
         private readonly int complexity;
         private readonly int timeout;
+        private string remoteKey;
 
         public SendDialog(string ip, string fileName, int rounds, int complexity, int timeout)
         {
@@ -242,7 +246,64 @@ namespace FEClient
 
             progressLabel.Text = "Attempting to contact " + ip;
 
+
             var client = new RESTClient("http://" + ip);
+
+            var keyReq = new RESTRequest("/ident/");
+
+            var keyResponse = client.Execute(keyReq);
+
+            if (keyResponse.StatusCode != HttpStatusCode.OK)
+            {
+                MessageBox.Show("error"); //TODO: make better
+            }
+
+            var keyRespObj = JObject.Parse(keyResponse.Content);
+
+            remoteKey = keyRespObj.Value<string>("pubKey"); //TODO: flag on error
+            var email = keyRespObj.Value<string>("email");
+
+            var keyObj = Adapter.Instance.GetByEmail(email);
+
+            if (keyObj == null)
+            {
+                var dialogResult =
+                    MessageBox.Show(
+                        "The key for " + email + " has not been registered, do you wish to accept?\n" + remoteKey,
+                        "New key", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                if (dialogResult == DialogResult.OK)
+                {
+                    var dbObj = new PubKey();
+                    dbObj.Email = email;
+                    dbObj.Pem = remoteKey;
+                    Adapter.Instance.insert(dbObj);
+                }
+                else
+                {
+                    Close();
+                    return;
+                }
+            } else if (keyObj.Pem != remoteKey)
+            {
+                var dialogResult =
+    MessageBox.Show(
+        "The key for " + email + " has BEEN CHANGED, this could indicate interception\n Do you wish to accept?\n" + remoteKey,
+        "CHANGED KEY", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                if (dialogResult == DialogResult.OK)
+                {
+                    var dbObj = new PubKey();
+                    dbObj.Email = email;
+                    dbObj.Pem = remoteKey;
+                    Adapter.Instance.insert(dbObj);
+                }
+                else
+                {
+                    Close();
+                    return;
+                }
+            }
+
+
             var req = new RESTRequest("/notify/");
             var data = new JObject { { "fileName", file.Name }, { "email", SettingsWrapper.Instance.Email }, { "guid", guid }, {"timeout", timeout}, {"complexity", complexity}, {"port",Context.port} };
             req.Method = HttpMethod.POST;
