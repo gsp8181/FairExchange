@@ -12,7 +12,8 @@ namespace FEClient.Security
 {
     public static class Rsa
     {
-        private static CspParameters _csparams = new CspParameters(1) { KeyContainerName = "ttpclient" };
+
+        private static CspParameters _csparams = new CspParameters(1) {KeyContainerName = "ttpclient"};//, KeyNumber = 1};
 
         public static string GetPublicKey()
         {
@@ -57,17 +58,25 @@ namespace FEClient.Security
 
         }
 
-        public static bool VerifySignature(string data, string signature, string pubKey)
+        public static bool VerifySignature(string data, string signatureB64, string pubKey)
         {
-                var rsaKeyInfo = GetPublicKeyParams(pubKey);
+            var rsaKeyInfo = GetPublicKeyParams(pubKey);
 
-                using (var rsa = new RSACryptoServiceProvider())
-                {
-                    rsa.PersistKeyInCsp = false;
-                    rsa.ImportParameters(rsaKeyInfo);
-                    return false;
-                    //return rsa.VerifyData(data, rsa);
-                }
+            return VerifySignature(data, signatureB64, rsaKeyInfo);
+        }
+
+        private static bool VerifySignature(string data, string signatureB64, RSAParameters rsaKeyInfo)
+        {
+            var dataBytes = Encoding.UTF8.GetBytes(data);
+            var signatureBytes = Convert.FromBase64String(signatureB64);
+
+            using (var rsa = new RSACryptoServiceProvider())
+            {
+                rsa.PersistKeyInCsp = false;
+                rsa.ImportParameters(rsaKeyInfo);
+                //return false;
+                return rsa.VerifyData(dataBytes, new SHA1CryptoServiceProvider(), signatureBytes);
+            }
         }
 
         public static string SignData(string data)

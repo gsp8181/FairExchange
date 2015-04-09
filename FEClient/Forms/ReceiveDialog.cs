@@ -82,6 +82,11 @@ namespace FEClient.Forms
             {
                 return;
             }
+            if (!Rsa.VerifySignature(file.Data, file.Signature, _remoteKey))
+            {
+                return;
+            }
+
             callbackArgs.HasSet = true;
             _stopped = true;
 

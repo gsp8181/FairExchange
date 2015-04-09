@@ -102,14 +102,19 @@ namespace FEClient.Forms
                     {"email", SettingsWrapper.Email},
                     {"guid", _guid},
                     {"iv",_key.IvStr},
-                    //{"data", Base64.Base64Encode(text)}
-                    //{"complexity",this.complexity},
-                    //{"timeout",this.timeout},
+                    {"complexity",_complexity},
                     {"data", _aesData.DataStr}, //TODO: RSA SIGN!!
-                    {"signature", "NYI"}
+                    //{"signature", "NYI"}
                     // NRO (sSa(F nro, B, L, C)
                 };
-            req.Payload = data.ToString();
+
+            JObject toSend = new JObject
+            {
+                {"data",data.ToString()},
+                {"signature",Rsa.SignData(data.ToString())}
+            };
+
+            req.Payload = toSend.ToString();
             //Sends the request
             var response = client.Execute(req);
 
