@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data.Linq;
-using System.Data.SqlTypes;
-using System.IO;
-using System.Linq;
-using System.Windows.Forms;
+﻿using System.Linq;
 
 namespace FEClient.SQLite
 {
@@ -23,7 +16,7 @@ namespace FEClient.SQLite
                 //Table<PubKey> statuses = db.GetTable<PubKey>();
                 //statuses.InsertOnSubmit(key);
                 //db.SubmitChanges();
-                db.PubKeys.Add(key);
+                db.PubKeys.Add(key); 
                 //db.PubKeys.InsertOnSubmit(key);
                 db.SaveChanges();
             
@@ -32,11 +25,12 @@ namespace FEClient.SQLite
         public PubKey GetByEmail(string email)
         {
             var db = new FEDBContext();
-                var pubKey = (from p in db.PubKeys
-                              where p.Email == email
-                              select p).First();
-                return pubKey;
-            
+            var pubKeys = (from p in db.PubKeys
+                where p.Email == email
+                orderby p.Id descending
+                select p);
+
+            return !pubKeys.Any() ? null : pubKeys.First();
         }
 
     }
