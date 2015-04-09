@@ -61,6 +61,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
@@ -83,19 +84,27 @@
     <Compile Include="Context.Designer.cs">
       <DependentUpon>Context.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ReceiveDialog.cs" />
+    <Compile Include="Forms\ReceiveDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\ReceiveDialog.Designer.cs">
       <DependentUpon>ReceiveDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SendDialog.cs" />
+    <Compile Include="Forms\SendDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\SendDialog.Designer.cs">
       <DependentUpon>SendDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SendOptions.cs" />
+    <Compile Include="Forms\SendOptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\SendOptions.Designer.cs">
       <DependentUpon>SendOptions.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SettingsDialog.cs" />
+    <Compile Include="Forms\SettingsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\SettingsDialog.Designer.cs">
       <DependentUpon>SettingsDialog.cs</DependentUpon>
     </Compile>

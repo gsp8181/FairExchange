@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Net;
 using System.Net.Sockets;
 using System.Windows.Forms;
@@ -13,7 +14,7 @@ namespace FEClient
     
     public partial class Context : ApplicationContext
     {
-        public const string Port = "6555";
+        public static readonly string Port = ConfigurationManager.AppSettings["Port"];
         private static RESTServer _server = new RESTServer("+", Port);
         private NotifyRequest _currentTipReq;
 
