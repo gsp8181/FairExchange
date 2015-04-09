@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Windows.Forms;
 using FEClient.API;
+using FEClient.Forms;
 using FEClient.NotMyCode;
 using FEClient.SQLite;
 using Grapevine.Server;

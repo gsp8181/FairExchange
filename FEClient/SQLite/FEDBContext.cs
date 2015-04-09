@@ -20,9 +20,9 @@ namespace FEClient.SQLite
 #if DROP_DB_ON_START
             Database.SetInitializer(new DropCreateDatabaseAlways<FedbContext>());
 #elif DEBUG
-            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<FEDBContext>());
+            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<FedbContext>());
 #else
-            Database.SetInitializer(new CreateDatabaseIfNotExists<FEDBContext>());  
+            Database.SetInitializer(new CreateDatabaseIfNotExists<FedbContext>());  
 #endif
             using (FedbContext db = new FedbContext())
                 db.Database.Initialize(false);

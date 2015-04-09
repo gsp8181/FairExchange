@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace FEClient
+namespace FEClient.Forms
 {
     partial class ReceiveDialog
     {

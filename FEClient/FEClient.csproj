@@ -83,6 +83,22 @@
     <Compile Include="Context.Designer.cs">
       <DependentUpon>Context.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ReceiveDialog.cs" />
+    <Compile Include="Forms\ReceiveDialog.Designer.cs">
+      <DependentUpon>ReceiveDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SendDialog.cs" />
+    <Compile Include="Forms\SendDialog.Designer.cs">
+      <DependentUpon>SendDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SendOptions.cs" />
+    <Compile Include="Forms\SendOptions.Designer.cs">
+      <DependentUpon>SendOptions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SettingsDialog.cs" />
+    <Compile Include="Forms\SettingsDialog.Designer.cs">
+      <DependentUpon>SettingsDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Security\Aes.cs" />
     <Compile Include="Security\AesData.cs" />
     <Compile Include="Security\AesKeys.cs" />
@@ -94,38 +110,26 @@
     <Compile Include="API\NotifyRequest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReceiveDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ReceiveDialog.Designer.cs">
-      <DependentUpon>ReceiveDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="NotMyCode\RegexUtilities.cs" />
     <Compile Include="API\ClientRestApi.cs" />
     <Compile Include="API\ClientRestApi.Events.cs" />
     <Compile Include="Security\RSASecurity.cs" />
-    <Compile Include="SendDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SendDialog.Designer.cs">
-      <DependentUpon>SendDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SendOptions.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SendOptions.Designer.cs">
-      <DependentUpon>SendOptions.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SettingsDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SettingsDialog.Designer.cs">
-      <DependentUpon>SettingsDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="SettingsWrapper.cs" />
     <Compile Include="SQLite\Adapter.cs" />
     <Compile Include="SQLite\FEDBContext.cs" />
     <Compile Include="SQLite\PubKey.cs" />
+    <EmbeddedResource Include="Forms\ReceiveDialog.resx">
+      <DependentUpon>ReceiveDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SendDialog.resx">
+      <DependentUpon>SendDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SendOptions.resx">
+      <DependentUpon>SendOptions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SettingsDialog.resx">
+      <DependentUpon>SettingsDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -136,18 +140,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="ReceiveDialog.resx">
-      <DependentUpon>ReceiveDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SendDialog.resx">
-      <DependentUpon>SendDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SendOptions.resx">
-      <DependentUpon>SendOptions.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SettingsDialog.resx">
-      <DependentUpon>SettingsDialog.cs</DependentUpon>
-    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

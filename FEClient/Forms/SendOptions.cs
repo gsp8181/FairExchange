@@ -89,10 +89,10 @@ namespace FEClient.Forms
             get
             {
                 var ipText = destinationBox.Text;
-                if (ipText.Contains(':'))
+                if (ipText.Contains(":"))
                 {
                     var index = ipText.LastIndexOf(":");
-                    ipText = ipText.Remove(index, ipText.Count() - index);
+                    ipText = ipText.Remove(index, ipText.Length - index);
                 }
                 IPAddress ipObj;
                 return IPAddress.TryParse(ipText, out ipObj);
