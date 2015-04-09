@@ -206,6 +206,19 @@ namespace FEClient.API
                 SendTextResponse(context, Rsa.getPublicKey());
             }
 
+            [RESTRoute(Method = HttpMethod.GET, PathInfo = @"^/ident/?$")]
+            public void HandleIdentRequest(HttpListenerContext context)
+            {//TODO: add debug
+#if TRACE
+                Debug.WriteLine("/ident/");
+#endif
+                var returnObj = new JObject();
+                returnObj.Add("email", SettingsWrapper.Instance.Email);
+                returnObj.Add("pubKey", Rsa.getPublicKey());
+                Debug.WriteLine("/ident/ sent " + returnObj);
+                SendJsonResponse(context, returnObj);
+            }
+
 
             [RESTRoute]
             public void HandleAllGetRequests(HttpListenerContext context)
