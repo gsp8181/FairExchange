@@ -38,7 +38,7 @@ namespace FEClient.Forms
             {
                 var dialogResult =
                     MessageBox.Show(
-                        "The key for " + email + " has not been registered, do you wish to accept?\n" + _remoteKey,
+                        "The key for " + email + " has not been registered, do you wish to accept?\n" + remoteKey,
                         "New key", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
                 if (dialogResult == DialogResult.OK)
                 {
@@ -57,7 +57,7 @@ namespace FEClient.Forms
                 var dialogResult =
                     MessageBox.Show(
                         "The key for " + email +
-                        " has BEEN CHANGED, this could indicate interception\n Do you wish to accept?\n" + _remoteKey,
+                        " has BEEN CHANGED, this could indicate interception\n Do you wish to accept?\n" + remoteKey,
                         "CHANGED KEY", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                 if (dialogResult == DialogResult.OK)
                 {
