@@ -67,7 +67,7 @@ namespace FEClient
             Invoke((MethodInvoker)delegate //TODO; does this happen AFTER keys start coming?
             {
                 progressBar1.Style = ProgressBarStyle.Continuous;
-                progressBar1.Value = 50;
+                progressBar1.Value = 33;
                 progressLabel.Text = "File recieved, obtaining decryption keys";
                 timer2.Start();
             });
@@ -109,16 +109,35 @@ namespace FEClient
             timer2.Stop();
             stopped = false;
             //try and decrypt or close and display error
-            var key = dict.Peek();
-            var str = File.ReadAllText(localFile.FullName);
-            progressBar1.Value = 90;
+
+            backgroundWorker2.RunWorkerAsync();
+            progressBar1.Value = 67;
             progressLabel.Text = "Decrypting";
 
-            var decrypted = Aes.Decrypt(str, key, iv,complexity);
 
-            File.WriteAllText(localFile.FullName,decrypted);
 
-            progressBar1.Value = 100; //TODO: another thread
+
+        }
+
+        private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+            var senderDialog = (SaveFileDialog) sender;
+            File.Copy(localFile.FullName,senderDialog.FileName,true);
+        }
+
+        private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
+        {
+            var key = dict.Peek();
+            var str = File.ReadAllText(localFile.FullName);
+
+            var decrypted = Aes.Decrypt(str, key, iv, complexity); //TODO: try catch
+
+            File.WriteAllText(localFile.FullName, decrypted);
+        }
+
+        private void backgroundWorker2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            progressBar1.Value = 100;
 
             saveFileDialog1.ShowDialog(); //TODO: save again??
 
@@ -126,12 +145,6 @@ namespace FEClient
 
             //MessageBox.Show(localFile.FullName);
             Close();
-        }
-
-        private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
-        {
-            var senderDialog = (SaveFileDialog) sender;
-            File.Copy(localFile.FullName,senderDialog.FileName,true);
         }
     }
 }
