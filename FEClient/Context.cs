@@ -33,13 +33,6 @@ namespace FEClient
 
             //TODO: is port open?
 
-            var pk = new PubKey();
-            pk.Email = "gspburscough@btinternet.com";
-            pk.Pem = "abcd";
-            adapter.insert(pk);
-
-            MessageBox.Show(adapter.GetByEmail("gspburscough@btinternet.com").Pem);
-
             InitializeComponent();
 
             ClientRestApi.NotifyRecieved += ClientRestApi_NotifyRecieved;
