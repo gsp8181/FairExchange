@@ -20,7 +20,9 @@ namespace FEClient.API
             {
 
                 var x = this.GetJsonPayload(context.Request);
+#if TRACE
                 Debug.WriteLine("/file/ " + x);
+#endif
 
                 string filename, email, data, signature, guid, iv;
                 try
@@ -36,7 +38,9 @@ namespace FEClient.API
                 {
                     JObject eresponse = new JObject {{"accepted", false}, {"error", "malformed JSON"}};
                     context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    #if TRACE
                     Debug.WriteLine("/file/ SENT " + eresponse);
+#endif
                     this.SendJsonResponse(context, eresponse);
                     return;
                 }
@@ -48,7 +52,9 @@ namespace FEClient.API
                 {
                     var sig = Rsa.SignData(Base64.Base64Decode(data));
                     JObject response = new JObject {{"accepted", true}, {"signature", sig}};
+                    #if TRACE
                     Debug.WriteLine("/file/ SENT " + response);
+#endif
                     this.SendJsonResponse(context, response);
                     fs.data = data;
                     FileRecievedAndRespSent(this, fs); 
@@ -57,7 +63,9 @@ namespace FEClient.API
                 {
                     JObject response = new JObject {{"accepted", false}, {"error", "cancelled"}};
                     context.Response.StatusCode = (int)HttpStatusCode.Gone;
+                    #if TRACE
                     Debug.WriteLine("/file/ SENT " + response);
+#endif
                     this.SendJsonResponse(context, response);
                 }
             }
@@ -65,13 +73,17 @@ namespace FEClient.API
             [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/notify/?$")]
             public void HandleNotifyRecievedRequest(HttpListenerContext context)
             {
+                #if TRACE
                 Debug.WriteLine("/notify/ (cont)");
+#endif
                 var vars = NotifySend(context);
                 if (vars == null)
                     return;
 
                 JObject response = new JObject {{"accepted", true}}; //TODO: email
+                #if TRACE
                 Debug.WriteLine("/notify/ SENT " + response);
+#endif
                 this.SendJsonResponse(context, response);
                 NotifyRecieved(this, vars);
 
@@ -80,7 +92,9 @@ namespace FEClient.API
             private NotifyRequest NotifySend(HttpListenerContext context)//TODO: rename
             {
                 var jsonStr = this.GetJsonPayload(context.Request); //TODO: validate here with Json.NET Schema
+                #if TRACE
                 Debug.WriteLine(jsonStr);
+#endif
                 string fileName, email, guid, port;
                 int timeout, complexity;
                 try
@@ -96,7 +110,9 @@ namespace FEClient.API
                 {
                     JObject eresponse = new JObject { { "accepted", false }, { "error", "malformed JSON" } };
                     context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    #if TRACE
                     Debug.WriteLine("/notify/ OR /start/ SENT " + eresponse);
+#endif
                     this.SendJsonResponse(context, eresponse);
                     return null;
                 }
@@ -104,7 +120,9 @@ namespace FEClient.API
                 {
                     JObject eresponse = new JObject { { "accepted", false }, { "error", "malformed JSON" } };
                     context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    #if TRACE
                     Debug.WriteLine("/notify/ OR /start/ SENT " + eresponse);
+#endif
                     this.SendJsonResponse(context, eresponse);
                     return null;
                 }
@@ -120,7 +138,9 @@ namespace FEClient.API
             public void HandleKeySend(HttpListenerContext context)
             {
                 JObject args = this.GetJsonPayload(context.Request);
+                #if TRACE
                 Debug.WriteLine("/key/ " + args);
+#endif
                 var kArgs = new KeyArgs();
                 kArgs.guid = args.Value<string>("guid");
                 kArgs.i = args.Value<int>("i");
@@ -131,14 +151,18 @@ namespace FEClient.API
                 if (callback.hasSet)
                 {
                     JObject response = new JObject { { "accepted", true }, { "signature", "sig" } }; //TODO: implement
+                    #if TRACE
                     Debug.WriteLine("/key/ SENT " + response);
+#endif
                     this.SendJsonResponse(context, response);
                 }
                 else
                 {
                     JObject response = new JObject { { "accepted", false }, { "error", "cancelled" } };
                     context.Response.StatusCode = (int)HttpStatusCode.Gone;
+                    #if TRACE
                     Debug.WriteLine("/key/ SENT " + response);
+#endif
                     this.SendJsonResponse(context, response);
                 }
 
@@ -147,7 +171,9 @@ namespace FEClient.API
             [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/start/?$")]
             public void HandleStartTransmissionRequest(HttpListenerContext context)
             {
+                #if TRACE
                 Debug.WriteLine("/start/ cont");
+#endif
                 NotifyArgs args = new NotifyArgs();
                 var vars = NotifySend(context);
                 if (vars == null)
@@ -157,7 +183,9 @@ namespace FEClient.API
                 if (args.hasSet)
                 {
                     JObject response = new JObject {{"accepted", true}};
+                    #if TRACE
                     Debug.WriteLine("/start/ SENT " + response);
+#endif
                     this.SendJsonResponse(context, response);
                     StartTransmissionAndRespSent(this, vars);
                 }
@@ -165,14 +193,16 @@ namespace FEClient.API
                 {
                     JObject response = new JObject {{"accepted", false}, {"error", "cancelled"}};
                     context.Response.StatusCode = (int)HttpStatusCode.Gone;
+                    #if TRACE
                     Debug.WriteLine("/start/ SENT " + response);
+#endif
                     this.SendJsonResponse(context, response);
                 }
             }
 
             [RESTRoute(Method = HttpMethod.GET, PathInfo = @"^/key/?$")]
             public void HandleGetKeyRequest(HttpListenerContext context)
-            {
+            {//TODO: add debug
                 this.SendTextResponse(context, Rsa.getPublicKey());
             }
 
@@ -180,7 +210,7 @@ namespace FEClient.API
             [RESTRoute]
             public void HandleAllGetRequests(HttpListenerContext context)
             {
-                this.SendTextResponse(context, "GET is a success!");
+                this.SendTextResponse(context, "GET is a success!"); //TODO: change to api description
             }
         }
 }
