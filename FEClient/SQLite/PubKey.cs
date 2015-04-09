@@ -12,14 +12,16 @@ namespace FEClient.SQLite
     class PubKey
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        [Column("Id")]
+        //[DatabaseGenerated(DatabaseGeneratedOption.None)]
+        //[Column("Id")]
         public int Id { get; set; }
 
-        [Column("Email")]
+        //[Column("Email")]
+        [Required]
         public string Email { get; set; }
 
-        [Column("Pem")]
+        //[Column("Pem")]
+        [Required]
         public string Pem { get; set; }
     }
 }
