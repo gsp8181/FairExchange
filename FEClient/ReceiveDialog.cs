@@ -97,7 +97,7 @@ namespace FEClient
         {
             var client = new RESTClient("http://" + _ip);
             var req = new RESTRequest("/start/");
-            JObject data = new JObject { { "fileName", _fileName }, { "email", SettingsWrapper.Instance.Email }, {"guid", _guid} };
+            JObject data = new JObject { { "fileName", _fileName }, { "email", SettingsWrapper.Email }, {"guid", _guid} };
             req.Method = HttpMethod.POST;
             req.ContentType = ContentType.JSON;
             req.Payload = data.ToString();

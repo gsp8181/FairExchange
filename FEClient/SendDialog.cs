@@ -101,7 +101,7 @@ namespace FEClient
             JObject data = new JObject
                 {
                     {"fileName", _file.Name},
-                    {"email", SettingsWrapper.Instance.Email},
+                    {"email", SettingsWrapper.Email},
                     {"guid", _guid},
                     {"iv",_key.IvStr},
                     //{"data", Base64.Base64Encode(text)}
@@ -305,7 +305,7 @@ namespace FEClient
 
 
             var req = new RESTRequest("/notify/");
-            var data = new JObject { { "fileName", _file.Name }, { "email", SettingsWrapper.Instance.Email }, { "guid", _guid }, {"timeout", _timeout}, {"complexity", _complexity}, {"port",Context.Port} };
+            var data = new JObject { { "fileName", _file.Name }, { "email", SettingsWrapper.Email }, { "guid", _guid }, {"timeout", _timeout}, {"complexity", _complexity}, {"port",Context.Port} };
             req.Method = HttpMethod.POST;
             req.ContentType = ContentType.JSON; //TODO: async and await
             req.Payload = data.ToString();

@@ -9,7 +9,6 @@ namespace FEClient
 {
     public partial class SendOptions : Form
     {
-        private SettingsWrapper _settings = SettingsWrapper.Instance;
         public SendOptions()
         {
             InitializeComponent();

@@ -15,11 +15,10 @@ namespace FEClient
         public const string Port = "6555";
         private static RESTServer _server = new RESTServer("+", Port);
         private NotifyRequest _currentTipReq;
-        private Adapter _adapter = Adapter.Instance;
 
         public Context()
         {
-            while (!SettingsWrapper.Instance.IsSet)
+            while (!SettingsWrapper.IsSet)
             {
                 using (SettingsDialog dialog = new SettingsDialog())
                 {

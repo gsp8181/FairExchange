@@ -2,13 +2,9 @@
 
 namespace FEClient
 {
-    public class SettingsWrapper
+    public static class SettingsWrapper
     {
-        private static SettingsWrapper _settingsWrapper = new SettingsWrapper();
-        private SettingsWrapper() { }
-        public static SettingsWrapper Instance {get { return _settingsWrapper; }}
-
-        public string Email
+        public static string Email
         {
             get { return (string)Settings.Default["Email"]; }
             set
@@ -18,7 +14,7 @@ namespace FEClient
             }
         }
 
-        public bool IsSet
+        public static bool IsSet
         {
             get { return (!string.IsNullOrWhiteSpace(Email)); }
 

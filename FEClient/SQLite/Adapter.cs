@@ -4,8 +4,12 @@ namespace FEClient.SQLite
 {
     class Adapter
     {
-        private readonly static Adapter _Instance = new Adapter();
-        public static Adapter Instance { get { return _Instance; } }
+        static Adapter()
+        {
+            Instance = new Adapter();
+        }
+
+        public static Adapter Instance { get; private set; }
 
 
         public void Insert(PubKey key)

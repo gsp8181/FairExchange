@@ -213,7 +213,7 @@ namespace FEClient.API
                 Debug.WriteLine("/ident/");
 #endif
                 var returnObj = new JObject();
-                returnObj.Add("email", SettingsWrapper.Instance.Email);
+                returnObj.Add("email", SettingsWrapper.Email);
                 returnObj.Add("pubKey", Rsa.GetPublicKey());
                 Debug.WriteLine("/ident/ sent " + returnObj);
                 SendJsonResponse(context, returnObj);

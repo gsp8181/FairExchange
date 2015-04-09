@@ -6,7 +6,6 @@ namespace FEClient
 {
     public partial class SettingsDialog : Form
     {
-        private SettingsWrapper _settings = SettingsWrapper.Instance;
         public SettingsDialog() //TODO: cancelbutton, regen enabled as a boolean [default true]
         {
             InitializeComponent();
@@ -28,12 +27,12 @@ namespace FEClient
         public void SaveSettings()
         {
 
-            _settings.Email = emailBox.Text;
+            SettingsWrapper.Email = emailBox.Text;
         }
 
         public void LoadSettings()
         {
-            emailBox.Text = _settings.Email;
+            emailBox.Text = SettingsWrapper.Email;
 
         }
 
