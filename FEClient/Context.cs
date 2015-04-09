@@ -38,7 +38,9 @@ namespace FEClient
 
             ClientRestApi.NotifyRecieved += ClientRestApi_NotifyRecieved;
 
-            CreateFirewallException(int.Parse(Port));
+            notifyIcon.Text += " :" + Port;
+
+            CreateFirewallException(int.Parse(Port)); //TODO: wait for firewall
             _server.OnStart = OnServerStartNotify;
             _server.Start();
             if (!_server.IsListening) //TODO: maybe sort out with a timer
@@ -97,6 +99,7 @@ namespace FEClient
         private void quitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ExitThread();
+            Environment.Exit(0);
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)

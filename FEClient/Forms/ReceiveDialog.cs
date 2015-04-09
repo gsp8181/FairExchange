@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Net;
 using System.Windows.Forms;
 using FEClient.API;
 using FEClient.Security;
+using FEClient.SQLite;
 using Grapevine;
 using Grapevine.Client;
 using Newtonsoft.Json.Linq;
@@ -21,6 +23,7 @@ namespace FEClient.Forms
         private Stack<string> _dict = new Stack<string>(); //TODO: holds I
         private bool _stopped;
         private int _complexity;
+        private string _remoteKey;
         public ReceiveDialog(NotifyRequest startObj)
         {
             InitializeComponent();
@@ -95,6 +98,15 @@ namespace FEClient.Forms
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e) //TODO: does this have to be separate
         {
+            if (Common.GetValue(_ip, out _remoteKey))
+            {
+                Close();
+                return;
+            }
+
+
+
+
             var client = new RESTClient("http://" + _ip);
             var req = new RESTRequest("/start/");
             JObject data = new JObject { { "fileName", _fileName }, { "email", SettingsWrapper.Email }, {"guid", _guid} };

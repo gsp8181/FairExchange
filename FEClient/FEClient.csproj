@@ -30,7 +30,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;MULTIINSTANCE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -83,6 +83,7 @@
     <Compile Include="Context.Designer.cs">
       <DependentUpon>Context.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Common.cs" />
     <Compile Include="Forms\ReceiveDialog.cs">
       <SubType>Form</SubType>
     </Compile>

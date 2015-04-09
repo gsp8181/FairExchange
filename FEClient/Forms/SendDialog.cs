@@ -245,60 +245,11 @@ namespace FEClient.Forms
             progressLabel.Text = "Attempting to contact " + _ip;
 
 
-            var client = new RESTClient("http://" + _ip);
-
-            var keyReq = new RESTRequest("/ident/");
-
-            var keyResponse = client.Execute(keyReq);
-
-            if (keyResponse.StatusCode != HttpStatusCode.OK)
+            RESTClient client = new RESTClient("http://" + _ip);
+            if (Common.GetValue(_ip, out _remoteKey))
             {
-                MessageBox.Show("error"); //TODO: make better
-            }
-
-            var keyRespObj = JObject.Parse(keyResponse.Content);
-
-            _remoteKey = keyRespObj.Value<string>("pubKey"); //TODO: flag on error
-            var email = keyRespObj.Value<string>("email");
-
-            var keyObj = Adapter.Instance.GetByEmail(email);
-
-            if (keyObj == null)
-            {
-                var dialogResult =
-                    MessageBox.Show(
-                        "The key for " + email + " has not been registered, do you wish to accept?\n" + _remoteKey,
-                        "New key", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-                if (dialogResult == DialogResult.OK)
-                {
-                    var dbObj = new PubKey();
-                    dbObj.Email = email;
-                    dbObj.Pem = _remoteKey;
-                    Adapter.Instance.Insert(dbObj);
-                }
-                else
-                {
-                    Close();
-                    return;
-                }
-            } else if (keyObj.Pem != _remoteKey)
-            {
-                var dialogResult =
-    MessageBox.Show(
-        "The key for " + email + " has BEEN CHANGED, this could indicate interception\n Do you wish to accept?\n" + _remoteKey,
-        "CHANGED KEY", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-                if (dialogResult == DialogResult.OK)
-                {
-                    var dbObj = new PubKey();
-                    dbObj.Email = email;
-                    dbObj.Pem = _remoteKey;
-                    Adapter.Instance.Insert(dbObj);
-                }
-                else
-                {
-                    Close();
-                    return;
-                }
+                Close();
+                return;
             }
 
 
@@ -314,6 +265,7 @@ namespace FEClient.Forms
             }
             timer1.Start();
         }
+
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
