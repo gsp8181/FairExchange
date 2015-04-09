@@ -9,7 +9,7 @@ using Grapevine;
 using Grapevine.Client;
 using Newtonsoft.Json.Linq;
 
-namespace FEClient
+namespace FEClient.Forms
 {
     public partial class ReceiveDialog : Form
     {

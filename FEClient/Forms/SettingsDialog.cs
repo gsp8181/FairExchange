@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using FEClient.Security;
 
-namespace FEClient
+namespace FEClient.Forms
 {
     public partial class SettingsDialog : Form
     {

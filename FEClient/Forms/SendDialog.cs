@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data.Common;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
-using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Windows.Forms;
 using FEClient.API;
@@ -16,7 +14,7 @@ using Grapevine.Client;
 using Newtonsoft.Json.Linq;
 using Aes = FEClient.Security.Aes;
 
-namespace FEClient
+namespace FEClient.Forms
 {
     public partial class SendDialog : Form
     {
