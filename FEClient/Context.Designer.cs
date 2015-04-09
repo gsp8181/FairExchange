@@ -48,14 +48,17 @@ namespace FEClient
             this.notifyIcon.Text = "FE Client";
             this.notifyIcon.Visible = true;
             this.notifyIcon.BalloonTipClicked += new System.EventHandler(this.notifyIcon_BalloonTipClicked);
+            this.notifyIcon.MouseDoubleClick += new MouseEventHandler(this.startToolStripMenuItem_Click);
             // 
             // notifyIconMenu
             // 
-            this.notifyIconMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.startToolStripMenuItem,
-            this.settingsToolStripMenuItem,
-            this.logsToolStripMenuItem,
-            this.quitToolStripMenuItem});
+            this.notifyIconMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
+            {
+                this.startToolStripMenuItem,
+                this.settingsToolStripMenuItem,
+                this.logsToolStripMenuItem,
+                this.quitToolStripMenuItem
+            });
             this.notifyIconMenu.Name = "contextMenuStrip1";
             this.notifyIconMenu.Size = new System.Drawing.Size(117, 92);
             // 
