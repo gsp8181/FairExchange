@@ -1,11 +1,14 @@
-﻿namespace FEClient
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace FEClient
 {
     partial class SendDialog
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -100,11 +103,11 @@
 
         #endregion
 
-        private System.Windows.Forms.ProgressBar progressBar1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label progressLabel;
-        private System.Windows.Forms.Timer timer1;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        private System.ComponentModel.BackgroundWorker backgroundWorker2;
+        private ProgressBar progressBar1;
+        private Button button1;
+        private Label progressLabel;
+        private Timer timer1;
+        private BackgroundWorker backgroundWorker1;
+        private BackgroundWorker backgroundWorker2;
     }
 }

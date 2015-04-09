@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using FEClient.API;
+using FEClient.Security;
+using Grapevine;
 using Grapevine.Client;
 using Newtonsoft.Json.Linq;
 
@@ -23,17 +19,17 @@ namespace FEClient
         private FileInfo localFile = new FileInfo(Path.GetTempFileName()); //TODO: why not just hold in memory?
         private string iv;
         private Stack<string> dict = new Stack<string>(); //TODO: holds I
-        private bool stopped = false;
+        private bool stopped;
         private int complexity;
         public ReceiveDialog(NotifyRequest startObj)
         {
             InitializeComponent();
             progressLabel.Text += fileName;
-            this.ip = startObj.ip;
-            this.fileName = startObj.fileName;
-            this.guid = startObj.guid;
+            ip = startObj.ip;
+            fileName = startObj.fileName;
+            guid = startObj.guid;
             timer2.Interval = startObj.timeout;
-            this.complexity = startObj.complexity;
+            complexity = startObj.complexity;
             ClientRestApi.FileRecieved += MyResource_FileRecieved;
             ClientRestApi.FileRecievedAndRespSent += MyResource_FileRecievedAndRespSent;
             ClientRestApi.KeyRecieved += ClientRestApi_KeyRecieved;
@@ -51,7 +47,7 @@ namespace FEClient
             dict.Push(key.key);
             callbackArgs.hasSet = true;
 
-            this.Invoke((MethodInvoker) delegate
+            Invoke((MethodInvoker) delegate
             {
                 timer2.Stop();
                 timer2.Start();
@@ -68,7 +64,7 @@ namespace FEClient
                 sw.Write(file.data); //TODO: WHY?
             }
             iv = file.iv;
-            this.Invoke((MethodInvoker)delegate //TODO; does this happen AFTER keys start coming?
+            Invoke((MethodInvoker)delegate //TODO; does this happen AFTER keys start coming?
             {
                 progressBar1.Style = ProgressBarStyle.Continuous;
                 progressBar1.Value = 50;
@@ -79,7 +75,7 @@ namespace FEClient
 
         private void MyResource_FileRecieved(object sender, FileSend file, NotifyArgs callbackArgs)
         {
-            if (this.fileName != file.fileName) //TODO: email!! or guid!
+            if (fileName != file.fileName) //TODO: email!! or guid!
             {
                 return;
             }
@@ -94,7 +90,7 @@ namespace FEClient
             ClientRestApi.FileRecieved -= MyResource_FileRecieved;
             ClientRestApi.FileRecievedAndRespSent -= MyResource_FileRecievedAndRespSent;
             ClientRestApi.KeyRecieved -= ClientRestApi_KeyRecieved;
-            this.Dispose();
+            Dispose();
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e) //TODO: does this have to be separate
@@ -102,8 +98,8 @@ namespace FEClient
             var client = new RESTClient("http://" + ip);
             var req = new RESTRequest("/start/");
             JObject data = new JObject { { "fileName", fileName }, { "email", SettingsWrapper.Instance.Email }, {"guid", guid} };
-            req.Method = Grapevine.HttpMethod.POST;
-            req.ContentType = Grapevine.ContentType.JSON;
+            req.Method = HttpMethod.POST;
+            req.ContentType = ContentType.JSON;
             req.Payload = data.ToString();
             var response = client.Execute(req);
         }
@@ -115,14 +111,14 @@ namespace FEClient
             //try and decrypt or close and display error
             var key = dict.Peek();
             var str = File.ReadAllText(localFile.FullName);
-            this.progressBar1.Value = 90;
-            this.progressLabel.Text = "Decrypting";
+            progressBar1.Value = 90;
+            progressLabel.Text = "Decrypting";
 
-            var decrypted = Security.Aes.Decrypt(str, key, this.iv,complexity);
+            var decrypted = Aes.Decrypt(str, key, iv,complexity);
 
             File.WriteAllText(localFile.FullName,decrypted);
 
-            this.progressBar1.Value = 100; //TODO: another thread
+            progressBar1.Value = 100; //TODO: another thread
 
             saveFileDialog1.ShowDialog(); //TODO: save again??
 

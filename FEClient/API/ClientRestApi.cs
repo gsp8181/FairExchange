@@ -1,12 +1,11 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 using System.Net;
-using System.Reflection;
 using FEClient.Security;
 using Grapevine;
 using Grapevine.Server;
 using Newtonsoft.Json.Linq;
+
 // ReSharper disable UnusedMember.Global
 
 namespace FEClient.API
@@ -20,7 +19,7 @@ namespace FEClient.API
             public void HandleFileRecievedRequest(HttpListenerContext context)
             {
 
-                var x = this.GetJsonPayload(context.Request);
+                var x = GetJsonPayload(context.Request);
 #if TRACE
                 Debug.WriteLine("/file/ " + x);
 #endif
@@ -42,7 +41,7 @@ namespace FEClient.API
                     #if TRACE
                     Debug.WriteLine("/file/ SENT " + eresponse);
 #endif
-                    this.SendJsonResponse(context, eresponse);
+                    SendJsonResponse(context, eresponse);
                     return;
                 }
                 FileSend fs = new FileSend {email = email, fileName = filename, iv = iv, guid=guid}; //TODO: tidy up, dont reuse?
@@ -56,7 +55,7 @@ namespace FEClient.API
                     #if TRACE
                     Debug.WriteLine("/file/ SENT " + response);
 #endif
-                    this.SendJsonResponse(context, response);
+                    SendJsonResponse(context, response);
                     fs.data = data;
                     FileRecievedAndRespSent(this, fs); 
                 }
@@ -67,7 +66,7 @@ namespace FEClient.API
                     #if TRACE
                     Debug.WriteLine("/file/ SENT " + response);
 #endif
-                    this.SendJsonResponse(context, response);
+                    SendJsonResponse(context, response);
                 }
             }
 
@@ -85,14 +84,14 @@ namespace FEClient.API
                 #if TRACE
                 Debug.WriteLine("/notify/ SENT " + response);
 #endif
-                this.SendJsonResponse(context, response);
+                SendJsonResponse(context, response);
                 NotifyRecieved(this, vars);
 
             }
 
             private NotifyRequest NotifySend(HttpListenerContext context)//TODO: rename
             {
-                var jsonStr = this.GetJsonPayload(context.Request); //TODO: validate here with Json.NET Schema
+                var jsonStr = GetJsonPayload(context.Request); //TODO: validate here with Json.NET Schema
                 #if TRACE
                 Debug.WriteLine(jsonStr);
 #endif
@@ -114,7 +113,7 @@ namespace FEClient.API
                     #if TRACE
                     Debug.WriteLine("/notify/ OR /start/ SENT " + eresponse);
 #endif
-                    this.SendJsonResponse(context, eresponse);
+                    SendJsonResponse(context, eresponse);
                     return null;
                 }
                 catch (FormatException)
@@ -124,11 +123,11 @@ namespace FEClient.API
                     #if TRACE
                     Debug.WriteLine("/notify/ OR /start/ SENT " + eresponse);
 #endif
-                    this.SendJsonResponse(context, eresponse);
+                    SendJsonResponse(context, eresponse);
                     return null;
                 }
 
-                var ip = context.Request.RemoteEndPoint.Address.ToString() + ":" + port;
+                var ip = context.Request.RemoteEndPoint.Address + ":" + port;
 
                 var output = new NotifyRequest {email = email, fileName = fileName, ip = ip, guid=guid, timeout=timeout, complexity=complexity};
                 //TODO: err?
@@ -138,7 +137,7 @@ namespace FEClient.API
             [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/key/?$")]
             public void HandleKeySend(HttpListenerContext context)
             {
-                JObject args = this.GetJsonPayload(context.Request);
+                JObject args = GetJsonPayload(context.Request);
                 #if TRACE
                 Debug.WriteLine("/key/ " + args);
 #endif
@@ -155,7 +154,7 @@ namespace FEClient.API
                     #if TRACE
                     Debug.WriteLine("/key/ SENT " + response);
 #endif
-                    this.SendJsonResponse(context, response);
+                    SendJsonResponse(context, response);
                 }
                 else
                 {
@@ -164,7 +163,7 @@ namespace FEClient.API
                     #if TRACE
                     Debug.WriteLine("/key/ SENT " + response);
 #endif
-                    this.SendJsonResponse(context, response);
+                    SendJsonResponse(context, response);
                 }
 
             }
@@ -187,7 +186,7 @@ namespace FEClient.API
                     #if TRACE
                     Debug.WriteLine("/start/ SENT " + response);
 #endif
-                    this.SendJsonResponse(context, response);
+                    SendJsonResponse(context, response);
                     StartTransmissionAndRespSent(this, vars);
                 }
                 else
@@ -197,21 +196,21 @@ namespace FEClient.API
                     #if TRACE
                     Debug.WriteLine("/start/ SENT " + response);
 #endif
-                    this.SendJsonResponse(context, response);
+                    SendJsonResponse(context, response);
                 }
             }
 
             [RESTRoute(Method = HttpMethod.GET, PathInfo = @"^/key/?$")]
             public void HandleGetKeyRequest(HttpListenerContext context)
             {//TODO: add debug
-                this.SendTextResponse(context, Rsa.getPublicKey());
+                SendTextResponse(context, Rsa.getPublicKey());
             }
 
 
             [RESTRoute]
             public void HandleAllGetRequests(HttpListenerContext context)
             {
-                this.SendTextResponse(context, "GET is a success!"); //TODO: change to api description
+                SendTextResponse(context, "GET is a success!"); //TODO: change to api description
             }
         }
 }

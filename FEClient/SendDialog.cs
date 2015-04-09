@@ -1,20 +1,14 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using FEClient.API;
 using FEClient.Security;
+using Grapevine;
 using Grapevine.Client;
 using Newtonsoft.Json.Linq;
 using Aes = FEClient.Security.Aes;
@@ -39,10 +33,10 @@ namespace FEClient
             ClientRestApi.StartTransmission += MyResource_StartTransmission;
             ClientRestApi.StartTransmissionAndRespSent += MyResource_StartTransmissionAndRespSent;
             this.ip = ip;
-            this.file = new FileInfo(fileName);
+            file = new FileInfo(fileName);
 
             guid = Guid.NewGuid().ToString();
-            this.amount = rounds;
+            amount = rounds;
             this.complexity = complexity;
             this.timeout = timeout;
 
@@ -52,7 +46,7 @@ namespace FEClient
         {
             if (vars.guid != guid)
                 return;
-            this.Invoke((MethodInvoker)delegate
+            Invoke((MethodInvoker)delegate
             {
                 timer2_Tick();
             }); //TODO: maybe another timeout timer?
@@ -63,7 +57,7 @@ namespace FEClient
             if (addrSender.fileName != file.Name)
                 return;
             callbackArgs.hasSet = true;
-            this.Invoke((MethodInvoker)delegate
+            Invoke((MethodInvoker)delegate
             {
                 timer1.Stop();
             });
@@ -74,7 +68,7 @@ namespace FEClient
         {
             ClientRestApi.StartTransmission -= MyResource_StartTransmission;
             ClientRestApi.StartTransmissionAndRespSent -= MyResource_StartTransmissionAndRespSent;
-            this.Dispose();
+            Dispose();
             //file.Close();
         }
 
@@ -82,7 +76,7 @@ namespace FEClient
         {
             progressBar1.Style = ProgressBarStyle.Continuous;
             MessageBox.Show("Remote user did not respond in time", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            this.Close();
+            Close();
         }
 
         private void timer2_Tick()
@@ -95,8 +89,8 @@ namespace FEClient
             var client = new RESTClient("http://" + ip);
             var req = new RESTRequest("/file/")
             {
-                Method = Grapevine.HttpMethod.POST,
-                ContentType = Grapevine.ContentType.JSON
+                Method = HttpMethod.POST,
+                ContentType = ContentType.JSON
             };
 
             //Embeds the data (fig 1)
@@ -122,7 +116,7 @@ namespace FEClient
             {
                 progressBar1.Style = ProgressBarStyle.Continuous; //TODO: update label
                 MessageBox.Show("Remote server did not accept the file" + Environment.NewLine + response.Error, "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                this.Close();
+                Close();
                 return;
             }
             var json = JObject.Parse(response.Content);
@@ -150,13 +144,13 @@ namespace FEClient
             { //Check cancellation
                 var fkey = fakeKeys.Dequeue();
 
-                JObject data = new JObject {{"key", fkey},{"guid",this.guid},{"i",i}};
+                JObject data = new JObject {{"key", fkey},{"guid",guid},{"i",i}};
 
                 var req = new RESTRequest("/key/");
                 
                 req.Timeout = timeout; //TODO actually take from input AND set a timer
-                req.Method = Grapevine.HttpMethod.POST;
-                req.ContentType = Grapevine.ContentType.JSON; //TODO: async and await
+                req.Method = HttpMethod.POST;
+                req.ContentType = ContentType.JSON; //TODO: async and await
                 req.Payload = data.ToString();
                 var response = client.Execute(req);
                 if (stopwatch.ElapsedMilliseconds > timeout)
@@ -168,7 +162,7 @@ namespace FEClient
                     
                     if(response.StatusCode != HttpStatusCode.OK) //TODO: OR IF TIMEOUT
                 {
-                    this.Invoke((MethodInvoker)delegate
+                    Invoke((MethodInvoker)delegate
                     {
                         MessageBox.Show("Error");
                     });
@@ -180,18 +174,18 @@ namespace FEClient
                 backgroundWorker1.ReportProgress((i/amount)*100); //TODO: fix
             }
 
-            JObject realData = new JObject {{"key", key.keyStr}, {"guid", this.guid}, {"i", amount}}; //TODO: encrypt keys??
+            JObject realData = new JObject {{"key", key.keyStr}, {"guid", guid}, {"i", amount}}; //TODO: encrypt keys??
 
 
             var realReq = new RESTRequest("/key/");//TODO: split into method with above bit
             realReq.Timeout = timeout;
-            realReq.Method = Grapevine.HttpMethod.POST;
-            realReq.ContentType = Grapevine.ContentType.JSON; //TODO: async and await
+            realReq.Method = HttpMethod.POST;
+            realReq.ContentType = ContentType.JSON; //TODO: async and await
             realReq.Payload = realData.ToString();
             var realResponse = client.Execute(realReq);
             if (realResponse.StatusCode != HttpStatusCode.OK) //TODO: OR IF TIMEOUT
             {
-                this.Invoke((MethodInvoker)delegate
+                Invoke((MethodInvoker)delegate
                 {
                     MessageBox.Show("Error");
                     this.Close();
@@ -251,8 +245,8 @@ namespace FEClient
             var client = new RESTClient("http://" + ip);
             var req = new RESTRequest("/notify/");
             var data = new JObject { { "fileName", file.Name }, { "email", SettingsWrapper.Instance.Email }, { "guid", guid }, {"timeout", timeout}, {"complexity", complexity}, {"port",Context.port} };
-            req.Method = Grapevine.HttpMethod.POST;
-            req.ContentType = Grapevine.ContentType.JSON; //TODO: async and await
+            req.Method = HttpMethod.POST;
+            req.ContentType = ContentType.JSON; //TODO: async and await
             req.Payload = data.ToString();
             var response = client.Execute(req);
             if (response.StatusCode != HttpStatusCode.OK)
@@ -264,7 +258,7 @@ namespace FEClient
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            this.progressLabel.Text = "Finished";
+            progressLabel.Text = "Finished";
         }
     }
 }

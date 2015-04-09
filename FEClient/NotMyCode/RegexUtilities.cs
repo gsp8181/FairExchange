@@ -6,7 +6,7 @@ namespace FEClient.NotMyCode
 {
     public class RegexUtilities //https://msdn.microsoft.com/en-us/library/01escwtf%28v=vs.110%29.aspx
     {
-        bool invalid = false;
+        bool invalid;
 
         public bool IsValidEmail(string strIn)
         {
@@ -17,7 +17,7 @@ namespace FEClient.NotMyCode
             // Use IdnMapping class to convert Unicode domain names. 
             try
             {
-                strIn = Regex.Replace(strIn, @"(@)(.+)$", this.DomainMapper,
+                strIn = Regex.Replace(strIn, @"(@)(.+)$", DomainMapper,
                                       RegexOptions.None, TimeSpan.FromMilliseconds(200));
             }
             catch (RegexMatchTimeoutException)

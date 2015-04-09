@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Windows.Forms;
-using FEClient.NotMyCode;
 
 namespace FEClient
 {
@@ -28,7 +27,7 @@ namespace FEClient
 
         private void cancelButton_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
         private void okButton_Click(object sender, EventArgs e)
         {
@@ -66,7 +65,7 @@ namespace FEClient
 
             var sendDialog = new SendDialog(ip, fileBox.Text, int.Parse(roundsBox.Text), int.Parse(complexityBox.Text), int.Parse(timeoutBox.Text));
             sendDialog.Show(); //TODO: validate
-            this.Close();
+            Close();
         }
 
         private bool validateAll()

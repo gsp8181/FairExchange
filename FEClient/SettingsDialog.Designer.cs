@@ -1,11 +1,14 @@
-﻿namespace FEClient
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace FEClient
 {
     partial class SettingsDialog
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -135,13 +138,13 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox emailBox;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox ttpBox;
-        private System.Windows.Forms.Button okButton;
-        private System.Windows.Forms.Button regenKeysButton;
-        private System.Windows.Forms.ErrorProvider errorProvider1;
-        private System.Windows.Forms.Button publicKeyButton;
+        private TextBox emailBox;
+        private Label label2;
+        private Label label1;
+        private TextBox ttpBox;
+        private Button okButton;
+        private Button regenKeysButton;
+        private ErrorProvider errorProvider1;
+        private Button publicKeyButton;
     }
 }

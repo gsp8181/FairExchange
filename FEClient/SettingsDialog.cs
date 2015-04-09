@@ -21,14 +21,14 @@ namespace FEClient
                 return;
             }
             SaveSettings();
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            DialogResult = DialogResult.OK;
+            Close();
         }
 
         public void SaveSettings()
         {
 
-            settings.Email = this.emailBox.Text;
+            settings.Email = emailBox.Text;
         }
 
         public void LoadSettings()

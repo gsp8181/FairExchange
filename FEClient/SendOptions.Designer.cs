@@ -1,11 +1,14 @@
-﻿namespace FEClient
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace FEClient
 {
     partial class SendOptions
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -238,21 +241,21 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox destinationBox;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button okButton;
-        private System.Windows.Forms.Button cancelButton;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox fileBox;
-        private System.Windows.Forms.Button browseButton;
-        private System.Windows.Forms.OpenFileDialog openFileDialog;
-        private System.Windows.Forms.ErrorProvider errorProvider;
-        private System.Windows.Forms.TextBox timeoutBox;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox complexityBox;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox roundsBox;
-        private System.Windows.Forms.CheckBox advancedCheckBox;
+        private TextBox destinationBox;
+        private Label label1;
+        private Label label2;
+        private Button okButton;
+        private Button cancelButton;
+        private Label label3;
+        private TextBox fileBox;
+        private Button browseButton;
+        private OpenFileDialog openFileDialog;
+        private ErrorProvider errorProvider;
+        private TextBox timeoutBox;
+        private Label label5;
+        private TextBox complexityBox;
+        private Label label4;
+        private TextBox roundsBox;
+        private CheckBox advancedCheckBox;
     }
 }
