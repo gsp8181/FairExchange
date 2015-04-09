@@ -7,6 +7,7 @@ using FEClient.Security;
 using Grapevine;
 using Grapevine.Server;
 using Newtonsoft.Json.Linq;
+// ReSharper disable UnusedMember.Global
 
 namespace FEClient.API
 {
