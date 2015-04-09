@@ -31,14 +31,14 @@ namespace FEClient.Forms
             _ip = startObj.Ip;
             _fileName = startObj.FileName;
             _guid = startObj.Guid;
-            timer2.Interval = startObj.Timeout;
+            decryptTimer.Interval = startObj.Timeout;
             _complexity = startObj.Complexity;
             ClientRestApi.FileRecieved += MyResource_FileRecieved;
             ClientRestApi.FileRecievedAndRespSent += MyResource_FileRecievedAndRespSent;
             ClientRestApi.KeyRecieved += ClientRestApi_KeyRecieved;
-            saveFileDialog1.FileName = _fileName;
-            saveFileDialog1.DefaultExt = new FileInfo(_fileName).Extension;
-            backgroundWorker1.RunWorkerAsync();
+            saveFileDialog.FileName = _fileName;
+            saveFileDialog.DefaultExt = new FileInfo(_fileName).Extension;
+            sendStartRequestWorker.RunWorkerAsync();
         }
 
         void ClientRestApi_KeyRecieved(object sender, KeyArgs key, NotifyArgs callbackArgs)
@@ -52,8 +52,8 @@ namespace FEClient.Forms
 
             Invoke((MethodInvoker) delegate
             {
-                timer2.Stop();
-                timer2.Start();
+                decryptTimer.Stop();
+                decryptTimer.Start();
             });
         }
 
@@ -72,7 +72,7 @@ namespace FEClient.Forms
                 progressBar1.Style = ProgressBarStyle.Continuous;
                 progressBar1.Value = 33;
                 progressLabel.Text = "File recieved, obtaining decryption keys";
-                timer2.Start();
+                decryptTimer.Start();
             });
         }
 
@@ -118,11 +118,11 @@ namespace FEClient.Forms
 
         private void timer2_Tick(object sender, EventArgs e)
         {
-            timer2.Stop();
+            decryptTimer.Stop();
             _stopped = false;
             //try and decrypt or close and display error
 
-            backgroundWorker2.RunWorkerAsync();
+            decryptBackgroundWorker.RunWorkerAsync();
             progressBar1.Value = 67;
             progressLabel.Text = "Decrypting";
 
@@ -154,7 +154,7 @@ namespace FEClient.Forms
             DialogResult result;
             do
             {
-                result = saveFileDialog1.ShowDialog();
+                result = saveFileDialog.ShowDialog();
                 if (result != DialogResult.OK)
                 {
                     var msgResult =  MessageBox.Show("You are not saving the file, would you like to retry?", "Not saved",

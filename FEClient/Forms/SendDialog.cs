@@ -61,7 +61,7 @@ namespace FEClient.Forms
             callbackArgs.HasSet = true;
             Invoke((MethodInvoker)delegate
             {
-                timer1.Stop();
+                timeoutTimer.Stop();
             });
 
         }
@@ -128,13 +128,13 @@ namespace FEClient.Forms
             // Update the progress box
             //TODO: use async and await
             progressLabel.Text = "Sending Keys";
-            backgroundWorker1.RunWorkerAsync();
+            sendKeysBackgroundWorker.RunWorkerAsync();
 
         }
 
         private void SendDialog_Load(object sender, EventArgs e)
         {
-            backgroundWorker2.RunWorkerAsync();
+            generateKeysBackgroundWorker.RunWorkerAsync();
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
@@ -173,7 +173,7 @@ namespace FEClient.Forms
 
                 //TODO:Check Sig
 
-                backgroundWorker1.ReportProgress((i/_amount)*100); //TODO: fix
+                sendKeysBackgroundWorker.ReportProgress((i/_amount)*100); //TODO: fix
             }
 
             JObject realData = new JObject {{"key", _key.KeyStr}, {"guid", _guid}, {"i", _amount}}; //TODO: encrypt keys??
@@ -196,7 +196,7 @@ namespace FEClient.Forms
             }
 
 
-            backgroundWorker1.ReportProgress(100);
+            sendKeysBackgroundWorker.ReportProgress(100);
             //Check Sig
 
 
@@ -263,7 +263,7 @@ namespace FEClient.Forms
             {
                 MessageBox.Show("error"); //TODO; this needs to be better, maybe a handle error method which tries to get the error string
             }
-            timer1.Start();
+            timeoutTimer.Start();
         }
 
 

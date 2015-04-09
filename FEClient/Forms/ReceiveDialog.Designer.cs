@@ -35,11 +35,10 @@ namespace FEClient.Forms
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.button1 = new System.Windows.Forms.Button();
             this.progressLabel = new System.Windows.Forms.Label();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.timer2 = new System.Windows.Forms.Timer(this.components);
-            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
+            this.sendStartRequestWorker = new System.ComponentModel.BackgroundWorker();
+            this.decryptTimer = new System.Windows.Forms.Timer(this.components);
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.decryptBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.SuspendLayout();
             // 
             // progressBar1
@@ -68,28 +67,24 @@ namespace FEClient.Forms
             this.progressLabel.TabIndex = 2;
             this.progressLabel.Text = "Waiting For File";
             // 
-            // timer1
+            // sendStartRequestWorker
             // 
-            this.timer1.Interval = 60000;
+            this.sendStartRequestWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
             // 
-            // backgroundWorker1
+            // decryptTimer
             // 
-            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            this.decryptTimer.Interval = 2500;
+            this.decryptTimer.Tick += new System.EventHandler(this.timer2_Tick);
             // 
-            // timer2
+            // saveFileDialog
             // 
-            this.timer2.Interval = 2500;
-            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
+            this.saveFileDialog.Filter = "All Files|*.*";
+            this.saveFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog1_FileOk);
             // 
-            // saveFileDialog1
+            // decryptBackgroundWorker
             // 
-            this.saveFileDialog1.Filter = "All Files|*.*";
-            this.saveFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog1_FileOk);
-            // 
-            // backgroundWorker2
-            // 
-            this.backgroundWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker2_DoWork);
-            this.backgroundWorker2.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker2_RunWorkerCompleted);
+            this.decryptBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker2_DoWork);
+            this.decryptBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker2_RunWorkerCompleted);
             // 
             // ReceiveDialog
             // 
@@ -113,10 +108,9 @@ namespace FEClient.Forms
         private ProgressBar progressBar1;
         private Button button1;
         private Label progressLabel;
-        private Timer timer1;
-        private BackgroundWorker backgroundWorker1;
-        private Timer timer2;
-        private SaveFileDialog saveFileDialog1;
-        private BackgroundWorker backgroundWorker2;
+        private BackgroundWorker sendStartRequestWorker;
+        private Timer decryptTimer;
+        private SaveFileDialog saveFileDialog;
+        private BackgroundWorker decryptBackgroundWorker;
     }
 }

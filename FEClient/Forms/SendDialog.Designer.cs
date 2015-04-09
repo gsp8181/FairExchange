@@ -35,9 +35,9 @@ namespace FEClient.Forms
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.button1 = new System.Windows.Forms.Button();
             this.progressLabel = new System.Windows.Forms.Label();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
+            this.timeoutTimer = new System.Windows.Forms.Timer(this.components);
+            this.sendKeysBackgroundWorker = new System.ComponentModel.BackgroundWorker();
+            this.generateKeysBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.SuspendLayout();
             // 
             // progressBar1
@@ -66,22 +66,22 @@ namespace FEClient.Forms
             this.progressLabel.TabIndex = 2;
             this.progressLabel.Text = "Generating keys";
             // 
-            // timer1
+            // timeoutTimer
             // 
-            this.timer1.Interval = 60000;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.timeoutTimer.Interval = 60000;
+            this.timeoutTimer.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // backgroundWorker1
+            // sendKeysBackgroundWorker
             // 
-            this.backgroundWorker1.WorkerReportsProgress = true;
-            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
-            this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
-            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+            this.sendKeysBackgroundWorker.WorkerReportsProgress = true;
+            this.sendKeysBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            this.sendKeysBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
+            this.sendKeysBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
             // 
-            // backgroundWorker2
+            // generateKeysBackgroundWorker
             // 
-            this.backgroundWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker2_DoWork);
-            this.backgroundWorker2.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker2_RunWorkerCompleted);
+            this.generateKeysBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker2_DoWork);
+            this.generateKeysBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker2_RunWorkerCompleted);
             // 
             // SendDialog
             // 
@@ -106,8 +106,8 @@ namespace FEClient.Forms
         private ProgressBar progressBar1;
         private Button button1;
         private Label progressLabel;
-        private Timer timer1;
-        private BackgroundWorker backgroundWorker1;
-        private BackgroundWorker backgroundWorker2;
+        private Timer timeoutTimer;
+        private BackgroundWorker sendKeysBackgroundWorker;
+        private BackgroundWorker generateKeysBackgroundWorker;
     }
 }
