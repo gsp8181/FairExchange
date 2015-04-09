@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Windows.Forms;
 using FEClient.API;
 using FEClient.NotMyCode;
+using FEClient.SQLite;
 using Grapevine.Server;
 
 namespace FEClient
@@ -14,6 +15,7 @@ namespace FEClient
         public const string port = "6555";
         private static RESTServer server = new RESTServer("+", port, "http", "index.html", null, 5);
         private NotifyRequest currentTipReq;
+        private Adapter adapter = Adapter.Instance;
 
         public Context()
         {
@@ -31,6 +33,12 @@ namespace FEClient
 
             //TODO: is port open?
 
+            var pk = new PubKey();
+            pk.Email = "gspburscough@btinternet.com";
+            pk.Pem = "abcd";
+            adapter.insert(pk);
+
+            MessageBox.Show(adapter.GetByEmail("gspburscough@btinternet.com").Pem);
 
             InitializeComponent();
 

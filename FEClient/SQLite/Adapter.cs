@@ -20,37 +20,50 @@ namespace FEClient.SQLite
         private readonly static Adapter _Instance = new Adapter();
         public static Adapter Instance { get { return _Instance; } }
 
-        private readonly static string AppDir = new DirectoryInfo(Application.UserAppDataPath).Parent.FullName;
-        private readonly static FileInfo SqLite = new FileInfo(AppDir + @"\db.sqlite3");
 
-        private static readonly string connString = "Data Source=" + SqLite.FullName +
-                                                    ";Version=3;DbLinqProvider=sqlite;";
-        //private readonly SQLiteConnection m_dbConnection;
+
+            private readonly string connString;
+        private readonly SQLiteConnection m_dbConnection;
         private readonly DataContext context;
 
 
         private Adapter()
         {
-            //m_dbConnection = new SQLiteConnection();
-            //m_dbConnection.Open();
+            string appDir = new DirectoryInfo(Application.UserAppDataPath).Parent.FullName;
+            FileInfo SqLite = new FileInfo(/*AppDir*/Application.UserAppDataPath + @"\db.sqlite3");
+            connString = "Data Source=" + SqLite.FullName + ";Version=3;DbLinqProvider=sqlite;";
+
+            if (!SqLite.Exists)
+                Create_DB();
+
+            m_dbConnection = new SQLiteConnection(connString);
+            m_dbConnection.Open();
             //context = new DataContext(connString);
 
         }
 
+        private void Create_DB()
+        {
+            
+        }
+
         public void insert(PubKey key)
         {
-            using (DataContext db = new DataContext(connString))
+            using (var db = new FEDBContext(m_dbConnection))
             {
-
-                Table<PubKey> statuses = db.GetTable<PubKey>();
-                statuses.InsertOnSubmit(key);
-                db.SubmitChanges();
+                
+                //Table<PubKey> statuses = db.GetTable<PubKey>();
+                //statuses.InsertOnSubmit(key);
+                //db.SubmitChanges();
+                db.PubKeys.Add(key);
+                //db.PubKeys.InsertOnSubmit(key);
+                db.SaveChanges();
             }
         }
 
         public PubKey GetByEmail(string email)
         {
-            using (DataContext db = new DataContext(connString))
+            using (var db = new DataContext(m_dbConnection))
             {
                 var pubKey = (from p in db.GetTable<PubKey>()
                               where p.Email == email

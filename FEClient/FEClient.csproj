@@ -124,6 +124,7 @@
     </Compile>
     <Compile Include="SettingsWrapper.cs" />
     <Compile Include="SQLite\Adapter.cs" />
+    <Compile Include="SQLite\FEDBContext.cs" />
     <Compile Include="SQLite\PubKey.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
