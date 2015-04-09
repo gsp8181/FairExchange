@@ -151,7 +151,18 @@ namespace FEClient.Forms
         {
             progressBar1.Value = 100;
 
-            saveFileDialog1.ShowDialog(); //TODO: save again??
+            DialogResult result;
+            do
+            {
+                result = saveFileDialog1.ShowDialog();
+                if (result != DialogResult.OK)
+                {
+                    var msgResult =  MessageBox.Show("You are not saving the file, would you like to retry?", "Not saved",
+                        MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                    if (msgResult == DialogResult.Cancel)
+                        break;
+                }
+            } while (result != DialogResult.OK);
 
             //MessageBox.Show(decrypted);
 
