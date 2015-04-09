@@ -9,7 +9,7 @@ namespace FEClient
     static class Program
     {
 
-#if !MULTIINSTANCE
+#if !SINGLEINSTANCE
         private static string guid =
             ((GuidAttribute) Assembly.GetExecutingAssembly().GetCustomAttributes(typeof (GuidAttribute), true)[0]).Value;
         static Mutex mutex = new Mutex(true,guid); //TODO: port specific
@@ -22,14 +22,14 @@ namespace FEClient
         [STAThread]
         static void Main()
         {
-#if !MULTIINSTANCE
+#if !SINGLEINSTANCE
             if (mutex.WaitOne(TimeSpan.Zero, true))
             {
 #endif
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new Context());
-#if !MULTIINSTANCE
+#if !SINGLEINSTANCE
                 mutex.ReleaseMutex();
             }
 #endif
