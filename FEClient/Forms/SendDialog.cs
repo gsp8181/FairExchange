@@ -185,7 +185,7 @@ namespace FEClient.Forms
 
                 //TODO:Check Sig
 
-                sendKeysBackgroundWorker.ReportProgress((i/_amount)*100); //TODO: fix
+                sendKeysBackgroundWorker.ReportProgress((int)(((double)i/_amount)*100)); //TODO: fix this does not work! :(
             }
 
             var realData = new JObject {{"key", _key.KeyStr}, {"guid", _guid}, {"i", _amount}}; //TODO: encrypt keys??
@@ -217,7 +217,7 @@ namespace FEClient.Forms
             }
 
 
-            sendKeysBackgroundWorker.ReportProgress(100);
+            sendKeysBackgroundWorker.ReportProgress(100); //TODO: not needed
             //Check Sig
 
             var finData = new JObject {{"guid", _guid}};
