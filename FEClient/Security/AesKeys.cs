@@ -18,9 +18,7 @@ namespace FEClient.Security
         }
 
         public int Rounds { get; set; }
-
         public byte[] Key { get; set; }
-
         public byte[] Iv { get; set; }
 
         public JObject ToJObject()

@@ -13,6 +13,21 @@ namespace FEClient.Forms
             InitializeComponent();
         }
 
+        private bool AddressBoxIsIp
+        {
+            get
+            {
+                var ipText = destinationBox.Text;
+                if (ipText.Contains(":"))
+                {
+                    var index = ipText.LastIndexOf(":");
+                    ipText = ipText.Remove(index, ipText.Length - index);
+                }
+                IPAddress ipObj;
+                return IPAddress.TryParse(ipText, out ipObj);
+            }
+        }
+
         private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
             fileBox.Text = openFileDialog.FileName;
@@ -27,6 +42,7 @@ namespace FEClient.Forms
         {
             Close();
         }
+
         private void okButton_Click(object sender, EventArgs e)
         {
             if (!ValidateAll())
@@ -34,7 +50,7 @@ namespace FEClient.Forms
                 return;
             }
 
-            string ip = ""; //TODO: does not need to be used?!
+            var ip = ""; //TODO: does not need to be used?!
             /*if (addressBoxIsEmail)
             {
                 var url = settings.TTP + "/rest/sessions/";
@@ -50,7 +66,8 @@ namespace FEClient.Forms
                     MessageBox.Show("Could not find. " + ex.Message);
                     return;
                 }
-            } else*/ if (AddressBoxIsIp)
+            } else*/
+            if (AddressBoxIsIp)
             {
                 ip = destinationBox.Text;
             }
@@ -61,7 +78,8 @@ namespace FEClient.Forms
             }
 
 
-            var sendDialog = new SendDialog(ip, fileBox.Text, int.Parse(roundsBox.Text), int.Parse(complexityBox.Text), int.Parse(timeoutBox.Text));
+            var sendDialog = new SendDialog(ip, fileBox.Text, int.Parse(roundsBox.Text), int.Parse(complexityBox.Text),
+                int.Parse(timeoutBox.Text));
             sendDialog.Show(); //TODO: validate
             Close();
         }
@@ -70,7 +88,7 @@ namespace FEClient.Forms
         {
             if (!AddressBoxIsIp)
             {
-                errorProvider.SetError(destinationBox,"Wrong format, should be an email or IP");
+                errorProvider.SetError(destinationBox, "Wrong format, should be an email or IP");
                 return false;
             }
             if (string.IsNullOrWhiteSpace(fileBox.Text))
@@ -82,21 +100,6 @@ namespace FEClient.Forms
                 return true;
             }
             return false;
-        }
-
-        private bool AddressBoxIsIp
-        {
-            get
-            {
-                var ipText = destinationBox.Text;
-                if (ipText.Contains(":"))
-                {
-                    var index = ipText.LastIndexOf(":");
-                    ipText = ipText.Remove(index, ipText.Length - index);
-                }
-                IPAddress ipObj;
-                return IPAddress.TryParse(ipText, out ipObj);
-            }
         }
 
         //private bool addressBoxIsEmail
@@ -134,7 +137,6 @@ namespace FEClient.Forms
 
         private void label2_Click(object sender, EventArgs e)
         {
-
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -159,8 +161,8 @@ namespace FEClient.Forms
         private void roundsBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             //var textSender = (TextBox)sender;
-            if(!Char.IsNumber(e.KeyChar) && !Char.IsControl(e.KeyChar))
-            e.Handled = true;
+            if (!Char.IsNumber(e.KeyChar) && !Char.IsControl(e.KeyChar))
+                e.Handled = true;
         }
     }
 }

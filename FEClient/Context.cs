@@ -6,23 +6,19 @@ using System.Windows.Forms;
 using FEClient.API;
 using FEClient.Forms;
 using FEClient.NotMyCode;
-using FEClient.SQLite;
 using Grapevine.Server;
 
 namespace FEClient
 {
-    
     public partial class Context : ApplicationContext
     {
-        public static readonly string Port = ConfigurationManager.AppSettings["Port"];
-        private static RESTServer _server = new RESTServer("+", Port);
         private NotifyRequest _currentTipReq;
 
         public Context()
         {
             while (!SettingsWrapper.IsSet)
             {
-                using (SettingsDialog dialog = new SettingsDialog())
+                using (var dialog = new SettingsDialog())
                 {
                     dialog.ShowDialog(); //TODO: if cancel then quit
                     if (dialog.DialogResult == DialogResult.Cancel)
@@ -45,7 +41,7 @@ namespace FEClient
             _server.Start();
             if (!_server.IsListening) //TODO: maybe sort out with a timer
             {
-                NetAclChecker.AddAddress("http://+:"+Port+"/");
+                NetAclChecker.AddAddress("http://+:" + Port + "/");
                 _server.Start();
                 /*if (!Program.server.IsListening)
                 {
@@ -78,7 +74,7 @@ namespace FEClient
             //Stackoverflow how to diusplay windows firewall has blocked some features of this program;
         {
             var ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList[0];
-                //TODO: is this needed in the presence of the other listener?
+            //TODO: is this needed in the presence of the other listener?
             var ipLocalEndPoint = new IPEndPoint(ipAddress, port);
 
             var t = new TcpListener(ipLocalEndPoint);
@@ -119,5 +115,7 @@ namespace FEClient
         {
         }
 
+        public static readonly string Port = ConfigurationManager.AppSettings["Port"];
+        private static readonly RESTServer _server = new RESTServer("+", Port);
     }
 }

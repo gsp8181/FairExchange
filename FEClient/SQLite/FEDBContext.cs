@@ -2,7 +2,7 @@
 
 namespace FEClient.SQLite
 {
-    class FedbContext : DbContext
+    internal class FedbContext : DbContext
     {
         //public FEDBContext(DbConnection conn) : base(conn,true) //TODO: should use autoregister
         //{
@@ -24,12 +24,10 @@ namespace FEClient.SQLite
 #else
             Database.SetInitializer(new CreateDatabaseIfNotExists<FedbContext>());  
 #endif
-            using (FedbContext db = new FedbContext())
+            using (var db = new FedbContext())
                 db.Database.Initialize(false);
         }
 
         public DbSet<PubKey> PubKeys { get; set; }
-
     }
-
 }

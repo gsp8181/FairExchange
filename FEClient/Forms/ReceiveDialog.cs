@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Net;
 using System.Windows.Forms;
 using FEClient.API;
 using FEClient.Security;
-using FEClient.SQLite;
 using Grapevine;
 using Grapevine.Client;
 using Newtonsoft.Json.Linq;
@@ -15,15 +13,19 @@ namespace FEClient.Forms
 {
     public partial class ReceiveDialog : Form
     {
-        private string _fileName;
-        private string _ip;
-        private string _guid;
-        private FileInfo _localFile = new FileInfo(Path.GetTempFileName()); //TODO: why not just hold in memory?
-        private volatile string _iv;
+        private readonly int _complexity;
+        private readonly string _fileName;
+        private readonly string _guid;
+        private readonly string _ip;
+
+        private readonly FileInfo _localFile = new FileInfo(Path.GetTempFileName());
+            //TODO: why not just hold in memory?
+
         private volatile Stack<string> _dict = new Stack<string>(); //TODO: holds I
+        private volatile string _iv;
         private bool _recievingCodes;
-        private int _complexity;
         private string _remoteKey;
+
         public ReceiveDialog(NotifyRequest startObj)
         {
             InitializeComponent();
@@ -42,16 +44,16 @@ namespace FEClient.Forms
             sendStartRequestWorker.RunWorkerAsync();
         }
 
-        void ClientRestApi_Finish(object sender, string guid, NotifyArgs callbackArgs)
+        private void ClientRestApi_Finish(object sender, string guid, NotifyArgs callbackArgs)
         {
             if (_guid == guid && _recievingCodes)
             {
                 callbackArgs.HasSet = true;
-                timer2_Tick(this,null);
+                timer2_Tick(this, null);
             }
         }
 
-        void ClientRestApi_KeyRecieved(object sender, KeyArgs key, NotifyArgs callbackArgs)
+        private void ClientRestApi_KeyRecieved(object sender, KeyArgs key, NotifyArgs callbackArgs)
         {
             if (_guid != key.Guid || !_recievingCodes)
             {
@@ -67,17 +69,17 @@ namespace FEClient.Forms
             });
         }
 
-        void MyResource_FileRecievedAndRespSent(object sender, FileSend file)
+        private void MyResource_FileRecievedAndRespSent(object sender, FileSend file)
         {
             if (_guid != file.Guid) //TODO: and filenames
                 return;
 
-            using (StreamWriter sw = new StreamWriter(_localFile.OpenWrite())) //TODO: on another thread
+            using (var sw = new StreamWriter(_localFile.OpenWrite())) //TODO: on another thread
             {
                 sw.Write(file.Data); //TODO: WHY?
             }
             _iv = file.Iv;
-            Invoke((MethodInvoker)delegate //TODO; does this happen AFTER keys start coming?
+            Invoke((MethodInvoker) delegate //TODO; does this happen AFTER keys start coming?
             {
                 progressBar1.Style = ProgressBarStyle.Continuous;
                 progressBar1.Value = 33;
@@ -94,7 +96,8 @@ namespace FEClient.Forms
             }
             if (!Rsa.VerifySignature(file.Data, file.Signature, _remoteKey))
             {
-                MessageBox.Show("Signature verification failed, transfer terminated", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Signature verification failed, transfer terminated", "Failed", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
                 Close();
                 return;
             }
@@ -122,11 +125,9 @@ namespace FEClient.Forms
             }
 
 
-
-
             var client = new RESTClient("http://" + _ip);
             var req = new RESTRequest("/start/");
-            JObject data = new JObject { { "fileName", _fileName }, { "email", SettingsWrapper.Email }, {"guid", _guid} };
+            var data = new JObject {{"fileName", _fileName}, {"email", SettingsWrapper.Email}, {"guid", _guid}};
             req.Method = HttpMethod.POST;
             req.ContentType = ContentType.JSON;
             req.Payload = data.ToString();
@@ -142,16 +143,12 @@ namespace FEClient.Forms
             decryptBackgroundWorker.RunWorkerAsync();
             progressBar1.Value = 67;
             progressLabel.Text = "Decrypting";
-
-
-
-
         }
 
         private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
             var senderDialog = (SaveFileDialog) sender;
-            File.Copy(_localFile.FullName,senderDialog.FileName,true);
+            File.Copy(_localFile.FullName, senderDialog.FileName, true);
         }
 
         private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
@@ -174,7 +171,7 @@ namespace FEClient.Forms
                 result = saveFileDialog.ShowDialog();
                 if (result != DialogResult.OK)
                 {
-                    var msgResult =  MessageBox.Show("You are not saving the file, would you like to retry?", "Not saved",
+                    var msgResult = MessageBox.Show("You are not saving the file, would you like to retry?", "Not saved",
                         MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
                     if (msgResult == DialogResult.Cancel)
                         break;

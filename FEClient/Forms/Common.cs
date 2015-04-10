@@ -6,11 +6,11 @@ using Newtonsoft.Json.Linq;
 
 namespace FEClient.Forms
 {
-    static class Common
+    internal static class Common
     {
         public static bool GetValue(string ip, out string remoteKey)
         {
-            RESTClient client = new RESTClient("http://" + ip);
+            var client = new RESTClient("http://" + ip);
 
             var keyReq = new RESTRequest("/ident/");
 

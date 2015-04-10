@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace FEClient.SQLite
 {
     [Table("PubKey")]
-    class PubKey
+    internal class PubKey
     {
         [Key]
         //[DatabaseGenerated(DatabaseGeneratedOption.None)]

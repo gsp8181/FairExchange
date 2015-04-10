@@ -6,7 +6,7 @@ namespace FEClient
     {
         public static string Email
         {
-            get { return (string)Settings.Default["Email"]; }
+            get { return (string) Settings.Default["Email"]; }
             set
             {
                 Settings.Default["Email"] = value;
@@ -17,7 +17,6 @@ namespace FEClient
         public static bool IsSet
         {
             get { return (!string.IsNullOrWhiteSpace(Email)); }
-
         }
     }
 }

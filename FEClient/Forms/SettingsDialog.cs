@@ -26,14 +26,12 @@ namespace FEClient.Forms
 
         public void SaveSettings()
         {
-
             SettingsWrapper.Email = emailBox.Text;
         }
 
         public void LoadSettings()
         {
             emailBox.Text = SettingsWrapper.Email;
-
         }
 
         private void GenDSAKeysButton_Click(object sender, EventArgs e)

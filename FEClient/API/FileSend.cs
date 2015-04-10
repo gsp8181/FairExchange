@@ -10,7 +10,6 @@ namespace FEClient.API
         public string Data { get; set; }
         public string Iv { get; set; }
         public string Guid { get; set; }
-
         public string Signature { get; set; }
     }
 }

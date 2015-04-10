@@ -12,8 +12,8 @@ namespace FEClient.Security
 {
     public static class Rsa
     {
-
-        private static CspParameters _csparams = new CspParameters(1) {KeyContainerName = "ttpclient"};//, KeyNumber = 1};
+        private static readonly CspParameters _csparams = new CspParameters(1) {KeyContainerName = "ttpclient"};
+            //, KeyNumber = 1};
 
         public static string GetPublicKey()
         {
@@ -23,10 +23,9 @@ namespace FEClient.Security
                 var sw = new StringWriter();
                 var pw = new PemWriter(sw);
                 pw.WriteObject(dsaKey.Public);
-                String rsakeypem = sw.ToString();
+                var rsakeypem = sw.ToString();
                 return rsakeypem;
             }
-
         }
 
         public static void Regenerate_RSA()
@@ -42,11 +41,11 @@ namespace FEClient.Security
             }
         }
 
-        public static EncryptedData EncryptData(string data, RSACryptoServiceProvider rsa, int rounds) //TODO: this encrypts to self
+        public static EncryptedData EncryptData(string data, RSACryptoServiceProvider rsa, int rounds)
+            //TODO: this encrypts to self
         {
-
             var dataBytes = Encoding.UTF8.GetBytes(data);
-            var ad = Aes.Encrypt(dataBytes,rounds);
+            var ad = Aes.Encrypt(dataBytes, rounds);
 
             var keyStr = ad.Key.ToString();
 
@@ -56,8 +55,6 @@ namespace FEClient.Security
             output.Data = ad.DataStr;
             output.Key = encryptedKey;
             return output;
-
-
         }
 
         public static bool VerifySignature(string data, string signatureB64, string pubKey)
@@ -106,10 +103,9 @@ namespace FEClient.Security
             {
                 rsa.PersistKeyInCsp = false;
                 rsa.ImportParameters(rsaKeyInfo);
-                return EncryptKey(rsa,keyStr);
+                return EncryptKey(rsa, keyStr);
             }
         }
-
 
         public static EncryptedData EncryptData(string data, int rounds) //encrypts with OWN KEY
         {
@@ -137,24 +133,24 @@ namespace FEClient.Security
             var keyStreamReader = new StreamReader(keyStream);
             var pemRead = new PemReader(keyStreamReader);
             var keyParameter = (AsymmetricKeyParameter) pemRead.ReadObject();
-            RsaKeyParameters rsaKeyParameters = (RsaKeyParameters) keyParameter;
+            var rsaKeyParameters = (RsaKeyParameters) keyParameter;
 
-            RSAParameters rsaKeyInfo = DotNetUtilities.ToRSAParameters(rsaKeyParameters);
+            var rsaKeyInfo = DotNetUtilities.ToRSAParameters(rsaKeyParameters);
             return rsaKeyInfo;
         }
 
         public static byte[] DecryptData(string payload, string key)
         {
-                var keyStr = DecryptKey(key);
-                var keyObj = JObject.Parse(keyStr);
+            var keyStr = DecryptKey(key);
+            var keyObj = JObject.Parse(keyStr);
 
-                var aeskey = keyObj.Value<string>("key");
-                var aesiv = keyObj.Value<string>("iv");
-                var rounds = keyObj.Value<int>("rounds");
+            var aeskey = keyObj.Value<string>("key");
+            var aesiv = keyObj.Value<string>("iv");
+            var rounds = keyObj.Value<int>("rounds");
 
             //var payloadBytes = Convert.FromBase64String(payload);
 
-                return Aes.Decrypt(payload, aeskey, aesiv, rounds);
+            return Aes.Decrypt(payload, aeskey, aesiv, rounds);
         }
 
         public static string DecryptKey(string encryptedKey)
@@ -162,11 +158,9 @@ namespace FEClient.Security
             using (var rsa = new RSACryptoServiceProvider(2048, _csparams))
             {
                 var keyBytes = Convert.FromBase64String(encryptedKey);
-                var decryptedKey =  Convert.ToBase64String(rsa.Decrypt(keyBytes, false));
+                var decryptedKey = Convert.ToBase64String(rsa.Decrypt(keyBytes, false));
                 return decryptedKey;
             }
         }
-
-        
     }
 }
