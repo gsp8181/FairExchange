@@ -103,9 +103,7 @@ namespace FEClient.Forms
                     {"guid", _guid},
                     {"iv",_key.IvStr},
                     {"complexity",_complexity},
-                    {"data", _aesData.DataStr}, //TODO: RSA SIGN!!
-                    //{"signature", "NYI"}
-                    // NRO (sSa(F nro, B, L, C)
+                    {"data", _aesData.DataStr}
                 };
 
             JObject toSend = new JObject
@@ -148,7 +146,7 @@ namespace FEClient.Forms
             var client = new RESTClient("http://" + _ip);
             stopwatch.Start();
             for (int i = 0; i < _amount; i++)
-            { //Check cancellation
+            { //TODO:Check cancellation
                 var fkey = _fakeKeys.Dequeue();
 
                 JObject data = new JObject {{"key", fkey},{"guid",_guid},{"i",i}};
