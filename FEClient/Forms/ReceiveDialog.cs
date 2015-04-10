@@ -19,7 +19,6 @@ namespace FEClient.Forms
         private readonly string _ip;
 
         private readonly FileInfo _localFile = new FileInfo(Path.GetTempFileName());
-            //TODO: why not just hold in memory?
 
         private volatile Stack<string> _dict = new Stack<string>(); //TODO: holds I
         private volatile string _iv;
@@ -90,7 +89,7 @@ namespace FEClient.Forms
 
         private void MyResource_FileRecieved(object sender, FileSend file, NotifyArgs callbackArgs)
         {
-            if (_fileName != file.FileName) //TODO: guid!
+            if (_guid != file.Guid)
             {
                 return;
             }
