@@ -7,7 +7,7 @@ namespace FEClient.Security
     public class Aes
     {
 
-        public static string Decrypt(string payload, byte[] aeskey, byte[] aesiv, int rounds) //TODO: needs some validity method like check against sig?
+        public static byte[] Decrypt(string payload, byte[] aeskey, byte[] aesiv, int rounds) //TODO: needs some validity method like check against sig?
         {
             using (AesCryptoServiceProvider aesCsp = new AesCryptoServiceProvider())
             { 
@@ -20,11 +20,11 @@ namespace FEClient.Security
             ICryptoTransform xfrm = aesCsp.CreateDecryptor();
             byte[] outBlock = xfrm.TransformFinalBlock(encrypted, 0, encrypted.Length);
 
-            return Encoding.UTF8.GetString(outBlock);
+            return outBlock;
             }
         }
 
-        public static AesData Encrypt(string data, int rounds)
+        public static AesData Encrypt(byte[] data, int rounds)
         {
             using (AesCryptoServiceProvider aesCsp = new AesCryptoServiceProvider())
             { 
@@ -40,9 +40,9 @@ namespace FEClient.Security
 
 
 
-            byte[] inBlock = Encoding.UTF8.GetBytes(data);
+            //byte[] inBlock = Encoding.UTF8.GetBytes(data);
             ICryptoTransform xfrm = aesCsp.CreateEncryptor();
-            byte[] outBlock = xfrm.TransformFinalBlock(inBlock, 0, inBlock.Length);
+            byte[] outBlock = xfrm.TransformFinalBlock(data, 0, data.Length);
             string encrypted = Convert.ToBase64String(outBlock);
             AesData ad = new AesData();
             ad.Key = ae;
@@ -59,7 +59,7 @@ namespace FEClient.Security
         }
 
 
-        public static string Decrypt(string payload, string aeskey, string aesiv, int rounds)
+        public static byte[] Decrypt(string payload, string aeskey, string aesiv, int rounds)
         {
             var aesKeyBytes = Convert.FromBase64String(aeskey);
             var aesIvBytes = Convert.FromBase64String(aesiv);

@@ -149,7 +149,7 @@ namespace FEClient.Forms
 
             var decrypted = Aes.Decrypt(str, key, _iv, _complexity); //TODO: try catch
 
-            File.WriteAllText(_localFile.FullName, decrypted);
+            File.WriteAllBytes(_localFile.FullName, decrypted);
         }
 
         private void backgroundWorker2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

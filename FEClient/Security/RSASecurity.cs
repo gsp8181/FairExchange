@@ -44,7 +44,9 @@ namespace FEClient.Security
 
         public static EncryptedData EncryptData(string data, RSACryptoServiceProvider rsa, int rounds) //TODO: this encrypts to self
         {
-            var ad = Aes.Encrypt(data,rounds);
+
+            var dataBytes = Encoding.UTF8.GetBytes(data);
+            var ad = Aes.Encrypt(dataBytes,rounds);
 
             var keyStr = ad.Key.ToString();
 
@@ -62,10 +64,10 @@ namespace FEClient.Security
         {
             var rsaKeyInfo = GetPublicKeyParams(pubKey);
 
-            return VerifySignature(data, signatureB64, rsaKeyInfo);
+            return VerifyStringSignature(data, signatureB64, rsaKeyInfo);
         }
 
-        private static bool VerifySignature(string data, string signatureB64, RSAParameters rsaKeyInfo)
+        private static bool VerifyStringSignature(string data, string signatureB64, RSAParameters rsaKeyInfo)
         {
             var dataBytes = Encoding.UTF8.GetBytes(data);
             var signatureBytes = Convert.FromBase64String(signatureB64);
@@ -79,7 +81,7 @@ namespace FEClient.Security
             }
         }
 
-        public static string SignData(string data)
+        public static string SignStringData(string data)
         {
             using (var rsa = new RSACryptoServiceProvider(2048, _csparams))
             {
@@ -141,7 +143,7 @@ namespace FEClient.Security
             return rsaKeyInfo;
         }
 
-        public static string DecryptData(string payload, string key)
+        public static byte[] DecryptData(string payload, string key)
         {
                 var keyStr = DecryptKey(key);
                 var keyObj = JObject.Parse(keyStr);
@@ -149,6 +151,8 @@ namespace FEClient.Security
                 var aeskey = keyObj.Value<string>("key");
                 var aesiv = keyObj.Value<string>("iv");
                 var rounds = keyObj.Value<int>("rounds");
+
+            //var payloadBytes = Convert.FromBase64String(payload);
 
                 return Aes.Decrypt(payload, aeskey, aesiv, rounds);
         }
@@ -158,7 +162,7 @@ namespace FEClient.Security
             using (var rsa = new RSACryptoServiceProvider(2048, _csparams))
             {
                 var keyBytes = Convert.FromBase64String(encryptedKey);
-                var decryptedKey =  Encoding.UTF8.GetString(rsa.Decrypt(keyBytes, false));
+                var decryptedKey =  Convert.ToBase64String(rsa.Decrypt(keyBytes, false));
                 return decryptedKey;
             }
         }

@@ -109,7 +109,7 @@ namespace FEClient.Forms
             JObject toSend = new JObject
             {
                 {"data",data.ToString()},
-                {"signature",Rsa.SignData(data.ToString())}
+                {"signature",Rsa.SignStringData(data.ToString())}
             };
 
             req.Payload = toSend.ToString();
@@ -213,12 +213,7 @@ namespace FEClient.Forms
         private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
         {
             // Opens and reads the file to the end
-            var stream = _file.OpenRead(); //TODO: if not null and using!
-            string text;
-            using (StreamReader sr = new StreamReader(stream)) //TODO: all using for streams
-            {
-                text = sr.ReadToEnd();
-            }
+            byte[] text = File.ReadAllBytes(_file.FullName); //TODO: if not null and using!
 
             //Encrypts the data
             _aesData = Aes.Encrypt(text, _complexity);
