@@ -2,6 +2,6 @@
 {
     public class NotifyArgs
     {
-        public bool HasSet = false;
+        public volatile bool HasSet;
     }
 }

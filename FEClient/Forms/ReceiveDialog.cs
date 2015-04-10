@@ -19,8 +19,8 @@ namespace FEClient.Forms
         private string _ip;
         private string _guid;
         private FileInfo _localFile = new FileInfo(Path.GetTempFileName()); //TODO: why not just hold in memory?
-        private string _iv;
-        private Stack<string> _dict = new Stack<string>(); //TODO: holds I
+        private volatile string _iv;
+        private volatile Stack<string> _dict = new Stack<string>(); //TODO: holds I
         private bool _stopped;
         private int _complexity;
         private string _remoteKey;
@@ -78,12 +78,14 @@ namespace FEClient.Forms
 
         private void MyResource_FileRecieved(object sender, FileSend file, NotifyArgs callbackArgs)
         {
-            if (_fileName != file.FileName) //TODO: email!! or guid!
+            if (_fileName != file.FileName) //TODO: guid!
             {
                 return;
             }
             if (!Rsa.VerifySignature(file.Data, file.Signature, _remoteKey))
             {
+                MessageBox.Show("Signature verification failed, transfer terminated", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Close();
                 return;
             }
 
@@ -118,7 +120,7 @@ namespace FEClient.Forms
             req.Method = HttpMethod.POST;
             req.ContentType = ContentType.JSON;
             req.Payload = data.ToString();
-            var response = client.Execute(req);
+            var response = client.Execute(req); //TODO: e.response?
         }
 
         private void timer2_Tick(object sender, EventArgs e)
@@ -144,7 +146,7 @@ namespace FEClient.Forms
 
         private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
         {
-            var key = _dict.Peek();
+            var key = _dict.Peek(); //TODO: 'System.InvalidOperationException' STACK EMPTY
             var str = File.ReadAllText(_localFile.FullName);
 
             var decrypted = Aes.Decrypt(str, key, _iv, _complexity); //TODO: try catch
