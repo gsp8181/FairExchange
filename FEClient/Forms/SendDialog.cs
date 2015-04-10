@@ -243,12 +243,13 @@ namespace FEClient.Forms
 
 
             RESTClient client = new RESTClient("http://" + _ip);
-            if (Common.GetValue(_ip, out _remoteKey))
+            if (Common.GetValue(_ip, out _remoteKey)) //TODO: async
             {
                 Close();
                 return;
             }
 
+            progressLabel.Text = "Waiting for the user to respond";
 
             var req = new RESTRequest("/notify/");
             var data = new JObject { { "fileName", _file.Name }, { "email", SettingsWrapper.Email }, { "guid", _guid }, {"timeout", _timeout}, {"complexity", _complexity}, {"port",Context.Port} };
