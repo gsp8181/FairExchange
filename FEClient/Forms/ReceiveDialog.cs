@@ -117,7 +117,7 @@ namespace FEClient.Forms
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e) //TODO: does this have to be separate
         {
-            if (Common.GetValue(_ip, out _remoteKey))
+            if (Common.GetSSHKey(_ip, out _remoteKey))
             {
                 Close();
                 return;

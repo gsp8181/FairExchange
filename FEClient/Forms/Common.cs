@@ -8,7 +8,7 @@ namespace FEClient.Forms
 {
     internal static class Common
     {
-        public static bool GetValue(string ip, out string remoteKey)
+        public static bool GetSSHKey(string ip, out string remoteKey)//TODO: shocking concurrency problems here, main thread IS blocked, use a background worker
         {
             var client = new RESTClient("http://" + ip);
 

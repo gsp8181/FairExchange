@@ -266,7 +266,7 @@ namespace FEClient.Forms
 
 
             var client = new RESTClient("http://" + _ip);
-            if (Common.GetValue(_ip, out _remoteKey)) //TODO: async
+            if (Common.GetSSHKey(_ip, out _remoteKey)) //TODO: async
             {
                 Close();
                 return;

@@ -105,10 +105,11 @@ namespace FEClient
 
         private void startToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var so = new SendOptions())
-            {
-                so.ShowDialog();
-            }
+            var so = new SendOptions();
+            
+                so.Show();
+                so.Focus();
+            
         }
 
         private void logsToolStripMenuItem_Click(object sender, EventArgs e)

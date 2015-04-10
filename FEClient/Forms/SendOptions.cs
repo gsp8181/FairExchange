@@ -9,7 +9,7 @@ namespace FEClient.Forms
 {
     public partial class SendOptions : Form
     {
-        private int rounds;
+        private readonly int rounds;
         public SendOptions()
         {
             InitializeComponent();
