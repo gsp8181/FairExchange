@@ -23,7 +23,7 @@ namespace FEClient.Forms
         private AesKeys _key;
         private AesData _aesData;
         private readonly string _guid;
-        public Queue<string> FakeKeys = new Queue<string>();
+        private Queue<string> _fakeKeys = new Queue<string>();
         private readonly int _amount;
         private readonly int _complexity;
         private readonly int _timeout;
@@ -149,7 +149,7 @@ namespace FEClient.Forms
             stopwatch.Start();
             for (int i = 0; i < _amount; i++)
             { //Check cancellation
-                var fkey = FakeKeys.Dequeue();
+                var fkey = _fakeKeys.Dequeue();
 
                 JObject data = new JObject {{"key", fkey},{"guid",_guid},{"i",i}};
 
@@ -219,7 +219,6 @@ namespace FEClient.Forms
             string text;
             using (StreamReader sr = new StreamReader(stream)) //TODO: all using for streams
             {
-
                 text = sr.ReadToEnd();
             }
 
@@ -238,7 +237,7 @@ namespace FEClient.Forms
             {
                 byte[] randBytes = new byte[bytes];
                 rng.GetBytes(randBytes);
-                FakeKeys.Enqueue(Convert.ToBase64String(randBytes)); 
+                _fakeKeys.Enqueue(Convert.ToBase64String(randBytes)); 
             }
         }
 
