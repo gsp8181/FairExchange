@@ -21,7 +21,7 @@ namespace FEClient.Forms
         private FileInfo _localFile = new FileInfo(Path.GetTempFileName()); //TODO: why not just hold in memory?
         private volatile string _iv;
         private volatile Stack<string> _dict = new Stack<string>(); //TODO: holds I
-        private bool _stopped;
+        private bool _recievingCodes;
         private int _complexity;
         private string _remoteKey;
         public ReceiveDialog(NotifyRequest startObj)
@@ -36,14 +36,24 @@ namespace FEClient.Forms
             ClientRestApi.FileRecieved += MyResource_FileRecieved;
             ClientRestApi.FileRecievedAndRespSent += MyResource_FileRecievedAndRespSent;
             ClientRestApi.KeyRecieved += ClientRestApi_KeyRecieved;
+            ClientRestApi.Finish += ClientRestApi_Finish;
             saveFileDialog.FileName = _fileName;
             saveFileDialog.DefaultExt = new FileInfo(_fileName).Extension;
             sendStartRequestWorker.RunWorkerAsync();
         }
 
+        void ClientRestApi_Finish(object sender, string guid, NotifyArgs callbackArgs)
+        {
+            if (_guid == guid && _recievingCodes)
+            {
+                callbackArgs.HasSet = true;
+                timer2_Tick(this,null);
+            }
+        }
+
         void ClientRestApi_KeyRecieved(object sender, KeyArgs key, NotifyArgs callbackArgs)
         {
-            if (_guid != key.Guid || !_stopped)
+            if (_guid != key.Guid || !_recievingCodes)
             {
                 return;
             }
@@ -90,7 +100,7 @@ namespace FEClient.Forms
             }
 
             callbackArgs.HasSet = true;
-            _stopped = true;
+            _recievingCodes = true;
 
             //ShowBalloonTip(5000, "File Recieved", fileName, ToolTipIcon.Info);
         }
@@ -126,7 +136,7 @@ namespace FEClient.Forms
         private void timer2_Tick(object sender, EventArgs e)
         {
             decryptTimer.Stop();
-            _stopped = false;
+            _recievingCodes = false;
             //try and decrypt or close and display error
 
             decryptBackgroundWorker.RunWorkerAsync();

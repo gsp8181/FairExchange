@@ -226,6 +226,12 @@ namespace FEClient.Forms
             sendKeysBackgroundWorker.ReportProgress(100);
             //Check Sig
 
+            var finData = new JObject {{"guid", _guid}};
+
+            var finReq = new RESTRequest("/finish/", HttpMethod.POST, ContentType.JSON, _timeout);//TODO: migrate all requests to this
+            finReq.Payload = finData.ToString();
+            client.Execute(finReq);
+
 
         }
 

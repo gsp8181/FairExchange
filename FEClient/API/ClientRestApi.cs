@@ -214,7 +214,7 @@ namespace FEClient.API
 
         [RESTRoute(Method = HttpMethod.GET, PathInfo = @"^/ident/?$")]
         public void HandleIdentRequest(HttpListenerContext context)
-        {//TODO: add debug
+        {
 #if TRACE
             Debug.WriteLine("/ident/");
 #endif
@@ -223,6 +223,24 @@ namespace FEClient.API
             returnObj.Add("pubKey", Rsa.GetPublicKey());
             Debug.WriteLine("/ident/ sent " + returnObj);
             SendJsonResponse(context, returnObj);
+        }
+
+        [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/finish/?$")]
+        public void HandleFinishRequest(HttpListenerContext context)
+        {
+            var payload = GetJsonPayload(context.Request);
+            var guid = payload.Value<string>("guid");
+            var args = new NotifyArgs();
+            Finish(this, guid, args);
+            if (args.HasSet)
+            {
+                SendJsonResponse(context,new JObject("accepted",true));
+            }
+            else
+            {
+                context.Response.StatusCode = (int) HttpStatusCode.Gone;
+                SendJsonResponse(context,new JObject("accepted", false));
+            }
         }
 
 
