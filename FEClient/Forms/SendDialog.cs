@@ -106,10 +106,12 @@ namespace FEClient.Forms
                     {"data", _aesData.DataStr}
                 };
 
+            var sig = Rsa.SignStringData(data.ToString());
+
             JObject toSend = new JObject
             {
                 {"data",data.ToString()},
-                {"signature",Rsa.SignStringData(data.ToString())}
+                {"signature",sig}
             };
 
             req.Payload = toSend.ToString();
@@ -125,7 +127,14 @@ namespace FEClient.Forms
                 return;
             }
             var json = JObject.Parse(response.Content);
-            //MessageBox.Show(json.Value<string>("signature"));
+            var remoteSig = json.Value<string>("signature");
+
+            if (!Rsa.VerifySignature(sig, remoteSig, _remoteKey)) //TODO:INSTEAD This should send an abort request of some kind, make sure it doesn't lock recievedialog
+            {
+                MessageBox.Show("Signature verification failed, transfer terminated", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Close();
+                return;
+            }
 
 
             // Update the progress box

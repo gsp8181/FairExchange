@@ -56,8 +56,8 @@ namespace FEClient.API
             FileRecieved(this, fs, args);
             if (args.HasSet)
             {
-                //var sig = Rsa.SignStringData(Base64.Base64Decode(data));
-                JObject response = new JObject { { "accepted", true }/*, { "signature", sig }*/ };
+                var sig = Rsa.SignStringData(signature);
+                JObject response = new JObject { { "accepted", true }, { "signature", sig } };
 #if TRACE
                 Debug.WriteLine("/file/ SENT " + response);
 #endif
