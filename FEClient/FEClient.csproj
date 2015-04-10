@@ -108,6 +108,7 @@
     <Compile Include="Forms\SettingsDialog.Designer.cs">
       <DependentUpon>SettingsDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="NotMyCode\Rng.cs" />
     <Compile Include="Security\Aes.cs" />
     <Compile Include="Security\AesData.cs" />
     <Compile Include="Security\AesKeys.cs" />

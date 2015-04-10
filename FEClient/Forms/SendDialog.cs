@@ -183,9 +183,8 @@ namespace FEClient.Forms
                     return;
                 }
 
-                //TODO:Check Sig
 
-                sendKeysBackgroundWorker.ReportProgress((int)(((double)i/_amount)*100)); //TODO: fix this does not work! :(
+                sendKeysBackgroundWorker.ReportProgress((int)(((double)i/_amount)*100));
             }
 
             var realData = new JObject {{"key", _key.KeyStr}, {"guid", _guid}, {"i", _amount}}; //TODO: encrypt keys??
@@ -217,8 +216,12 @@ namespace FEClient.Forms
             }
 
 
-            sendKeysBackgroundWorker.ReportProgress(100); //TODO: not needed
-            //Check Sig
+            sendKeysBackgroundWorker.ReportProgress(100);
+
+            Invoke((MethodInvoker) delegate
+            {
+                this.progressLabel.Text = "Sending finish token";
+            });
 
             var finData = new JObject {{"guid", _guid}};
 

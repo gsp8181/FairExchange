@@ -3,14 +3,18 @@ using System.ComponentModel;
 using System.IO;
 using System.Net;
 using System.Windows.Forms;
+using FEClient.NotMyCode;
 
 namespace FEClient.Forms
 {
     public partial class SendOptions : Form
     {
+        private int rounds;
         public SendOptions()
         {
             InitializeComponent();
+            rounds = Rng.NextInt(500, 1500); //TODO: does this reprisent a problem because as convergence happens on 1500 it COULD get more rewarding to terminate
+            this.roundsBox.Text = rounds.ToString();
         }
 
         private bool AddressBoxIsIp
@@ -149,7 +153,8 @@ namespace FEClient.Forms
             }
             else
             {
-                roundsBox.Text = "1000";
+                //roundsBox.Text = "1000";
+                roundsBox.Text = rounds.ToString();
                 complexityBox.Text = "1300000";
                 timeoutBox.Text = "5000";
                 roundsBox.Enabled = false;
