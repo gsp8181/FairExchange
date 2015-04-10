@@ -48,7 +48,7 @@ namespace FEClient.Forms
             if (_guid == guid && _recievingCodes)
             {
                 callbackArgs.HasSet = true;
-                timer2_Tick(this, null);
+                Invoke((MethodInvoker) delegate {timer2_Tick(this, null); });
             }
         }
 

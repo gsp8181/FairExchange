@@ -167,7 +167,7 @@ namespace FEClient.API
 
             if (callback.HasSet)
             {
-                var response = new JObject {{"accepted", true}, {"signature", "sig"}}; //TODO: implement
+                var response = new JObject {{"accepted", true}, {"signature", Rsa.SignStringData(args.ToString())}};
 #if TRACE
                 Debug.WriteLine("/key/ SENT " + response);
 #endif
@@ -232,25 +232,38 @@ namespace FEClient.API
             var returnObj = new JObject();
             returnObj.Add("email", SettingsWrapper.Email);
             returnObj.Add("pubKey", Rsa.GetPublicKey());
+#if TRACE
             Debug.WriteLine("/ident/ sent " + returnObj);
+#endif
             SendJsonResponse(context, returnObj);
         }
 
         [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/finish/?$")]
         public void HandleFinishRequest(HttpListenerContext context)
         {
+#if TRACE
+            Debug.WriteLine("/finish/");
+#endif
             var payload = GetJsonPayload(context.Request);
             var guid = payload.Value<string>("guid");
             var args = new NotifyArgs();
             Finish(this, guid, args);
             if (args.HasSet)
             {
-                SendJsonResponse(context, new JObject("accepted", true));
+                var resp = new JObject { { "accepted", true } };
+#if TRACE
+                Debug.WriteLine("/finish/ sent " + resp);
+#endif
+                SendJsonResponse(context, resp);
             }
             else
             {
+                var resp = new JObject { { "accepted", false } };
+#if TRACE
+                Debug.WriteLine("/finish/ sent " + resp);
+#endif
                 context.Response.StatusCode = (int) HttpStatusCode.Gone;
-                SendJsonResponse(context, new JObject("accepted", false));
+                SendJsonResponse(context, resp);
             }
         }
 
