@@ -51,7 +51,7 @@ namespace FEClient.Forms
                 var dialogResult =
                     MessageBox.Show(
                         "The key for " + email +
-                        " has BEEN CHANGED, this could indicate interception\n Do you wish to accept?\n" + remoteKey,
+                        " has BEEN CHANGED, this could indicate interception\nDo you wish to accept?\n" + remoteKey,
                         "CHANGED KEY", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                 if (dialogResult == DialogResult.OK)
                 {

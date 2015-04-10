@@ -2,7 +2,7 @@
 
 namespace FEClient.SQLite
 {
-    class Adapter
+    internal class Adapter
     {
         static Adapter()
         {
@@ -11,19 +11,12 @@ namespace FEClient.SQLite
 
         public static Adapter Instance { get; private set; }
 
-
         public void Insert(PubKey key)
         {
             var db = new FedbContext();
-            
-                
-                //Table<PubKey> statuses = db.GetTable<PubKey>();
-                //statuses.InsertOnSubmit(key);
-                //db.SubmitChanges();
-                db.PubKeys.Add(key); 
-                //db.PubKeys.InsertOnSubmit(key);
-                db.SaveChanges();
-            
+
+            db.PubKeys.Add(key);
+            db.SaveChanges();
         }
 
         public PubKey GetByEmail(string email)
@@ -36,6 +29,5 @@ namespace FEClient.SQLite
 
             return !pubKeys.Any() ? null : pubKeys.First();
         }
-
     }
 }

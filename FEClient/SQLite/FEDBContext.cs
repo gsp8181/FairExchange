@@ -4,16 +4,6 @@ namespace FEClient.SQLite
 {
     internal class FedbContext : DbContext
     {
-        //public FEDBContext(DbConnection conn) : base(conn,true) //TODO: should use autoregister
-        //{
-        //this.Database.CreateIfNotExists();
-        //}
-        /*protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Conventions
-                .Remove<PluralizingTableNameConvention>();
-        }*/
-
         static FedbContext()
         {
             // Database initialize
