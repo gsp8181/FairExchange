@@ -173,12 +173,19 @@ namespace FEClient.Forms
                     MessageBox.Show("Timed out!");
                 }
                 stopwatch.Restart();
+
+                var sig = JObject.Parse(response.Content).Value<string>("signature");
+                if (!Rsa.VerifySignature(data.ToString(), sig, _remoteKey))
+                    //TODO: is this a performance hit converting from string every time?
+                {
+                    MessageBox.Show("Error, signature verification failed"); //TODO: complete
+                }
                     
                     if(response.StatusCode != HttpStatusCode.OK) //TODO: OR IF TIMEOUT
                 {
                     Invoke((MethodInvoker)delegate
                     {
-                        MessageBox.Show("Error");
+                        MessageBox.Show("Error"); //TODO: STOP!
                     });
                     return;
                 }
@@ -201,10 +208,18 @@ namespace FEClient.Forms
             {
                 Invoke((MethodInvoker)delegate
                 {
-                    MessageBox.Show("Error");
+                    MessageBox.Show("Error"); //TODO: bigger!
                     this.Close();
                 });
                 return;
+            }
+
+            var realSig = JObject.Parse(realResponse.Content).Value<string>("signature"); //TODO: save this!!! along with data!
+
+            if (!Rsa.VerifySignature(realData.ToString(), realSig, _remoteKey))
+            //TODO: is this a performance hit converting from string every time?
+            {
+                MessageBox.Show("Error, signature verification failed"); //TODO: complete
             }
 
 
