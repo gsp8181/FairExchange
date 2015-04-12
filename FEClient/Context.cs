@@ -116,6 +116,9 @@ namespace FEClient
 
         private void logsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            var logs = new Logs();
+            logs.Show();
+            logs.Focus();
         }
     }
 }
