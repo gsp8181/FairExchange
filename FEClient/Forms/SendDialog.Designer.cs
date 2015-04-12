@@ -92,6 +92,9 @@ namespace FEClient.Forms
             this.Controls.Add(this.button1);
             this.Controls.Add(this.progressBar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = global::FEClient.Properties.Resources.Icojam_Blue_Bits_Document_arrow_down;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "SendDialog";
             this.Text = "SendDialog";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SendDialog_FormClosed);
