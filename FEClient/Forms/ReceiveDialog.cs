@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration.Internal;
+using System.Diagnostics;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using System.Windows.Forms;
 using FEClient.API;
 using FEClient.Security;
 using Grapevine;
 using Grapevine.Client;
 using Newtonsoft.Json.Linq;
+using Aes = FEClient.Security.Aes;
 
 namespace FEClient.Forms
 {
@@ -22,7 +26,7 @@ namespace FEClient.Forms
         private readonly FileInfo _localFile;
         private readonly FileInfo _logFile;
 
-        private FileStream _log;
+        private FileStream _log; //TODO: volatile?
         private StreamWriter _logWriter;
 
         private volatile Stack<string> _dict = new Stack<string>(); //TODO: holds I
@@ -48,13 +52,21 @@ namespace FEClient.Forms
             new DirectoryInfo(logPath).Create();
 
             _localFile = new FileInfo(Path.GetTempFileName());
-            _logFile =
-                new FileInfo(logPath.ToString() + DateTime.Today.ToString("yyyy:MM:dd:HH:mm:sszzz") + ".log");
+
+                _logFile =
+                    new FileInfo(logPath + DateTime.Now.ToString("yyyy.MM.dd.HH.mm.ss") + ".log");
+
 
             _log = _logFile.OpenWrite();
             _logWriter = new StreamWriter(_log);
 
             _logWriter.WriteLine("Log started at " + DateTime.Today.ToString("yyyy:MM:dd:HH:mm:sszzz"));
+            _logWriter.WriteLine("{0} at {1}", startObj.Email, _ip);
+            _logWriter.WriteLine("Sending: {0} ({1})",_fileName,_guid);
+            _logWriter.WriteLine("Timeout: " + startObj.Timeout);
+            _logWriter.WriteLine("Complexity: " + _complexity);
+            _logWriter.WriteLine("Local Public Key");
+            _logWriter.WriteLine(Rsa.GetPublicKey());
             
 
             saveFileDialog.FileName = _fileName;
@@ -65,8 +77,9 @@ namespace FEClient.Forms
         private void ClientRestApi_Finish(object sender, string guid, NotifyArgs callbackArgs)
         {
             if (_guid != guid || !_recievingCodes) return;
+            _logWriter.WriteLine("Recieved FINISH packet");
             callbackArgs.HasSet = true;
-            Invoke((MethodInvoker) delegate {timer2_Tick(this, null); });
+            Invoke((MethodInvoker) Decrypt);
         }
 
         private void ClientRestApi_KeyRecieved(object sender, KeyArgs key, NotifyArgs callbackArgs)
@@ -75,6 +88,7 @@ namespace FEClient.Forms
             {
                 return;
             }
+            _logWriter.WriteLineAsync("Received Key: " + key.Key);
             _dict.Push(key.Key);
             callbackArgs.HasSet = true;
 
@@ -95,6 +109,10 @@ namespace FEClient.Forms
                 sw.Write(file.Data); //TODO: WHY?
             }
             _iv = file.Iv;
+            _logWriter.WriteLine("Received encrypted file and saved at " + _localFile);
+            _logWriter.WriteLine("Received IV: " + _iv);
+            _logWriter.WriteLine("Starting Key Receive");
+            
             Invoke((MethodInvoker) delegate //TODO; does this happen AFTER keys start coming?
             {
                 progressBar1.Style = ProgressBarStyle.Continuous;
@@ -110,8 +128,14 @@ namespace FEClient.Forms
             {
                 return;
             }
-            if (!Rsa.VerifySignature(file.Data, file.Signature, _remoteKey))
+            var hash = new SHA1CryptoServiceProvider().ComputeHash(Encoding.UTF8.GetBytes(file.Data)); //TODO; do the actual data array?
+            var hashStr = Convert.ToBase64String(hash);
+            _logWriter.WriteLine("Received Data, SHA1 Hash: " + hashStr); //TODO: make new and truncate data?
+            _logWriter.WriteLine("Recieved Signature: " + ""); //TODO: NYI
+            if (!Rsa.VerifySignature(file.Data, file.Signature, _remoteKey)) //TODO: maybe verify hash?
             {
+                _logWriter.WriteLine("Signature verification failed, transfer terminated");
+                _logWriter.WriteLine("Offending signature: " + file.Signature);
                 MessageBox.Show("Signature verification failed, transfer terminated", "Failed", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
                 Close();
@@ -141,9 +165,15 @@ namespace FEClient.Forms
         {
             if (Common.GetSshKey(_ip, out _remoteKey))
             {
+                _logWriter.WriteLine("Remote public key not trusted, terminated");
+                _logWriter.WriteLine("Remote Public Key");
+                _logWriter.WriteLine(_remoteKey);
                 Close();
                 return;
             }
+
+            _logWriter.WriteLine("Remote Public Key");
+            _logWriter.WriteLine(_remoteKey);
 
 
             var client = new RESTClient("http://" + _ip);
@@ -153,6 +183,12 @@ namespace FEClient.Forms
         }
 
         private void timer2_Tick(object sender, EventArgs e)
+        {
+            _logWriter.WriteLine("Timeout expired, using last received key");
+            Decrypt();
+        }
+
+        private void Decrypt()
         {
             decryptTimer.Stop();
             _recievingCodes = false;
@@ -167,6 +203,7 @@ namespace FEClient.Forms
         {
             var senderDialog = (SaveFileDialog) sender;
             File.Copy(_localFile.FullName, senderDialog.FileName, true);
+            _logWriter.WriteLine("Saved as " + senderDialog.FileName);
         }
 
         private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
@@ -174,9 +211,13 @@ namespace FEClient.Forms
             var key = _dict.Peek(); //TODO: 'System.InvalidOperationException' STACK EMPTY
             var str = File.ReadAllText(_localFile.FullName);
 
+            _logWriter.WriteLine("Attempting to decrypt using latest key");
+            _logWriter.WriteLine(key);
+
             var decrypted = Aes.Decrypt(str, key, _iv, _complexity); //TODO: try catch
 
             File.WriteAllBytes(_localFile.FullName, decrypted);
+            _logWriter.WriteLine("Decryption Successful");
         }
 
         private void backgroundWorker2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
