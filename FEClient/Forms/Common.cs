@@ -9,7 +9,7 @@ namespace FEClient.Forms
     internal static class Common
     {
         public static bool GetSshKey(string ip, out string remoteKey)//TODO: shocking concurrency problems here, main thread IS blocked, use a background worker
-        {
+        { //TODO: invert
             var client = new RESTClient("http://" + ip);
 
             var keyReq = new RESTRequest("/ident/");

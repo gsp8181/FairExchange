@@ -13,21 +13,24 @@ namespace FEClient.SQLite
 
         public void Insert(PubKey key)
         {
-            var db = new FedbContext();
-
+            using(var db = new FedbContext())
+            { 
             db.PubKeys.Add(key);
             db.SaveChanges();
+            }
         }
 
         public PubKey GetByEmail(string email)
         {
-            var db = new FedbContext();
-            var pubKeys = (from p in db.PubKeys
-                where p.Email == email
-                orderby p.Id descending
-                select p);
+            using (var db = new FedbContext())
+            {
+                var pubKeys = (from p in db.PubKeys
+                    where p.Email == email
+                    orderby p.Id descending
+                    select p);
 
-            return !pubKeys.Any() ? null : pubKeys.First();
+                return !pubKeys.Any() ? null : pubKeys.First();
+            }
         }
     }
 }

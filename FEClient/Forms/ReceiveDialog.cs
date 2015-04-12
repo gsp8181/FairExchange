@@ -194,6 +194,8 @@ namespace FEClient.Forms
             _recievingCodes = false;
             //try and decrypt or close and display error
 
+            _logWriter.Write("Received {0} total keys",_dict.Count);
+
             decryptBackgroundWorker.RunWorkerAsync();
             progressBar1.Value = 67;
             progressLabel.Text = "Decrypting";

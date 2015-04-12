@@ -26,7 +26,7 @@ namespace FEClient.Forms
         private readonly int _timeout;
         private AesData _aesData;
         private AesKeys _key;
-        private string _remoteKey;
+        private volatile string _remoteKey;
 
         public SendDialog(string ip, string fileName, int rounds, int complexity, int timeout)
         {
@@ -254,19 +254,28 @@ namespace FEClient.Forms
                 rng.GetBytes(randBytes);
                 _fakeKeys.Enqueue(Convert.ToBase64String(randBytes));
             }
+
+            Invoke((MethodInvoker) delegate { progressLabel.Text = "Attempting to contact " + _ip; });
+
+            if (Common.GetSshKey(_ip, out _remoteKey)) //TODO: async
+            {
+                e.Result = false;
+                Close();
+                return;
+            }
+            else
+            {
+                e.Result = true;
+            }
         }
 
         private void backgroundWorker2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            progressLabel.Text = "Attempting to contact " + _ip;
-
+            if ((bool) e.Result == false)
+                return;
 
             var client = new RESTClient("http://" + _ip);
-            if (Common.GetSshKey(_ip, out _remoteKey)) //TODO: async
-            {
-                Close();
-                return;
-            }
+
 
             progressLabel.Text = "Waiting for the user to respond";
 
