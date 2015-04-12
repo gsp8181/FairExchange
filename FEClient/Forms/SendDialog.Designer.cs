@@ -32,7 +32,7 @@ namespace FEClient.Forms
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.button1 = new System.Windows.Forms.Button();
             this.progressLabel = new System.Windows.Forms.Label();
             this.timeoutTimer = new System.Windows.Forms.Timer(this.components);
@@ -40,13 +40,13 @@ namespace FEClient.Forms
             this.generateKeysBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.SuspendLayout();
             // 
-            // progressBar1
+            // progressBar
             // 
-            this.progressBar1.Location = new System.Drawing.Point(13, 13);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(239, 23);
-            this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
-            this.progressBar1.TabIndex = 0;
+            this.progressBar.Location = new System.Drawing.Point(13, 13);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(239, 23);
+            this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.progressBar.TabIndex = 0;
             // 
             // button1
             // 
@@ -90,7 +90,7 @@ namespace FEClient.Forms
             this.ClientSize = new System.Drawing.Size(284, 85);
             this.Controls.Add(this.progressLabel);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.progressBar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "SendDialog";
             this.Text = "SendDialog";
@@ -103,7 +103,7 @@ namespace FEClient.Forms
 
         #endregion
 
-        private ProgressBar progressBar1;
+        private ProgressBar progressBar;
         private Button button1;
         private Label progressLabel;
         private Timer timeoutTimer;

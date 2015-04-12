@@ -67,7 +67,7 @@ namespace FEClient.Forms
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            progressBar1.Style = ProgressBarStyle.Continuous;
+            progressBar.Style = ProgressBarStyle.Continuous;
             MessageBox.Show("Remote user did not respond in time", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             Close();
         }
@@ -76,7 +76,7 @@ namespace FEClient.Forms
         {
             // Updates progress label to show file is sending
             progressLabel.Text = "Sending " + _file.Name;
-            progressBar1.Style = ProgressBarStyle.Continuous;
+            progressBar.Style = ProgressBarStyle.Continuous;
 
             // Creates a new POST request to the remote client
             var client = new RESTClient("http://" + _ip);
@@ -113,7 +113,7 @@ namespace FEClient.Forms
             if (response.ReturnedError || !string.IsNullOrEmpty(response.Error))
                 //TODO: accepted? TODO: better response checking for example timeout
             {
-                progressBar1.Style = ProgressBarStyle.Continuous; //TODO: update label
+                progressBar.Style = ProgressBarStyle.Continuous; //TODO: update label
                 MessageBox.Show("Remote server did not accept the file\n" + response.Error, "Failed",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Close();
@@ -233,7 +233,7 @@ namespace FEClient.Forms
 
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            progressBar1.Value = e.ProgressPercentage; //TODO: does not work
+            progressBar.Value = e.ProgressPercentage; //TODO: does not work
         }
 
         private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
