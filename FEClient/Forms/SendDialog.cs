@@ -114,7 +114,7 @@ namespace FEClient.Forms
                 //TODO: accepted? TODO: better response checking for example timeout
             {
                 progressBar1.Style = ProgressBarStyle.Continuous; //TODO: update label
-                MessageBox.Show("Remote server did not accept the file" + Environment.NewLine + response.Error, "Failed",
+                MessageBox.Show("Remote server did not accept the file\n" + response.Error, "Failed",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Close();
                 return;
@@ -274,7 +274,7 @@ namespace FEClient.Forms
 
             progressLabel.Text = "Waiting for the user to respond";
 
-            var req = new RESTRequest("/notify/");
+            var req = new RESTRequest("/notify/", HttpMethod.POST, ContentType.JSON, _timeout);//TODO: async and await
             var data = new JObject
             {
                 {"fileName", _file.Name},
@@ -284,8 +284,6 @@ namespace FEClient.Forms
                 {"complexity", _complexity},
                 {"port", Context.Port}
             };
-            req.Method = HttpMethod.POST;
-            req.ContentType = ContentType.JSON; //TODO: async and await
             req.Payload = data.ToString();
             var response = client.Execute(req);
             if (response.StatusCode != HttpStatusCode.OK)
