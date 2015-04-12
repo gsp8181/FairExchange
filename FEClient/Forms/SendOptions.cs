@@ -24,7 +24,7 @@ namespace FEClient.Forms
                 var ipText = destinationBox.Text;
                 if (ipText.Contains(":"))
                 {
-                    var index = ipText.LastIndexOf(":");
+                    var index = ipText.LastIndexOf(":", StringComparison.Ordinal);
                     ipText = ipText.Remove(index, ipText.Length - index);
                 }
                 IPAddress ipObj;
@@ -99,11 +99,7 @@ namespace FEClient.Forms
                 return false;
 
             var fileInfo = new FileInfo(fileBox.Text);
-            if (fileInfo.Exists && fileInfo.Length > 0)
-            {
-                return true;
-            }
-            return false;
+            return fileInfo.Exists && fileInfo.Length > 0;
         }
 
         //private bool addressBoxIsEmail
