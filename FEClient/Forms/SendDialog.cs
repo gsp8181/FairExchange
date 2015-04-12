@@ -59,7 +59,7 @@ namespace FEClient.Forms
 
         private void SendDialog_FormClosed(object sender, FormClosedEventArgs e)
         {
-            ClientRestApi.StartTransmission -= MyResource_StartTransmission;
+            ClientRestApi.StartTransmission -= MyResource_StartTransmission; //TODO: delink events before form.close()? maybe involve
             ClientRestApi.StartTransmissionAndRespSent -= MyResource_StartTransmissionAndRespSent;
             Dispose();
             //file.Close();

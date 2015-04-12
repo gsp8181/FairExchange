@@ -107,11 +107,12 @@ namespace FEClient.Forms
             //ShowBalloonTip(5000, "File Recieved", fileName, ToolTipIcon.Info);
         }
 
-        private void ReceiveDialog_FormClosed(object sender, FormClosedEventArgs e)
+        private void ReceiveDialog_FormClosed(object sender, FormClosedEventArgs e) //TODO: delink before close
         {
             ClientRestApi.FileRecieved -= MyResource_FileRecieved;
             ClientRestApi.FileRecievedAndRespSent -= MyResource_FileRecievedAndRespSent;
             ClientRestApi.KeyRecieved -= ClientRestApi_KeyRecieved;
+            ClientRestApi.Finish -= ClientRestApi_Finish;
             Dispose();
         }
 

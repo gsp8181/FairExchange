@@ -6,7 +6,7 @@ namespace FEClient.Forms
 {
     public partial class SettingsDialog : Form
     {
-        public SettingsDialog() //TODO: cancelbutton, regen enabled as a boolean [default true]
+        public SettingsDialog()
         {
             InitializeComponent();
             LoadSettings();
@@ -14,7 +14,7 @@ namespace FEClient.Forms
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //errorProvider1.Clear();
+            //errorProvider.Clear();
             if (string.IsNullOrWhiteSpace(emailBox.Text))
             {
                 return;
@@ -24,12 +24,12 @@ namespace FEClient.Forms
             Close();
         }
 
-        public void SaveSettings()
+        private void SaveSettings()
         {
             SettingsWrapper.Email = emailBox.Text;
         }
 
-        public void LoadSettings()
+        private void LoadSettings()
         {
             emailBox.Text = SettingsWrapper.Email;
         }
@@ -42,7 +42,7 @@ namespace FEClient.Forms
 
         private void emailBox_Validated(object sender, EventArgs e)
         {
-            errorProvider1.SetError(emailBox,
+            errorProvider.SetError(emailBox,
                 string.IsNullOrWhiteSpace(emailBox.Text) ? "Email cannot be empty" : String.Empty);
         }
 

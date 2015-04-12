@@ -38,9 +38,9 @@ namespace FEClient.Forms
             this.ttpBox = new System.Windows.Forms.TextBox();
             this.okButton = new System.Windows.Forms.Button();
             this.regenKeysButton = new System.Windows.Forms.Button();
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.publicKeyButton = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // emailBox
@@ -97,9 +97,9 @@ namespace FEClient.Forms
             this.regenKeysButton.UseVisualStyleBackColor = true;
             this.regenKeysButton.Click += new System.EventHandler(this.GenDSAKeysButton_Click);
             // 
-            // errorProvider1
+            // errorProvider
             // 
-            this.errorProvider1.ContainerControl = this;
+            this.errorProvider.ContainerControl = this;
             // 
             // publicKeyButton
             // 
@@ -130,7 +130,7 @@ namespace FEClient.Forms
             this.Name = "SettingsDialog";
             this.ShowInTaskbar = false;
             this.Text = "Settings";
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -144,7 +144,7 @@ namespace FEClient.Forms
         private TextBox ttpBox;
         private Button okButton;
         private Button regenKeysButton;
-        private ErrorProvider errorProvider1;
+        private ErrorProvider errorProvider;
         private Button publicKeyButton;
     }
 }
