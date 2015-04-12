@@ -1,8 +1,5 @@
-﻿using System;
-
-namespace FEClient.API
+﻿namespace FEClient.API
 {
-    [Obsolete]
     public class FileSend
     {
         public string FileName { get; set; }
