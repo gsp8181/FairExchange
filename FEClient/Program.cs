@@ -15,23 +15,23 @@ namespace FEClient
         private static void Main()
         {
 #if !MULTIINSTANCE
-            if (_mutex.WaitOne(TimeSpan.Zero, true))
+            if (Mutex.WaitOne(TimeSpan.Zero, true))
             {
 #endif
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new Context());
 #if !MULTIINSTANCE
-                _mutex.ReleaseMutex();
+                Mutex.ReleaseMutex();
             }
 #endif
         }
 
 #if !MULTIINSTANCE
-        private static readonly string _guid =
+        private static readonly string Guid =
             ((GuidAttribute) Assembly.GetExecutingAssembly().GetCustomAttributes(typeof (GuidAttribute), true)[0]).Value;
 
-        private static readonly Mutex _mutex = new Mutex(true, _guid); //TODO: port specific
+        private static readonly Mutex Mutex = new Mutex(true, Guid); //TODO: port specific
 #endif
     }
 }

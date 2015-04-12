@@ -13,6 +13,8 @@ namespace FEClient
     public partial class Context : ApplicationContext
     {
         private NotifyRequest _currentTipReq;
+        public static readonly string Port = ConfigurationManager.AppSettings["Port"];
+        private static readonly RESTServer Server = new RESTServer("+", Port);
 
         public Context()
         {
@@ -37,12 +39,12 @@ namespace FEClient
             notifyIcon.Text += " :" + Port;
 
             CreateFirewallException(int.Parse(Port)); //TODO: wait for firewall
-            _server.OnStart = OnServerStartNotify;
-            _server.Start();
-            if (!_server.IsListening) //TODO: maybe sort out with a timer
+            Server.OnStart = OnServerStartNotify;
+            Server.Start();
+            if (!Server.IsListening) //TODO: maybe sort out with a timer
             {
                 NetAclChecker.AddAddress("http://+:" + Port + "/");
-                _server.Start();
+                Server.Start();
                 /*if (!Program.server.IsListening)
                 {
                     MessageBox.Show("Could not bind port 6555", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error); //todo: does not work
@@ -70,7 +72,7 @@ namespace FEClient
             ShowBalloonTip(5000, "Started", "Server started and is listening on port " + Port, ToolTipIcon.Info);
         }
 
-        private void CreateFirewallException(int port)
+        private static void CreateFirewallException(int port)
             //Stackoverflow how to diusplay windows firewall has blocked some features of this program;
         {
             var ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList[0];
@@ -115,8 +117,5 @@ namespace FEClient
         private void logsToolStripMenuItem_Click(object sender, EventArgs e)
         {
         }
-
-        public static readonly string Port = ConfigurationManager.AppSettings["Port"];
-        private static readonly RESTServer _server = new RESTServer("+", Port);
     }
 }

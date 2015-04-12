@@ -12,12 +12,12 @@ namespace FEClient.Security
 {
     public static class Rsa
     {
-        private static readonly CspParameters _csparams = new CspParameters(1) {KeyContainerName = "ttpclient"};
+        private static readonly CspParameters CsParams = new CspParameters(1) {KeyContainerName = "ttpclient"};
             //, KeyNumber = 1};
 
         public static string GetPublicKey()
         {
-            using (var rsa = new RSACryptoServiceProvider(2048, _csparams))
+            using (var rsa = new RSACryptoServiceProvider(2048, CsParams))
             {
                 var dsaKey = DotNetUtilities.GetRsaKeyPair(rsa);
                 var sw = new StringWriter();
@@ -30,12 +30,12 @@ namespace FEClient.Security
 
         public static void Regenerate_RSA()
         {
-            using (var rsa = new RSACryptoServiceProvider(2048, _csparams))
+            using (var rsa = new RSACryptoServiceProvider(2048, CsParams))
             {
                 rsa.PersistKeyInCsp = false;
                 rsa.Clear();
             }
-            using (var rsa = new RSACryptoServiceProvider(2048, _csparams))
+            using (var rsa = new RSACryptoServiceProvider(2048, CsParams))
             {
                 rsa.PersistKeyInCsp = true;
             }
@@ -51,9 +51,7 @@ namespace FEClient.Security
 
             var encryptedKey = EncryptKey(rsa, keyStr);
 
-            var output = new EncryptedData();
-            output.Data = ad.DataStr;
-            output.Key = encryptedKey;
+            var output = new EncryptedData {Data = ad.DataStr, Key = encryptedKey};
             return output;
         }
 
@@ -80,7 +78,7 @@ namespace FEClient.Security
 
         public static string SignStringData(string data)
         {
-            using (var rsa = new RSACryptoServiceProvider(2048, _csparams))
+            using (var rsa = new RSACryptoServiceProvider(2048, CsParams))
             {
                 var bytes = Encoding.UTF8.GetBytes(data);
                 var signature = rsa.SignData(bytes, new SHA1CryptoServiceProvider());
@@ -109,7 +107,7 @@ namespace FEClient.Security
 
         public static EncryptedData EncryptData(string data, int rounds) //encrypts with OWN KEY
         {
-            using (var rsa = new RSACryptoServiceProvider(2048, _csparams))
+            using (var rsa = new RSACryptoServiceProvider(2048, CsParams))
             {
                 return EncryptData(data, rsa, rounds);
             }
@@ -155,7 +153,7 @@ namespace FEClient.Security
 
         public static string DecryptKey(string encryptedKey)
         {
-            using (var rsa = new RSACryptoServiceProvider(2048, _csparams))
+            using (var rsa = new RSACryptoServiceProvider(2048, CsParams))
             {
                 var keyBytes = Convert.FromBase64String(encryptedKey);
                 var decryptedKey = Convert.ToBase64String(rsa.Decrypt(keyBytes, false));

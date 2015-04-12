@@ -8,7 +8,7 @@ namespace FEClient.Forms
 {
     internal static class Common
     {
-        public static bool GetSSHKey(string ip, out string remoteKey)//TODO: shocking concurrency problems here, main thread IS blocked, use a background worker
+        public static bool GetSshKey(string ip, out string remoteKey)//TODO: shocking concurrency problems here, main thread IS blocked, use a background worker
         {
             var client = new RESTClient("http://" + ip);
 
@@ -36,9 +36,7 @@ namespace FEClient.Forms
                         "New key", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
                 if (dialogResult == DialogResult.OK)
                 {
-                    var dbObj = new PubKey();
-                    dbObj.Email = email;
-                    dbObj.Pem = remoteKey;
+                    var dbObj = new PubKey {Email = email, Pem = remoteKey};
                     Adapter.Instance.Insert(dbObj);
                 }
                 else
@@ -55,9 +53,7 @@ namespace FEClient.Forms
                         "CHANGED KEY", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                 if (dialogResult == DialogResult.OK)
                 {
-                    var dbObj = new PubKey();
-                    dbObj.Email = email;
-                    dbObj.Pem = remoteKey;
+                    var dbObj = new PubKey {Email = email, Pem = remoteKey};
                     Adapter.Instance.Insert(dbObj);
                 }
                 else

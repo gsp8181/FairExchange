@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 
 namespace FEClient.API
 {
+    // ReSharper disable once ClassNeverInstantiated.Global
     public sealed partial class ClientRestApi : RESTResource
     {
         [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/file/?$")]
@@ -158,10 +159,12 @@ namespace FEClient.API
 #if TRACE
             Debug.WriteLine("/key/ " + args);
 #endif
-            var kArgs = new KeyArgs();
-            kArgs.Guid = args.Value<string>("guid");
-            kArgs.I = args.Value<int>("i");
-            kArgs.Key = args.Value<string>("key");
+            var kArgs = new KeyArgs
+            {
+                Guid = args.Value<string>("guid"),
+                I = args.Value<int>("i"),
+                Key = args.Value<string>("key")
+            };
             var callback = new NotifyArgs();
             KeyRecieved(this, kArgs, callback);
 
@@ -229,9 +232,7 @@ namespace FEClient.API
 #if TRACE
             Debug.WriteLine("/ident/");
 #endif
-            var returnObj = new JObject();
-            returnObj.Add("email", SettingsWrapper.Email);
-            returnObj.Add("pubKey", Rsa.GetPublicKey());
+            var returnObj = new JObject {{"email", SettingsWrapper.Email}, {"pubKey", Rsa.GetPublicKey()}};
 #if TRACE
             Debug.WriteLine("/ident/ sent " + returnObj);
 #endif

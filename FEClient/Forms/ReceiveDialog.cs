@@ -45,11 +45,9 @@ namespace FEClient.Forms
 
         private void ClientRestApi_Finish(object sender, string guid, NotifyArgs callbackArgs)
         {
-            if (_guid == guid && _recievingCodes)
-            {
-                callbackArgs.HasSet = true;
-                Invoke((MethodInvoker) delegate {timer2_Tick(this, null); });
-            }
+            if (_guid != guid || !_recievingCodes) return;
+            callbackArgs.HasSet = true;
+            Invoke((MethodInvoker) delegate {timer2_Tick(this, null); });
         }
 
         private void ClientRestApi_KeyRecieved(object sender, KeyArgs key, NotifyArgs callbackArgs)
@@ -118,7 +116,7 @@ namespace FEClient.Forms
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e) //TODO: does this have to be separate
         {
-            if (Common.GetSSHKey(_ip, out _remoteKey))
+            if (Common.GetSshKey(_ip, out _remoteKey))
             {
                 Close();
                 return;
@@ -126,11 +124,8 @@ namespace FEClient.Forms
 
 
             var client = new RESTClient("http://" + _ip);
-            var req = new RESTRequest("/start/");
-            var data = new JObject {{"fileName", _fileName}, {"email", SettingsWrapper.Email}, {"guid", _guid}};
-            req.Method = HttpMethod.POST;
-            req.ContentType = ContentType.JSON;
-            req.Payload = data.ToString();
+            var data = new JObject { { "fileName", _fileName }, { "email", SettingsWrapper.Email }, { "guid", _guid } };
+            var req = new RESTRequest("/start/", HttpMethod.POST, ContentType.JSON) {Payload = data.ToString()};
             var response = client.Execute(req); //TODO: e.response?
         }
 

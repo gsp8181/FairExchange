@@ -7,11 +7,11 @@ namespace FEClient.NotMyCode
     {
         public static int NextInt(int min, int max) //http://www.vcskicks.com/code-snippet/rng-int.php
         {
-            RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
-            byte[] buffer = new byte[4];
+            var rng = new RNGCryptoServiceProvider();
+            var buffer = new byte[4];
 
             rng.GetBytes(buffer);
-            int result = BitConverter.ToInt32(buffer, 0);
+            var result = BitConverter.ToInt32(buffer, 0);
 
             return new Random(result).Next(min, max);
         }

@@ -1,5 +1,6 @@
 ﻿namespace FEClient.API
 {
+    // ReSharper disable once ClassNeverInstantiated.Global
     public sealed partial class ClientRestApi
     {
         public delegate void FileRecievedAndRespSendHandler(object sender, FileSend file);

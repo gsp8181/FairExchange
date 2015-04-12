@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 
 namespace FEClient.Security
 {
-    public class Aes
+    public static class Aes
     {
         public static byte[] Decrypt(string payload, byte[] aeskey, byte[] aesiv, int rounds)
             //TODO: needs some validity method like check against sig?
@@ -29,11 +29,8 @@ namespace FEClient.Security
             {
                 aesCsp.GenerateIV();
                 aesCsp.GenerateKey();
-                var ae = new AesKeys();
-                ae.Key = aesCsp.Key;
-                ae.Iv = aesCsp.IV;
-                ae.Rounds = rounds;
-                    //TODO: embed the parameter sent through rest as THIS instead, probably when RSA takes shape
+                var ae = new AesKeys {Key = aesCsp.Key, Iv = aesCsp.IV, Rounds = rounds};
+                //TODO: embed the parameter sent through rest as THIS instead, probably when RSA takes shape
 
 
                 aesCsp.Key = Strengthen(aesCsp.Key, aesCsp.IV, rounds);
@@ -43,9 +40,7 @@ namespace FEClient.Security
                 var xfrm = aesCsp.CreateEncryptor();
                 var outBlock = xfrm.TransformFinalBlock(data, 0, data.Length);
                 var encrypted = Convert.ToBase64String(outBlock);
-                var ad = new AesData();
-                ad.Key = ae;
-                ad.DataStr = encrypted;
+                var ad = new AesData {Key = ae, DataStr = encrypted};
                 return ad;
             }
         }

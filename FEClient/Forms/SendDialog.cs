@@ -46,7 +46,7 @@ namespace FEClient.Forms
         {
             if (vars.Guid != _guid)
                 return;
-            Invoke((MethodInvoker) delegate { timer2_Tick(); }); //TODO: maybe another timeout timer?
+            Invoke((MethodInvoker) timer2_Tick); //TODO: maybe another timeout timer?
         }
 
         private void MyResource_StartTransmission(object sender, NotifyRequest addrSender, NotifyArgs callbackArgs)
@@ -80,11 +80,7 @@ namespace FEClient.Forms
 
             // Creates a new POST request to the remote client
             var client = new RESTClient("http://" + _ip);
-            var req = new RESTRequest("/file/")
-            {
-                Method = HttpMethod.POST,
-                ContentType = ContentType.JSON
-            };
+            var req = new RESTRequest("/file/", HttpMethod.POST, ContentType.JSON);
 
             //Embeds the data (fig 1)
             var data = new JObject
@@ -155,12 +151,11 @@ namespace FEClient.Forms
 
                 var data = new JObject {{"key", fkey}, {"guid", _guid}, {"i", i}};
 
-                var req = new RESTRequest("/key/");
+                var req = new RESTRequest("/key/", HttpMethod.POST, ContentType.JSON, _timeout)
+                {
+                    Payload = data.ToString()
+                }; //TODO: async and await
 
-                req.Timeout = _timeout; //TODO actually take from input AND set a timer
-                req.Method = HttpMethod.POST;
-                req.ContentType = ContentType.JSON; //TODO: async and await
-                req.Payload = data.ToString();
                 var response = client.Execute(req);
                 if (stopwatch.ElapsedMilliseconds > _timeout)
                 {
@@ -190,11 +185,11 @@ namespace FEClient.Forms
             var realData = new JObject {{"key", _key.KeyStr}, {"guid", _guid}, {"i", _amount}}; //TODO: encrypt keys??
 
 
-            var realReq = new RESTRequest("/key/"); //TODO: split into method with above bit
-            realReq.Timeout = _timeout;
-            realReq.Method = HttpMethod.POST;
-            realReq.ContentType = ContentType.JSON; //TODO: async and await
-            realReq.Payload = realData.ToString();
+            var realReq = new RESTRequest("/key/", HttpMethod.POST, ContentType.JSON, _timeout)
+            {
+                Payload = realData.ToString()
+            }; //TODO: split into method with above bit //TODO: async and await
+
             var realResponse = client.Execute(realReq);
             if (realResponse.StatusCode != HttpStatusCode.OK) //TODO: OR IF TIMEOUT
             {
@@ -225,9 +220,10 @@ namespace FEClient.Forms
 
             var finData = new JObject {{"guid", _guid}};
 
-            var finReq = new RESTRequest("/finish/", HttpMethod.POST, ContentType.JSON, _timeout);
-            //TODO: migrate all requests to this
-            finReq.Payload = finData.ToString();
+            var finReq = new RESTRequest("/finish/", HttpMethod.POST, ContentType.JSON, _timeout)
+            {
+                Payload = finData.ToString()
+            };
             client.Execute(finReq);
         }
 
@@ -266,7 +262,7 @@ namespace FEClient.Forms
 
 
             var client = new RESTClient("http://" + _ip);
-            if (Common.GetSSHKey(_ip, out _remoteKey)) //TODO: async
+            if (Common.GetSshKey(_ip, out _remoteKey)) //TODO: async
             {
                 Close();
                 return;

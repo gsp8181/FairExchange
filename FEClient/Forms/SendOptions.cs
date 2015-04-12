@@ -9,12 +9,12 @@ namespace FEClient.Forms
 {
     public partial class SendOptions : Form
     {
-        private readonly int rounds;
+        private readonly int _rounds;
         public SendOptions()
         {
             InitializeComponent();
-            rounds = Rng.NextInt(500, 1500); //TODO: does this reprisent a problem because as convergence happens on 1500 it COULD get more rewarding to terminate
-            this.roundsBox.Text = rounds.ToString();
+            _rounds = Rng.NextInt(500, 1500); //TODO: does this reprisent a problem because as convergence happens on 1500 it COULD get more rewarding to terminate
+            roundsBox.Text = _rounds.ToString();
         }
 
         private bool AddressBoxIsIp
@@ -129,14 +129,8 @@ namespace FEClient.Forms
 
         private void textBox1_Validated(object sender, EventArgs e)
         {
-            if (!AddressBoxIsIp)
-            {
-                errorProvider.SetError(destinationBox, "Wrong format, should be an IP address");
-            }
-            else
-            {
-                errorProvider.SetError(destinationBox, string.Empty);
-            }
+            errorProvider.SetError(destinationBox,
+                !AddressBoxIsIp ? "Wrong format, should be an IP address" : string.Empty);
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -154,7 +148,7 @@ namespace FEClient.Forms
             else
             {
                 //roundsBox.Text = "1000";
-                roundsBox.Text = rounds.ToString();
+                roundsBox.Text = _rounds.ToString();
                 complexityBox.Text = "1300000";
                 timeoutBox.Text = "5000";
                 roundsBox.Enabled = false;
