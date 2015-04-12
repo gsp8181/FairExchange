@@ -1,6 +1,6 @@
 ﻿namespace FEClient.API
 {
-    public class FileSend
+    public class FileSend //TODO: make immutable
     {
         public string FileName { get; set; }
         public string Email { get; set; }

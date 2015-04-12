@@ -223,7 +223,7 @@ namespace FEClient.API
         public void HandleGetKeyRequest(HttpListenerContext context)
         {
 //TODO: add debug
-            SendTextResponse(context, Rsa.GetPublicKey());
+            SendTextResponse(context, Rsa.PublicKey);
         }
 
         [RESTRoute(Method = HttpMethod.GET, PathInfo = @"^/ident/?$")]
@@ -232,7 +232,7 @@ namespace FEClient.API
 #if TRACE
             Debug.WriteLine("/ident/");
 #endif
-            var returnObj = new JObject {{"email", SettingsWrapper.Email}, {"pubKey", Rsa.GetPublicKey()}};
+            var returnObj = new JObject {{"email", SettingsWrapper.Email}, {"pubKey", Rsa.PublicKey}};
 #if TRACE
             Debug.WriteLine("/ident/ sent " + returnObj);
 #endif

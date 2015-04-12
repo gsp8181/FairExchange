@@ -48,7 +48,7 @@ namespace FEClient.Forms
 
         private void publicKeyButton_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(Rsa.GetPublicKey());
+            MessageBox.Show(Rsa.PublicKey);
         }
     }
 }

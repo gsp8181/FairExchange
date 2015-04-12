@@ -66,7 +66,7 @@ namespace FEClient.Forms
             _logWriter.WriteLine("Timeout: " + startObj.Timeout);
             _logWriter.WriteLine("Complexity: " + _complexity);
             _logWriter.WriteLine("Local Public Key");
-            _logWriter.WriteLine(Rsa.GetPublicKey());
+            _logWriter.WriteLine(Rsa.PublicKey);
             
 
             saveFileDialog.FileName = _fileName;

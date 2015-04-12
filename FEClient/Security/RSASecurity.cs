@@ -12,19 +12,24 @@ namespace FEClient.Security
 {
     public static class Rsa
     {
-        private static readonly CspParameters CsParams = new CspParameters(1) {KeyContainerName = "ttpclient"};
-            //, KeyNumber = 1};
+        private static readonly CspParameters CsParams = new CspParameters(1) { KeyContainerName = "ttpclient" };
+        //, KeyNumber = 1};
 
-        public static string GetPublicKey()
+        public static string PublicKey
         {
-            using (var rsa = new RSACryptoServiceProvider(2048, CsParams))
+            get
             {
-                var dsaKey = DotNetUtilities.GetRsaKeyPair(rsa);
-                var sw = new StringWriter();
-                var pw = new PemWriter(sw);
-                pw.WriteObject(dsaKey.Public);
-                var rsakeypem = sw.ToString();
-                return rsakeypem;
+                using (var rsa = new RSACryptoServiceProvider(2048, CsParams))
+                {
+                    var dsaKey = DotNetUtilities.GetRsaKeyPair(rsa);
+                    using (var sw = new StringWriter())
+                    {
+                        var pw = new PemWriter(sw);
+                        pw.WriteObject(dsaKey.Public);
+                        var rsakeypem = sw.ToString();
+                        return rsakeypem;
+                    }
+                }
             }
         }
 
@@ -42,7 +47,7 @@ namespace FEClient.Security
         }
 
         public static EncryptedData EncryptData(string data, RSACryptoServiceProvider rsa, int rounds)
-            //TODO: this encrypts to self
+        //TODO: this encrypts to self
         {
             var dataBytes = Encoding.UTF8.GetBytes(data);
             var ad = Aes.Encrypt(dataBytes, rounds);
@@ -51,7 +56,7 @@ namespace FEClient.Security
 
             var encryptedKey = EncryptKey(rsa, keyStr);
 
-            var output = new EncryptedData {Data = ad.DataStr, Key = encryptedKey};
+            var output = new EncryptedData { Data = ad.DataStr, Key = encryptedKey };
             return output;
         }
 
@@ -72,7 +77,10 @@ namespace FEClient.Security
                 rsa.PersistKeyInCsp = false;
                 rsa.ImportParameters(rsaKeyInfo);
                 //return false;
-                return rsa.VerifyData(dataBytes, new SHA1CryptoServiceProvider(), signatureBytes);
+                using (var sha1 = new SHA1CryptoServiceProvider())
+                {
+                    return rsa.VerifyData(dataBytes, sha1, signatureBytes);
+                }
             }
         }
 
@@ -81,8 +89,11 @@ namespace FEClient.Security
             using (var rsa = new RSACryptoServiceProvider(2048, CsParams))
             {
                 var bytes = Encoding.UTF8.GetBytes(data);
-                var signature = rsa.SignData(bytes, new SHA1CryptoServiceProvider());
-                return Convert.ToBase64String(signature);
+                using (var sha1 = new SHA1CryptoServiceProvider())
+                {
+                    var signature = rsa.SignData(bytes, sha1);
+                    return Convert.ToBase64String(signature);
+                }
             }
         }
 
@@ -127,14 +138,16 @@ namespace FEClient.Security
 
         private static RSAParameters GetPublicKeyParams(string pemKey)
         {
-            var keyStream = new MemoryStream(Encoding.UTF8.GetBytes(pemKey ?? ""));
-            var keyStreamReader = new StreamReader(keyStream);
-            var pemRead = new PemReader(keyStreamReader);
-            var keyParameter = (AsymmetricKeyParameter) pemRead.ReadObject();
-            var rsaKeyParameters = (RsaKeyParameters) keyParameter;
+            using (var keyStream = new MemoryStream(Encoding.UTF8.GetBytes(pemKey ?? "")))
+            {
+                var keyStreamReader = new StreamReader(keyStream);
+                var pemRead = new PemReader(keyStreamReader);
+                var keyParameter = (AsymmetricKeyParameter)pemRead.ReadObject();
+                var rsaKeyParameters = (RsaKeyParameters)keyParameter;
 
-            var rsaKeyInfo = DotNetUtilities.ToRSAParameters(rsaKeyParameters);
-            return rsaKeyInfo;
+                var rsaKeyInfo = DotNetUtilities.ToRSAParameters(rsaKeyParameters);
+                return rsaKeyInfo;
+            }
         }
 
         public static byte[] DecryptData(string payload, string key)

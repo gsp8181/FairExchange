@@ -20,7 +20,10 @@ namespace FEClient
 #endif
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new Context());
+                using (var context = new Context())
+                { 
+                Application.Run(context);
+                }
 #if !MULTIINSTANCE
                 Mutex.ReleaseMutex();
             }

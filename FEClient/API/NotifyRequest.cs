@@ -1,6 +1,6 @@
 ﻿namespace FEClient.API
 {
-    public class NotifyRequest
+    public class NotifyRequest //TODO: make immutable
     {
         public string FileName { get; set; }
         public string Email { get; set; }

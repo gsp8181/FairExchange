@@ -247,12 +247,14 @@ namespace FEClient.Forms
             {
                 bytes = aesCsp.KeySize/8;
             }
-            var rng = new RNGCryptoServiceProvider();
-            for (var i = 0; i < _amount; i++)
-            {
-                var randBytes = new byte[bytes];
-                rng.GetBytes(randBytes);
-                _fakeKeys.Enqueue(Convert.ToBase64String(randBytes));
+            using(var rng = new RNGCryptoServiceProvider())
+            { 
+                for (var i = 0; i < _amount; i++)
+                {
+                    var randBytes = new byte[bytes];
+                    rng.GetBytes(randBytes);
+                    _fakeKeys.Enqueue(Convert.ToBase64String(randBytes));
+                }
             }
 
             Invoke((MethodInvoker) delegate { progressLabel.Text = "Attempting to contact " + _ip; });

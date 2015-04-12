@@ -1,7 +1,9 @@
-﻿namespace FEClient.API
+﻿using System;
+
+namespace FEClient.API
 {
-    public class NotifyArgs
+    public class NotifyArgs : EventArgs
     {
-        public volatile bool HasSet;
+        public bool HasSet { get; set; }
     }
 }
