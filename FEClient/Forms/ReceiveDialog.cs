@@ -74,23 +74,23 @@ namespace FEClient.Forms
             sendStartRequestWorker.RunWorkerAsync();
         }
 
-        private void ClientRestApi_Finish(object sender, string guid, NotifyArgs callbackArgs)
+        private void ClientRestApi_Finish(object sender, FinishEventArgs e)
         {
-            if (_guid != guid || !_recievingCodes) return;
+            if (_guid != e.Guid || !_recievingCodes) return;
             _logWriter.WriteLine("Recieved FINISH packet");
-            callbackArgs.HasSet = true;
+            e.HasSet = true;
             Invoke((MethodInvoker) Decrypt);
         }
 
-        private void ClientRestApi_KeyRecieved(object sender, KeyArgs key, NotifyArgs callbackArgs)
+        private void ClientRestApi_KeyRecieved(object sender, KeyReceivedEventArgs e)
         {
-            if (_guid != key.Guid || !_recievingCodes)  //TODO: and IP == ip for sig recieved
+            if (_guid != e.Guid || !_recievingCodes)  //TODO: and IP == ip for sig recieved
             {
                 return;
             }
-            _logWriter.WriteLineAsync("Received Key: " + key.Key);
-            _dict.Push(key.Key);
-            callbackArgs.HasSet = true;
+            _logWriter.WriteLineAsync("Received Key: " + e.Key);
+            _dict.Push(e.Key);
+            e.HasSet = true;
 
             Invoke((MethodInvoker) delegate
             {
@@ -99,7 +99,7 @@ namespace FEClient.Forms
             });
         }
 
-        private void MyResource_FileRecievedAndRespSent(object sender, FileSend file)
+        private void MyResource_FileRecievedAndRespSent(object sender, FileSendEventArgs file)
         {
             if (_guid != file.Guid) //TODO: and filenames
                 return;
@@ -122,7 +122,7 @@ namespace FEClient.Forms
             });
         }
 
-        private void MyResource_FileRecieved(object sender, FileSend file, NotifyArgs callbackArgs)
+        private void MyResource_FileRecieved(object sender, FileSendEventArgs file)
         {
             if (_guid != file.Guid)
             {
@@ -142,7 +142,7 @@ namespace FEClient.Forms
                 return;
             }
 
-            callbackArgs.HasSet = true;
+            file.HasSet = true;
             _recievingCodes = true;
 
             //ShowBalloonTip(5000, "File Recieved", fileName, ToolTipIcon.Info);

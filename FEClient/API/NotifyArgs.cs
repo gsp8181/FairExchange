@@ -2,7 +2,8 @@
 
 namespace FEClient.API
 {
-    public class NotifyArgs : EventArgs
+    [Obsolete]
+    public class NotifyArgs
     {
         public bool HasSet { get; set; }
     }

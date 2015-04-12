@@ -78,6 +78,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\FinishEventArgs.cs" />
     <Compile Include="API\KeyArgs.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="Context.Designer.cs">

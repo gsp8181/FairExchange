@@ -3,22 +3,22 @@
     // ReSharper disable once ClassNeverInstantiated.Global
     public sealed partial class ClientRestApi
     {
-        public delegate void FileRecievedAndRespSendHandler(object sender, FileSend file);
+        public delegate void FileRecievedAndRespSendHandler(object sender, FileSendEventArgs e);
 
         //public delegate void NotifyHandler(object sender, string myValue);
         //public static event NotifyHandler Notify = delegate { };
 
-        public delegate void FileRecievedHandler(object sender, FileSend file, NotifyArgs callbackArgs);
+        public delegate void FileRecievedHandler(object sender, FileSendEventArgs e);
 
-        public delegate void FinishHandler(object sender, string guid, NotifyArgs callbackArgs);
+        public delegate void FinishHandler(object sender, FinishEventArgs e);
 
-        public delegate void KeyRecievedHandler(object sender, KeyArgs key, NotifyArgs callbackArgs);
+        public delegate void KeyRecievedHandler(object sender, KeyReceivedEventArgs e);
 
-        public delegate void NotifyRecievedHandler(object sender, NotifyRequest vars);
+        public delegate void NotifyRecievedHandler(object sender, NotifyRequest e);
 
-        public delegate void StartTransmissionAndRespSentHandler(object sender, NotifyRequest vars);
+        public delegate void StartTransmissionAndRespSentHandler(object sender, NotifyRequest e);
 
-        public delegate void StartTransmissionHandler(object sender, NotifyRequest vars, NotifyArgs callbackArgs);
+        public delegate void StartTransmissionHandler(object sender, NotifyRequest e, NotifyArgs callbackArgs);
 
         public static event FileRecievedHandler FileRecieved = delegate { };
         public static event KeyRecievedHandler KeyRecieved = delegate { };

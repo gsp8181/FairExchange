@@ -47,19 +47,9 @@ namespace FEClient.API
                 SendJsonResponse(context, eresponse);
                 return;
             }
-            var fs = new FileSend
-            {
-                Email = email,
-                FileName = filename,
-                Iv = iv,
-                Guid = guid,
-                Signature = signature,
-                Data = jobj
-            }; //TODO: tidy up, dont reuse?
-            //this.SendTextResponse(context, x);
-            var args = new NotifyArgs();
-            FileRecieved(this, fs, args);
-            if (args.HasSet)
+            var fs = new FileSendEventArgs(filename,email,jobj,iv,guid,signature);
+            FileRecieved(this, fs);
+            if (fs.HasSet)
             {
                 var sig = Rsa.SignStringData(signature);
                 var response = new JObject {{"accepted", true}, {"signature", sig}};
@@ -67,8 +57,8 @@ namespace FEClient.API
                 Debug.WriteLine("/file/ SENT " + response);
 #endif
                 SendJsonResponse(context, response);
-                fs.Data = data;
-                FileRecievedAndRespSent(this, fs);
+                var fs2 = new FileSendEventArgs(filename, email, data, iv, guid, signature);
+                FileRecievedAndRespSent(this, fs2);
             }
             else
             {
@@ -159,16 +149,13 @@ namespace FEClient.API
 #if TRACE
             Debug.WriteLine("/key/ " + args);
 #endif
-            var kArgs = new KeyArgs
-            {
-                Guid = args.Value<string>("guid"),
-                I = args.Value<int>("i"),
-                Key = args.Value<string>("key")
-            };
-            var callback = new NotifyArgs();
-            KeyRecieved(this, kArgs, callback);
+            var guid = args.Value<string>("guid");
+            var i = args.Value<int>("i");
+            var key = args.Value<string>("key");
+            var kArgs = new KeyReceivedEventArgs(key, guid, i);
+            KeyRecieved(this, kArgs);
 
-            if (callback.HasSet)
+            if (kArgs.HasSet)
             {
                 var response = new JObject {{"accepted", true}, {"signature", Rsa.SignStringData(args.ToString())}};
 #if TRACE
@@ -247,8 +234,8 @@ namespace FEClient.API
 #endif
             var payload = GetJsonPayload(context.Request);
             var guid = payload.Value<string>("guid");
-            var args = new NotifyArgs();
-            Finish(this, guid, args);
+            var args = new FinishEventArgs(guid);
+            Finish(this, args);
             if (args.HasSet)
             {
                 var resp = new JObject { { "accepted", true } };
