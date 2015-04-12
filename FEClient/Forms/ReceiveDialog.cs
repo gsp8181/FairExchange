@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration.Internal;
 using System.IO;
 using System.Windows.Forms;
 using FEClient.API;
@@ -18,7 +19,11 @@ namespace FEClient.Forms
         private readonly string _guid;
         private readonly string _ip;
 
-        private readonly FileInfo _localFile = new FileInfo(Path.GetTempFileName());
+        private readonly FileInfo _localFile;
+        private readonly FileInfo _logFile;
+
+        private FileStream _log;
+        private StreamWriter _logWriter;
 
         private volatile Stack<string> _dict = new Stack<string>(); //TODO: holds I
         private volatile string _iv;
@@ -38,6 +43,20 @@ namespace FEClient.Forms
             ClientRestApi.FileRecievedAndRespSent += MyResource_FileRecievedAndRespSent;
             ClientRestApi.KeyRecieved += ClientRestApi_KeyRecieved;
             ClientRestApi.Finish += ClientRestApi_Finish;
+
+            var logPath = (Application.UserAppDataPath + @"\logs\received\");
+            new DirectoryInfo(logPath).Create();
+
+            _localFile = new FileInfo(Path.GetTempFileName());
+            _logFile =
+                new FileInfo(logPath.ToString() + DateTime.Today.ToString("yyyy:MM:dd:HH:mm:sszzz") + ".log");
+
+            _log = _logFile.OpenWrite();
+            _logWriter = new StreamWriter(_log);
+
+            _logWriter.WriteLine("Log started at " + DateTime.Today.ToString("yyyy:MM:dd:HH:mm:sszzz"));
+            
+
             saveFileDialog.FileName = _fileName;
             saveFileDialog.DefaultExt = new FileInfo(_fileName).Extension;
             sendStartRequestWorker.RunWorkerAsync();
@@ -52,7 +71,7 @@ namespace FEClient.Forms
 
         private void ClientRestApi_KeyRecieved(object sender, KeyArgs key, NotifyArgs callbackArgs)
         {
-            if (_guid != key.Guid || !_recievingCodes)
+            if (_guid != key.Guid || !_recievingCodes)  //TODO: and IP == ip for sig recieved
             {
                 return;
             }
@@ -105,12 +124,16 @@ namespace FEClient.Forms
             //ShowBalloonTip(5000, "File Recieved", fileName, ToolTipIcon.Info);
         }
 
-        private void ReceiveDialog_FormClosed(object sender, FormClosedEventArgs e) //TODO: delink before close
+        private void ReceiveDialog_FormClosed(object sender, FormClosedEventArgs e) //TODO: delink before close, should dispose be done instead?
         {
             ClientRestApi.FileRecieved -= MyResource_FileRecieved;
             ClientRestApi.FileRecievedAndRespSent -= MyResource_FileRecievedAndRespSent;
             ClientRestApi.KeyRecieved -= ClientRestApi_KeyRecieved;
             ClientRestApi.Finish -= ClientRestApi_Finish;
+
+            _logWriter.Close();
+            _log.Close();
+
             Dispose();
         }
 
