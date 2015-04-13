@@ -2,7 +2,7 @@
 
 namespace FEClient.API
 {
-    [Obsolete]
+    [Obsolete] //TODO: transition
     public class NotifyArgs
     {
         public bool HasSet { get; set; }
