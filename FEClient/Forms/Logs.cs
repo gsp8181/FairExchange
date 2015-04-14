@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using FEClient.Properties;
 
 namespace FEClient.Forms
 {
@@ -24,7 +18,7 @@ namespace FEClient.Forms
         private void Logs_Load(object sender, EventArgs e)
         {
             var icon = new ImageList();
-            icon.Images.Add(global::FEClient.Properties.Resources.Icojam_Blue_Bits_Document_arrow_down);
+            icon.Images.Add(Resources.Icojam_Blue_Bits_Document_arrow_down);
             receivedListView.LargeImageList = icon;
             sentListView.LargeImageList = icon;
             /*if (sentLogpath.Exists)
