@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration.Internal;
-using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;

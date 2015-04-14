@@ -1,11 +1,14 @@
-﻿namespace FEClient.Forms
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace FEClient.Forms
 {
     partial class Logs
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -121,11 +124,11 @@
 
         #endregion
 
-        private System.Windows.Forms.TabControl tabControl;
-        private System.Windows.Forms.TabPage sentTabPage;
-        private System.Windows.Forms.TabPage receivedTabPage;
-        private System.Windows.Forms.ListView sentListView;
-        private System.Windows.Forms.ListView receivedListView;
-        private System.Windows.Forms.ImageList iconImageList;
+        private TabControl tabControl;
+        private TabPage sentTabPage;
+        private TabPage receivedTabPage;
+        private ListView sentListView;
+        private ListView receivedListView;
+        private ImageList iconImageList;
     }
 }
