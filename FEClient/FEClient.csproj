@@ -132,7 +132,6 @@
     <Compile Include="API\NotifyRequestEventArgs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="NotMyCode\RegexUtilities.cs" />
     <Compile Include="API\ClientRestApi.cs" />
     <Compile Include="API\ClientRestApi.Events.cs" />
     <Compile Include="Security\RSASecurity.cs" />

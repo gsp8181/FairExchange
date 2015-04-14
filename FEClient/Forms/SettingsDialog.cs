@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Mail;
 using System.Windows.Forms;
 using FEClient.Security;
 
@@ -14,8 +15,7 @@ namespace FEClient.Forms
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //errorProvider.Clear();
-            if (string.IsNullOrWhiteSpace(emailBox.Text))
+            if (!ValidateEmail())
             {
                 return;
             }
@@ -42,8 +42,28 @@ namespace FEClient.Forms
 
         private void emailBox_Validated(object sender, EventArgs e)
         {
-            errorProvider.SetError(emailBox,
-                string.IsNullOrWhiteSpace(emailBox.Text) ? "Email cannot be empty" : String.Empty);
+            ValidateEmail();
+        }
+
+        private bool ValidateEmail()
+        {
+            if (string.IsNullOrWhiteSpace(emailBox.Text))
+            {
+                errorProvider.SetError(emailBox, "Email cannot be empty");
+                return false;
+            }
+            try
+            {
+                // ReSharper disable once ObjectCreationAsStatement
+                new MailAddress(emailBox.Text);
+            }
+            catch (Exception)
+            {
+                errorProvider.SetError(emailBox, "Email could not be verified");
+                return false;
+            }
+            errorProvider.SetError(emailBox, String.Empty);
+            return true;
         }
 
         private void publicKeyButton_Click(object sender, EventArgs e)
