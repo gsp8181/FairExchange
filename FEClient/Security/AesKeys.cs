@@ -26,7 +26,7 @@ namespace FEClient.Security
             return new JObject
             {
                 {"key", KeyStr},
-                {"iv", IvStr}, //TODO: nono make this a serialisable object
+                {"iv", IvStr},
                 {"rounds", Rounds}
             };
         }

@@ -89,9 +89,9 @@ namespace FEClient.API
             NotifyRecieved(this, vars);
         }
 
-        private NotifyRequestEventArgs NotifySend(HttpListenerContext context) //TODO: rename
+        private NotifyRequestEventArgs NotifySend(HttpListenerContext context)
         {
-            var jsonStr = GetJsonPayload(context.Request); //TODO: validate here with Json.NET Schema
+            var jsonStr = GetJsonPayload(context.Request);
 #if TRACE
             Debug.WriteLine(jsonStr);
 #endif
@@ -203,7 +203,10 @@ namespace FEClient.API
         [RESTRoute(Method = HttpMethod.GET, PathInfo = @"^/key/?$")]
         public void HandleGetKeyRequest(HttpListenerContext context)
         {
-//TODO: add debug
+#if TRACE
+            Debug.WriteLine("/key/");
+            Debug.WriteLine("/key/ sent " + Rsa.PublicKey);
+#endif
             SendTextResponse(context, Rsa.PublicKey);
         }
 
@@ -249,10 +252,10 @@ namespace FEClient.API
             }
         }
 
-        [RESTRoute]
+        /*[RESTRoute]
         public void HandleAllGetRequests(HttpListenerContext context)
         {
             SendTextResponse(context, "GET is a success!"); //TODO: change to api description
-        }
+        }*/
     }
 }

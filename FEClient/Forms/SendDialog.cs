@@ -332,7 +332,7 @@ namespace FEClient.Forms
             _logWriter.WriteLine("Contacting " + _ip);
 
             Invoke((MethodInvoker)delegate { progressLabel.Text = "Attempting to contact " + _ip; });
-            if (Common.GetSshKey(_ip, out _remoteKey)) //TODO: async
+            if (!Common.GetSshKey(_ip, out _remoteKey)) 
             {
                 _logWriter.WriteLine("Remote public key not trusted, terminated");
                 _logWriter.WriteLine("Remote Public Key");

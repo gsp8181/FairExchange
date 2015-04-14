@@ -161,7 +161,7 @@ namespace FEClient.Forms
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e) //TODO: does this have to be separate
         {
-            if (Common.GetSshKey(_ip, out _remoteKey))
+            if (!Common.GetSshKey(_ip, out _remoteKey))
             {
                 _logWriter.WriteLine("Remote public key not trusted, terminated");
                 _logWriter.WriteLine("Remote Public Key");

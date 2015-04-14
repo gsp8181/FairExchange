@@ -55,22 +55,7 @@ namespace FEClient.Forms
             }
 
             var ip = ""; //TODO: does not need to be used?!
-            /*if (addressBoxIsEmail)
-            {
-                var url = settings.TTP + "/rest/sessions/";
 
-                url = url + destinationBox.Text;
-                try
-                {
-                    var content = new WebClient().DownloadString(url);
-                    ip = content;
-                }
-                catch (WebException ex)
-                {
-                    MessageBox.Show("Could not find. " + ex.Message);
-                    return;
-                }
-            } else*/
             if (AddressBoxIsIp)
             {
                 ip = destinationBox.Text;
@@ -101,11 +86,6 @@ namespace FEClient.Forms
             var fileInfo = new FileInfo(fileBox.Text);
             return fileInfo.Exists && fileInfo.Length > 0;
         }
-
-        //private bool addressBoxIsEmail
-        //{
-        //    get { return new RegexUtilities().IsValidEmail(destinationBox.Text); }
-        //}
 
         private void textBox2_Validated(object sender, EventArgs e)
         {
@@ -153,9 +133,8 @@ namespace FEClient.Forms
             }
         }
 
-        private void roundsBox_KeyPress(object sender, KeyPressEventArgs e)
+        private void roundsBox_KeyPress(object sender, KeyPressEventArgs e) //TODO: you CAN still paste a number in!
         {
-            //var textSender = (TextBox)sender;
             if (!Char.IsNumber(e.KeyChar) && !Char.IsControl(e.KeyChar))
                 e.Handled = true;
         }
