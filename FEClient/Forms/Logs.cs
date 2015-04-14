@@ -33,8 +33,7 @@ namespace FEClient.Forms
             {
                 foreach (var file in receivedLogPath.GetFiles())
                 {
-                    ListViewItem i = new ListViewItem(file.Name);
-                    i.ImageIndex = 0;
+                    var i = new ListViewItem(file.Name) {ImageIndex = 0};
                     receivedListView.Items.Add(i);
                 }
             }
@@ -47,7 +46,7 @@ namespace FEClient.Forms
                 return;
             var item = list.SelectedItems[0];
             var fileName = receivedLogPath.FullName + item.Text;
-            using (LogViewer dialog = new LogViewer(fileName))
+            using (var dialog = new LogViewer(fileName))
             {
                 dialog.ShowDialog();
             }
