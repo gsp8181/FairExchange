@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
@@ -177,6 +178,12 @@ namespace FEClient.Forms
             var data = new JObject { { "fileName", _fileName }, { "email", SettingsWrapper.Email }, { "guid", _guid } };
             var req = new RESTRequest("/start/", HttpMethod.POST, ContentType.JSON) {Payload = data.ToString()};
             var response = client.Execute(req); //TODO: e.response?
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                MessageBox.Show("Attempt to respond to notification request returned error", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Close();
+            }
         }
 
         private void timer2_Tick(object sender, EventArgs e)

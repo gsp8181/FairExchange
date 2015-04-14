@@ -136,7 +136,6 @@ namespace FEClient.Forms
 
             //If there was an error then fail and quit
             if (response.ReturnedError || !string.IsNullOrEmpty(response.Error))
-            //TODO: accepted? TODO: better response checking for example timeout
             {
                 _logWriter.WriteLine("Sending data resulted in an error: " + response.Error);
                 progressBar.Style = ProgressBarStyle.Continuous; //TODO: update label
