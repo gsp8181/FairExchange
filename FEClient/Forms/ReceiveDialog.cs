@@ -155,7 +155,7 @@ namespace FEClient.Forms
             ClientRestApi.KeyRecieved -= ClientRestApi_KeyRecieved;
             ClientRestApi.Finish -= ClientRestApi_Finish;
 
-            _logWriter.Close();
+            //_logWriter.Close();
             _log.Close();
 
             Dispose();
