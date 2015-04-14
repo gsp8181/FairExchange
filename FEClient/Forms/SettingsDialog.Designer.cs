@@ -34,8 +34,6 @@ namespace FEClient.Forms
             this.components = new System.ComponentModel.Container();
             this.emailBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.ttpBox = new System.Windows.Forms.TextBox();
             this.okButton = new System.Windows.Forms.Button();
             this.regenKeysButton = new System.Windows.Forms.Button();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
@@ -45,7 +43,7 @@ namespace FEClient.Forms
             // 
             // emailBox
             // 
-            this.emailBox.Location = new System.Drawing.Point(86, 38);
+            this.emailBox.Location = new System.Drawing.Point(86, 12);
             this.emailBox.Name = "emailBox";
             this.emailBox.Size = new System.Drawing.Size(186, 20);
             this.emailBox.TabIndex = 11;
@@ -54,32 +52,15 @@ namespace FEClient.Forms
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 43);
+            this.label2.Location = new System.Drawing.Point(12, 17);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 13);
             this.label2.TabIndex = 10;
             this.label2.Text = "Email:";
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 15);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(68, 13);
-            this.label1.TabIndex = 9;
-            this.label1.Text = "TTP Server: ";
-            // 
-            // ttpBox
-            // 
-            this.ttpBox.Enabled = false;
-            this.ttpBox.Location = new System.Drawing.Point(86, 12);
-            this.ttpBox.Name = "ttpBox";
-            this.ttpBox.Size = new System.Drawing.Size(186, 20);
-            this.ttpBox.TabIndex = 8;
-            // 
             // okButton
             // 
-            this.okButton.Location = new System.Drawing.Point(196, 64);
+            this.okButton.Location = new System.Drawing.Point(197, 38);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
             this.okButton.TabIndex = 12;
@@ -89,7 +70,7 @@ namespace FEClient.Forms
             // 
             // regenKeysButton
             // 
-            this.regenKeysButton.Location = new System.Drawing.Point(12, 64);
+            this.regenKeysButton.Location = new System.Drawing.Point(13, 38);
             this.regenKeysButton.Name = "regenKeysButton";
             this.regenKeysButton.Size = new System.Drawing.Size(75, 23);
             this.regenKeysButton.TabIndex = 13;
@@ -103,7 +84,7 @@ namespace FEClient.Forms
             // 
             // publicKeyButton
             // 
-            this.publicKeyButton.Location = new System.Drawing.Point(104, 64);
+            this.publicKeyButton.Location = new System.Drawing.Point(105, 38);
             this.publicKeyButton.Name = "publicKeyButton";
             this.publicKeyButton.Size = new System.Drawing.Size(75, 23);
             this.publicKeyButton.TabIndex = 14;
@@ -116,14 +97,12 @@ namespace FEClient.Forms
             this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 103);
+            this.ClientSize = new System.Drawing.Size(284, 72);
             this.Controls.Add(this.publicKeyButton);
             this.Controls.Add(this.regenKeysButton);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.emailBox);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.ttpBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = global::FEClient.Properties.Resources.Icojam_Blue_Bits_Document_arrow_down;
             this.MaximizeBox = false;
@@ -141,8 +120,6 @@ namespace FEClient.Forms
 
         private TextBox emailBox;
         private Label label2;
-        private Label label1;
-        private TextBox ttpBox;
         private Button okButton;
         private Button regenKeysButton;
         private ErrorProvider errorProvider;
