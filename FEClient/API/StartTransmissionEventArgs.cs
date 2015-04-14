@@ -1,6 +1,8 @@
-﻿namespace FEClient.API
+﻿using System;
+
+namespace FEClient.API
 {
-    public class StartTransmissionEventArgs
+    public class StartTransmissionEventArgs : EventArgs
     {
         public StartTransmissionEventArgs(string fileName, string email, string ip, string guid, int timeout, int complexity)
         {
