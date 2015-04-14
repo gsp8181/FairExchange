@@ -173,9 +173,11 @@ namespace FEClient.API
 #if TRACE
             Debug.WriteLine("/start/ cont");
 #endif
-            var vars = (StartTransmissionEventArgs)NotifySend(context);
-            if (vars == null)
+            var nrArgs = NotifySend(context);
+            if (nrArgs == null)
                 return;
+
+            var vars = new StartTransmissionEventArgs(nrArgs);
 
             StartTransmission(this, vars);
             if (vars.HasSet)

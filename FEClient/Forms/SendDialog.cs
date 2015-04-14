@@ -42,7 +42,7 @@ namespace FEClient.Forms
             _timeout = timeout;
         }
 
-        private void MyResource_StartTransmissionAndRespSent(object sender, NotifyRequestEventArgs vars)
+        private void MyResource_StartTransmissionAndRespSent(object sender, StartTransmissionEventArgs vars)
         {
             if (vars.Guid != _guid)
                 return;

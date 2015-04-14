@@ -16,7 +16,7 @@
 
         public delegate void NotifyRecievedHandler(object sender, NotifyRequestEventArgs e);
 
-        public delegate void StartTransmissionAndRespSentHandler(object sender, NotifyRequestEventArgs e);
+        public delegate void StartTransmissionAndRespSentHandler(object sender, StartTransmissionEventArgs e);
 
         public delegate void StartTransmissionHandler(object sender, StartTransmissionEventArgs e);
 
