@@ -69,7 +69,7 @@ namespace FEClient.Forms
         {
             if (vars.Guid != _guid)
                 return;
-            Invoke((MethodInvoker) timer2_Tick); //TODO: maybe another timeout timer?
+            Invoke((MethodInvoker)timer2_Tick); //TODO: maybe another timeout timer?
         }
 
         private void MyResource_StartTransmission(object sender, StartTransmissionEventArgs args)
@@ -77,7 +77,7 @@ namespace FEClient.Forms
             if (args.FileName != _file.Name)
                 return;
             args.HasSet = true;
-            Invoke((MethodInvoker) delegate { timeoutTimer.Stop(); });
+            Invoke((MethodInvoker)delegate { timeoutTimer.Stop(); });
         }
 
         private void SendDialog_FormClosed(object sender, FormClosedEventArgs e)
@@ -120,7 +120,7 @@ namespace FEClient.Forms
             var hash = new SHA1CryptoServiceProvider().ComputeHash(Encoding.UTF8.GetBytes(data.ToString())); //TODO; do the actual data array?
             var hashStr = Convert.ToBase64String(hash);
 
-            _logWriter.WriteLine("Data Hash: "+ hashStr);
+            _logWriter.WriteLine("Data Hash: " + hashStr);
             var sig = Rsa.SignStringData(data.ToString());
             _logWriter.WriteLine("Signature: " + sig);
 
@@ -138,7 +138,7 @@ namespace FEClient.Forms
 
             //If there was an error then fail and quit
             if (response.ReturnedError || !string.IsNullOrEmpty(response.Error))
-                //TODO: accepted? TODO: better response checking for example timeout
+            //TODO: accepted? TODO: better response checking for example timeout
             {
                 _logWriter.WriteLine("Sending data resulted in an error: " + response.Error);
                 progressBar.Style = ProgressBarStyle.Continuous; //TODO: update label
@@ -153,7 +153,7 @@ namespace FEClient.Forms
             _logWriter.WriteLine("Returned signature " + remoteSig);
 
             if (!Rsa.VerifySignature(sig, remoteSig, _remoteKey))
-                //TODO:INSTEAD This should send an abort request of some kind, make sure it doesn't lock recievedialog
+            //TODO:INSTEAD This should send an abort request of some kind, make sure it doesn't lock recievedialog
             {
                 _logWriter.WriteLine("Signature verification failed, terminated");
                 MessageBox.Show("Signature verification failed, transfer terminated", "Failed", MessageBoxButtons.OK,
@@ -187,7 +187,7 @@ namespace FEClient.Forms
                 //TODO:Check cancellation
                 var fkey = _fakeKeys.Dequeue();
 
-                var data = new JObject {{"key", fkey}, {"guid", _guid}, {"i", i}}; //TODO: rsa sign?
+                var data = new JObject { { "key", fkey }, { "guid", _guid }, { "i", i } }; //TODO: rsa sign?
 
                 var req = new RESTRequest("/key/", HttpMethod.POST, ContentType.JSON, _timeout)
                 {
@@ -197,7 +197,7 @@ namespace FEClient.Forms
                 var response = client.Execute(req);
                 if (stopwatch.ElapsedMilliseconds > _timeout)
                 {
-                    _logWriter.WriteLineAsync(string.Format("Failed on key {0} through timeout, {1}ms elapsed", i, stopwatch.ElapsedMilliseconds ));
+                    _logWriter.WriteLineAsync(string.Format("Failed on key {0} through timeout, {1}ms elapsed", i, stopwatch.ElapsedMilliseconds));
                     _logWriter.WriteLineAsync("Failed fake key: " + fkey);
 
                     MessageBox.Show("Timed out, transmission ended", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); //TODO: complete
@@ -208,7 +208,7 @@ namespace FEClient.Forms
 
                 var sig = JObject.Parse(response.Content).Value<string>("signature");
                 if (!Rsa.VerifySignature(data.ToString(), sig, _remoteKey))
-                    //TODO: is this a performance hit converting from string every time?
+                //TODO: is this a performance hit converting from string every time?
                 {
                     var hash = new SHA1CryptoServiceProvider().ComputeHash(Encoding.UTF8.GetBytes(data.ToString())); //TODO; do the actual data array?
                     var hashStr = Convert.ToBase64String(hash);
@@ -224,17 +224,17 @@ namespace FEClient.Forms
 
                 if (response.StatusCode != HttpStatusCode.OK) //TODO: OR IF TIMEOUT
                 {
-                    _logWriter.WriteLine("Error through malformed HTTP Code on fake key {0}; {1} with error {2}",i, fkey, response.Error);
-                    MessageBox.Show("Error, remote server returned error\n"+response.Error, "Error", MessageBoxButtons.OK,MessageBoxIcon.Error); //TODO: complete
+                    _logWriter.WriteLine("Error through malformed HTTP Code on fake key {0}; {1} with error {2}", i, fkey, response.Error);
+                    MessageBox.Show("Error, remote server returned error\n" + response.Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); //TODO: complete
                     Close();
                     return;
                 }
 
 
-                sendKeysBackgroundWorker.ReportProgress((int)(((double)i/_amount)*100));
+                sendKeysBackgroundWorker.ReportProgress((int)(((double)i / _amount) * 100));
             }
 
-            var realData = new JObject {{"key", _key.KeyStr}, {"guid", _guid}, {"i", _amount}}; //TODO: encrypt keys??, rsa sign?
+            var realData = new JObject { { "key", _key.KeyStr }, { "guid", _guid }, { "i", _amount } }; //TODO: encrypt keys??, rsa sign?
 
 
             var realReq = new RESTRequest("/key/", HttpMethod.POST, ContentType.JSON, _timeout)
@@ -252,8 +252,8 @@ namespace FEClient.Forms
                 _logWriter.WriteLine("ERROR: Sent REAL key and error was returned: {0}", realResponse.Error);
                 //Invoke((MethodInvoker) delegate
                 //{
-                    MessageBox.Show("Error, sent real key and error was returned\n" + realResponse.Error,"Error", MessageBoxButtons.OK,MessageBoxIcon.Error);
-                    this.Close();
+                MessageBox.Show("Error, sent real key and error was returned\n" + realResponse.Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Close();
                 //});
                 return;
             }
@@ -266,7 +266,7 @@ namespace FEClient.Forms
             _logWriter.WriteLine("Given signature " + realSig);
 
             if (!Rsa.VerifySignature(realData.ToString(), realSig, _remoteKey))
-                //TODO: is this a performance hit converting from string every time?
+            //TODO: is this a performance hit converting from string every time?
             {
                 _logWriter.WriteLine("ERROR, sent REAL key and signature verification failed, terminating");
                 MessageBox.Show("Error, signature verification failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -279,12 +279,12 @@ namespace FEClient.Forms
 
             sendKeysBackgroundWorker.ReportProgress(100);
 
-            Invoke((MethodInvoker) delegate
+            Invoke((MethodInvoker)delegate
             {
                 this.progressLabel.Text = "Sending finish token";
             });
 
-            var finData = new JObject {{"guid", _guid}};
+            var finData = new JObject { { "guid", _guid } };
 
             var finReq = new RESTRequest("/finish/", HttpMethod.POST, ContentType.JSON, _timeout)
             {
@@ -316,11 +316,11 @@ namespace FEClient.Forms
             int bytes;
             using (var aesCsp = new AesCryptoServiceProvider())
             {
-                bytes = aesCsp.KeySize/8;
+                bytes = aesCsp.KeySize / 8;
             }
-            _logWriter.WriteLine("Key is {0} bytes long so generating {1} fake keys of {2} byte length",bytes,_amount,bytes);
-            using(var rng = new RNGCryptoServiceProvider())
-            { 
+            _logWriter.WriteLine("Key is {0} bytes long so generating {1} fake keys of {2} byte length", bytes, _amount, bytes);
+            using (var rng = new RNGCryptoServiceProvider())
+            {
                 for (var i = 0; i < _amount; i++)
                 {
                     var randBytes = new byte[bytes];
@@ -331,7 +331,7 @@ namespace FEClient.Forms
 
             _logWriter.WriteLine("Contacting " + _ip);
 
-            Invoke((MethodInvoker) delegate { progressLabel.Text = "Attempting to contact " + _ip; });
+            Invoke((MethodInvoker)delegate { progressLabel.Text = "Attempting to contact " + _ip; });
             if (Common.GetSshKey(_ip, out _remoteKey)) //TODO: async
             {
                 _logWriter.WriteLine("Remote public key not trusted, terminated");
@@ -341,17 +341,14 @@ namespace FEClient.Forms
                 Close();
                 return;
             }
-            else
-            {
-                _logWriter.WriteLine("Remote Public Key");
-                _logWriter.WriteLine(_remoteKey);
-                e.Result = true;
-            }
+            _logWriter.WriteLine("Remote Public Key");
+            _logWriter.WriteLine(_remoteKey);
+            e.Result = true;
         }
 
         private void backgroundWorker2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if ((bool) e.Result == false)
+            if ((bool)e.Result == false)
                 return;
 
             var client = new RESTClient("http://" + _ip);
