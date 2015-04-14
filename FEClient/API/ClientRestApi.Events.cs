@@ -5,9 +5,6 @@
     {
         public delegate void FileRecievedAndRespSendHandler(object sender, FileSendEventArgs e);
 
-        //public delegate void NotifyHandler(object sender, string myValue);
-        //public static event NotifyHandler Notify = delegate { };
-
         public delegate void FileRecievedHandler(object sender, FileSendEventArgs e);
 
         public delegate void FinishHandler(object sender, FinishEventArgs e);
