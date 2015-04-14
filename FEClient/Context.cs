@@ -22,7 +22,7 @@ namespace FEClient
             {
                 using (var dialog = new SettingsDialog())
                 {
-                    dialog.ShowDialog(); //TODO: if cancel then quit
+                    dialog.ShowDialog();
                     if (dialog.DialogResult == DialogResult.Cancel)
                     {
                         Environment.Exit(-1);
