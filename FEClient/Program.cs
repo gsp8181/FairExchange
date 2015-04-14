@@ -22,7 +22,7 @@ namespace FEClient
                 Application.SetCompatibleTextRenderingDefault(false);
                 using (var context = new Context())
                 { 
-                Application.Run(context);
+                    Application.Run(context);
                 }
 #if !MULTIINSTANCE
                 Mutex.ReleaseMutex();

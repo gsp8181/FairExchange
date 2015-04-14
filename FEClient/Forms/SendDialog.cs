@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Security.Cryptography;
-using System.Text;
 using System.Windows.Forms;
 using FEClient.API;
 using FEClient.Security;
@@ -28,9 +27,8 @@ namespace FEClient.Forms
         private AesData _aesData;
         private AesKeys _key;
         private volatile string _remoteKey;
-        private FileInfo _logFile;
-        private FileStream _log;
-        private StreamWriter _logWriter;
+        private readonly FileStream _log;
+        private readonly StreamWriter _logWriter;
 
         public SendDialog(string ip, string fileName, int rounds, int complexity, int timeout)
         {
@@ -48,11 +46,10 @@ namespace FEClient.Forms
             var logPath = (Application.UserAppDataPath + @"\logs\sent\");
             new DirectoryInfo(logPath).Create();
 
-            _logFile =
-                new FileInfo(logPath + DateTime.Now.ToString("yyyy.MM.dd.HH.mm.ss") + ".log");
+            var logFile = new FileInfo(logPath + DateTime.Now.ToString("yyyy.MM.dd.HH.mm.ss") + ".log");
 
 
-            _log = _logFile.OpenWrite();
+            _log = logFile.OpenWrite();
             _logWriter = new StreamWriter(_log);
 
             _logWriter.WriteLine("Log started at " + DateTime.Today.ToString("yyyy:MM:dd:HH:mm:sszzz"));
@@ -249,7 +246,7 @@ namespace FEClient.Forms
                 //Invoke((MethodInvoker) delegate
                 //{
                 MessageBox.Show("Error, sent real key and error was returned\n" + realResponse.Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                this.Close();
+                Close();
                 //});
                 return;
             }

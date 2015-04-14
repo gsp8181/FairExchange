@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Net;
-using System.Security.Cryptography;
-using System.Text;
 using System.Windows.Forms;
 using FEClient.API;
 using FEClient.Security;
 using Grapevine;
 using Grapevine.Client;
 using Newtonsoft.Json.Linq;
-using Aes = FEClient.Security.Aes;
 
 namespace FEClient.Forms
 {
@@ -23,10 +20,9 @@ namespace FEClient.Forms
         private readonly string _ip;
 
         private readonly FileInfo _localFile;
-        private readonly FileInfo _logFile;
 
-        private FileStream _log; //TODO: volatile?
-        private StreamWriter _logWriter;
+        private readonly FileStream _log; 
+        private readonly StreamWriter _logWriter;
 
         private volatile Stack<string> _dict = new Stack<string>(); //TODO: holds I
         private volatile string _iv;
@@ -52,11 +48,10 @@ namespace FEClient.Forms
 
             _localFile = new FileInfo(Path.GetTempFileName());
 
-                _logFile =
-                    new FileInfo(logPath + DateTime.Now.ToString("yyyy.MM.dd.HH.mm.ss") + ".log");
+                var logFile = new FileInfo(logPath + DateTime.Now.ToString("yyyy.MM.dd.HH.mm.ss") + ".log");
 
 
-            _log = _logFile.OpenWrite();
+            _log = logFile.OpenWrite();
             _logWriter = new StreamWriter(_log);
 
             _logWriter.WriteLine("Log started at " + DateTime.Today.ToString("yyyy:MM:dd:HH:mm:sszzz"));
