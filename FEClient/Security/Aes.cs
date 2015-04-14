@@ -47,9 +47,10 @@ namespace FEClient.Security
 
         private static byte[] Strengthen(byte[] p, byte[] s, int rounds)
         {
-            var rfcKey = new Rfc2898DeriveBytes(p, s, rounds);
-
-            return rfcKey.GetBytes(p.Length);
+            using(var rfcKey = new Rfc2898DeriveBytes(p, s, rounds))
+            { 
+                return rfcKey.GetBytes(p.Length);
+            }
         }
 
         public static byte[] Decrypt(string payload, string aeskey, string aesiv, int rounds)

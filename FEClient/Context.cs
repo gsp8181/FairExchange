@@ -102,7 +102,11 @@ namespace FEClient
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new SettingsDialog().ShowDialog();
+            using (var dialog = new SettingsDialog())
+            {
+
+                dialog.ShowDialog();
+            }
         }
 
         private void startToolStripMenuItem_Click(object sender, EventArgs e)

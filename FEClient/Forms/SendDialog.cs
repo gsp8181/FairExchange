@@ -117,9 +117,7 @@ namespace FEClient.Forms
                 {"data", _aesData.DataStr}
             };
             _logWriter.WriteLine("Sending data");
-            var hash = new SHA1CryptoServiceProvider().ComputeHash(Encoding.UTF8.GetBytes(data.ToString())); //TODO; do the actual data array?
-            var hashStr = Convert.ToBase64String(hash);
-
+            var hashStr = Sha1.HashJObject(data);
             _logWriter.WriteLine("Data Hash: " + hashStr);
             var sig = Rsa.SignStringData(data.ToString());
             _logWriter.WriteLine("Signature: " + sig);
@@ -210,8 +208,7 @@ namespace FEClient.Forms
                 if (!Rsa.VerifySignature(data.ToString(), sig, _remoteKey))
                 //TODO: is this a performance hit converting from string every time?
                 {
-                    var hash = new SHA1CryptoServiceProvider().ComputeHash(Encoding.UTF8.GetBytes(data.ToString())); //TODO; do the actual data array?
-                    var hashStr = Convert.ToBase64String(hash);
+                    var hashStr = Sha1.HashJObject(data);
                     _logWriter.WriteLineAsync(string.Format("Failed on fake key {0} as signature verification failed", i));
                     _logWriter.WriteLineAsync("Actual data: " + data);
                     _logWriter.WriteLineAsync("Data hash: " + hashStr);
@@ -259,9 +256,7 @@ namespace FEClient.Forms
             }
 
             var realSig = JObject.Parse(realResponse.Content).Value<string>("signature");
-
-            var hash2 = new SHA1CryptoServiceProvider().ComputeHash(Encoding.UTF8.GetBytes(realData.ToString())); //TODO; do the actual data array?
-            var hashStr2 = Convert.ToBase64String(hash2);
+            var hashStr2 = Sha1.HashJObject(realData);
             _logWriter.WriteLine("Hash of data: " + hashStr2);
             _logWriter.WriteLine("Given signature " + realSig);
 

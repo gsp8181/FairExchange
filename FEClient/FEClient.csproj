@@ -136,6 +136,7 @@
     <Compile Include="API\ClientRestApi.cs" />
     <Compile Include="API\ClientRestApi.Events.cs" />
     <Compile Include="Security\RSASecurity.cs" />
+    <Compile Include="Security\Sha1.cs" />
     <Compile Include="SettingsWrapper.cs" />
     <Compile Include="SQLite\Adapter.cs" />
     <Compile Include="SQLite\FEDBContext.cs" />

@@ -126,11 +126,10 @@ namespace FEClient.Forms
             {
                 return;
             }
-            var hash = new SHA1CryptoServiceProvider().ComputeHash(Encoding.UTF8.GetBytes(file.Data)); //TODO; do the actual data array?
-            var hashStr = Convert.ToBase64String(hash);
+            var hashStr = Sha1.HashString(file.Data);
             _logWriter.WriteLine("Received Data, SHA1 Hash: " + hashStr); //TODO: make new and truncate data?
             _logWriter.WriteLine("Recieved Signature: " + ""); //TODO: NYI
-            if (!Rsa.VerifySignature(file.Data, file.Signature, _remoteKey)) //TODO: maybe verify hash?
+            if (!Rsa.VerifySignature(file.Data, file.Signature, _remoteKey))
             {
                 _logWriter.WriteLine("Signature verification failed, transfer terminated");
                 _logWriter.WriteLine("Offending signature: " + file.Signature);
