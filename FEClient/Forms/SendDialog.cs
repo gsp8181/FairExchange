@@ -45,7 +45,7 @@ namespace FEClient.Forms
             _complexity = complexity;
             _timeout = timeout;
 
-            var logPath = (Application.UserAppDataPath + @"\logs\received\");
+            var logPath = (Application.UserAppDataPath + @"\logs\sent\");
             new DirectoryInfo(logPath).Create();
 
             _logFile =
@@ -209,8 +209,8 @@ namespace FEClient.Forms
                 if (!Rsa.VerifySignature(data.ToString(), sig, _remoteKey))
                     //TODO: is this a performance hit converting from string every time?
                 {
-                                var hash = new SHA1CryptoServiceProvider().ComputeHash(Encoding.UTF8.GetBytes(data.ToString())); //TODO; do the actual data array?
-            var hashStr = Convert.ToBase64String(hash);
+                    var hash = new SHA1CryptoServiceProvider().ComputeHash(Encoding.UTF8.GetBytes(data.ToString())); //TODO; do the actual data array?
+                    var hashStr = Convert.ToBase64String(hash);
                     _logWriter.WriteLineAsync(string.Format("Failed on fake key {0} as signature verification failed", i));
                     _logWriter.WriteLineAsync("Actual data: " + data);
                     _logWriter.WriteLineAsync("Data hash: " + hashStr);
@@ -256,20 +256,21 @@ namespace FEClient.Forms
             }
 
             var realSig = JObject.Parse(realResponse.Content).Value<string>("signature");
-            //TODO: save this!!! along with data!
+
+            var hash2 = new SHA1CryptoServiceProvider().ComputeHash(Encoding.UTF8.GetBytes(realData.ToString())); //TODO; do the actual data array?
+            var hashStr2 = Convert.ToBase64String(hash2);
+            _logWriter.WriteLine("Hash of data: " + hashStr2);
+            _logWriter.WriteLine("Given signature " + realSig);
 
             if (!Rsa.VerifySignature(realData.ToString(), realSig, _remoteKey))
                 //TODO: is this a performance hit converting from string every time?
             {
-                _logWriter.WriteLine("ERROR, sent REAL key and signature verification failed");
-                var hash = new SHA1CryptoServiceProvider().ComputeHash(Encoding.UTF8.GetBytes(realData.ToString())); //TODO; do the actual data array?
-            var hashStr = Convert.ToBase64String(hash);
-                _logWriter.WriteLine("Hash of data: " + hashStr);
-                _logWriter.WriteLine("Given signature " + realSig);
+                _logWriter.WriteLine("ERROR, sent REAL key and signature verification failed, terminating");
                 MessageBox.Show("Error, signature verification failed"); //TODO: complete
                 return;
             }
 
+            _logWriter.WriteLine("Signature verified successfully");
             _logWriter.WriteLine("Finished, sending finish token!");
 
             sendKeysBackgroundWorker.ReportProgress(100);
@@ -313,7 +314,7 @@ namespace FEClient.Forms
             {
                 bytes = aesCsp.KeySize/8;
             }
-            _logWriter.WriteLine("Key is {0} bytes long so generating {1} fake keys of {2} length",bytes,_amount,bytes);
+            _logWriter.WriteLine("Key is {0} bytes long so generating {1} fake keys of {2} byte length",bytes,_amount,bytes);
             using(var rng = new RNGCryptoServiceProvider())
             { 
                 for (var i = 0; i < _amount; i++)
