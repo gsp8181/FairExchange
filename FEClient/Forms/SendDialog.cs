@@ -27,6 +27,9 @@ namespace FEClient.Forms
         private AesData _aesData;
         private AesKeys _key;
         private volatile string _remoteKey;
+        private FileInfo _logFile;
+        private FileStream _log;
+        private StreamWriter _logWriter;
 
         public SendDialog(string ip, string fileName, int rounds, int complexity, int timeout)
         {
@@ -40,6 +43,25 @@ namespace FEClient.Forms
             _amount = rounds;
             _complexity = complexity;
             _timeout = timeout;
+
+            var logPath = (Application.UserAppDataPath + @"\logs\received\");
+            new DirectoryInfo(logPath).Create();
+
+            _logFile =
+                new FileInfo(logPath + DateTime.Now.ToString("yyyy.MM.dd.HH.mm.ss") + ".log");
+
+
+            _log = _logFile.OpenWrite();
+            _logWriter = new StreamWriter(_log);
+
+            _logWriter.WriteLine("Log started at " + DateTime.Today.ToString("yyyy:MM:dd:HH:mm:sszzz"));
+            _logWriter.WriteLine("{0} at {1}", /*startObj.Email*/null, _ip); //TODO: fix email
+            _logWriter.WriteLine("Sending: {0} ({1})", fileName, _guid);
+            _logWriter.WriteLine("Timeout: " + _timeout);
+            _logWriter.WriteLine("Complexity: " + _complexity);
+            _logWriter.WriteLine("Rounds " + _amount);
+            _logWriter.WriteLine("Local Public Key");
+            _logWriter.WriteLine(Rsa.PublicKey);
         }
 
         private void MyResource_StartTransmissionAndRespSent(object sender, StartTransmissionEventArgs vars)
