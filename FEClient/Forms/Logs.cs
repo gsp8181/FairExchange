@@ -52,7 +52,11 @@ namespace FEClient.Forms
             if (list.SelectedItems.Count <= 0)
                 return;
             var item = list.SelectedItems[0];
-            MessageBox.Show(item.Text);
+            var fileName = receivedLogPath.FullName + item.Text;
+            using (LogViewer dialog = new LogViewer(fileName))
+            {
+                dialog.ShowDialog();
+            }
         }
     }
 }
