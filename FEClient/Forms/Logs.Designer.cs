@@ -28,11 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.sentTabPage = new System.Windows.Forms.TabPage();
             this.sentListView = new System.Windows.Forms.ListView();
             this.receivedTabPage = new System.Windows.Forms.TabPage();
             this.receivedListView = new System.Windows.Forms.ListView();
+            this.iconImageList = new System.Windows.Forms.ImageList(this.components);
             this.tabControl.SuspendLayout();
             this.sentTabPage.SuspendLayout();
             this.receivedTabPage.SuspendLayout();
@@ -63,13 +65,14 @@
             // sentListView
             // 
             this.sentListView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sentListView.Location = new System.Drawing.Point(0, 0);
+            this.sentListView.Location = new System.Drawing.Point(3, 3);
             this.sentListView.MultiSelect = false;
             this.sentListView.Name = "sentListView";
-            this.sentListView.Size = new System.Drawing.Size(276, 236);
+            this.sentListView.Size = new System.Drawing.Size(270, 230);
             this.sentListView.TabIndex = 0;
             this.sentListView.UseCompatibleStateImageBehavior = false;
             this.sentListView.View = System.Windows.Forms.View.Tile;
+            this.sentListView.DoubleClick += new System.EventHandler(this.sentListView_DoubleClick);
             // 
             // receivedTabPage
             // 
@@ -92,6 +95,12 @@
             this.receivedListView.UseCompatibleStateImageBehavior = false;
             this.receivedListView.View = System.Windows.Forms.View.Tile;
             this.receivedListView.DoubleClick += new System.EventHandler(this.receivedListView_DoubleClick);
+            // 
+            // iconImageList
+            // 
+            this.iconImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.iconImageList.ImageSize = new System.Drawing.Size(16, 16);
+            this.iconImageList.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // Logs
             // 
@@ -117,5 +126,6 @@
         private System.Windows.Forms.TabPage receivedTabPage;
         private System.Windows.Forms.ListView sentListView;
         private System.Windows.Forms.ListView receivedListView;
+        private System.Windows.Forms.ImageList iconImageList;
     }
 }

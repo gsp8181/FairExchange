@@ -7,31 +7,29 @@ namespace FEClient.Forms
 {
     public partial class Logs : Form
     {
-        DirectoryInfo sentLogpath = new DirectoryInfo(Application.UserAppDataPath + @"\logs\sent\");
-        DirectoryInfo receivedLogPath = new DirectoryInfo(Application.UserAppDataPath + @"\logs\received\");
-//        ImageList icon;
+        private readonly DirectoryInfo _sentLogpath = new DirectoryInfo(Application.UserAppDataPath + @"\logs\sent\");
+        private readonly DirectoryInfo _receivedLogPath = new DirectoryInfo(Application.UserAppDataPath + @"\logs\received\");
         public Logs()
         {
             InitializeComponent();
+            iconImageList.Images.Add(Resources.Icojam_Blue_Bits_Document_arrow_down);
+            receivedListView.LargeImageList = iconImageList;
+            sentListView.LargeImageList = iconImageList;
         }
 
         private void Logs_Load(object sender, EventArgs e)
         {
-            var icon = new ImageList();
-            icon.Images.Add(Resources.Icojam_Blue_Bits_Document_arrow_down);
-            receivedListView.LargeImageList = icon;
-            sentListView.LargeImageList = icon;
-            /*if (sentLogpath.Exists)
+            if (_sentLogpath.Exists)
             {
-                foreach(var file in sentLogpath.GetFiles())
+                foreach (var file in _sentLogpath.GetFiles())
                 {
-                    ListViewItem i = new ListViewItem(file.Name);
+                    var i = new ListViewItem(file.Name) { ImageIndex = 0 };
                     sentListView.Items.Add(i);
                 }
-            }*/
-            if (receivedLogPath.Exists)
+            }
+            if (_receivedLogPath.Exists)
             {
-                foreach (var file in receivedLogPath.GetFiles())
+                foreach (var file in _receivedLogPath.GetFiles())
                 {
                     var i = new ListViewItem(file.Name) {ImageIndex = 0};
                     receivedListView.Items.Add(i);
@@ -41,15 +39,29 @@ namespace FEClient.Forms
 
         private void receivedListView_DoubleClick(object sender, EventArgs e)
         {
+            var logPath = _receivedLogPath;
+
+            Show_Log(sender, logPath);
+        }
+
+        private static void Show_Log(object sender, DirectoryInfo logPath)
+        {
             var list = (ListView) sender;
             if (list.SelectedItems.Count <= 0)
                 return;
             var item = list.SelectedItems[0];
-            var fileName = receivedLogPath.FullName + item.Text;
+            var fileName = logPath.FullName + item.Text;
             using (var dialog = new LogViewer(fileName))
             {
                 dialog.ShowDialog();
             }
+        }
+
+        private void sentListView_DoubleClick(object sender, EventArgs e)
+        {
+            var logPath = _sentLogpath;
+
+            Show_Log(sender, logPath);
         }
     }
 }
