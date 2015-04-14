@@ -199,8 +199,9 @@ namespace FEClient.Forms
                 {
                     _logWriter.WriteLineAsync(string.Format("Failed on key {0} through timeout, {1}ms elapsed", i, stopwatch.ElapsedMilliseconds ));
                     _logWriter.WriteLineAsync("Failed fake key: " + fkey);
-                    //TODO: STOP
-                    MessageBox.Show("Timed out!");
+
+                    MessageBox.Show("Timed out, transmission ended", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); //TODO: complete
+                    Close();
                     return;
                 }
                 stopwatch.Restart();
@@ -215,7 +216,8 @@ namespace FEClient.Forms
                     _logWriter.WriteLineAsync("Actual data: " + data);
                     _logWriter.WriteLineAsync("Data hash: " + hashStr);
                     _logWriter.WriteLineAsync("Provided signature " + sig);
-                    MessageBox.Show("Error, signature verification failed"); //TODO: complete
+                    MessageBox.Show("Error, signature verification failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); //TODO: complete
+                    Close();
                     return;
                     //this.Close();
                 }
@@ -223,7 +225,8 @@ namespace FEClient.Forms
                 if (response.StatusCode != HttpStatusCode.OK) //TODO: OR IF TIMEOUT
                 {
                     _logWriter.WriteLine("Error through malformed HTTP Code on fake key {0}; {1} with error {2}",i, fkey, response.Error);
-                    MessageBox.Show("Error"); //TODO: stop
+                    MessageBox.Show("Error, remote server returned error\n"+response.Error, "Error", MessageBoxButtons.OK,MessageBoxIcon.Error); //TODO: complete
+                    Close();
                     return;
                 }
 
@@ -247,11 +250,11 @@ namespace FEClient.Forms
             if (realResponse.StatusCode != HttpStatusCode.OK) //TODO: OR IF TIMEOUT
             {
                 _logWriter.WriteLine("ERROR: Sent REAL key and error was returned: {0}", realResponse.Error);
-                Invoke((MethodInvoker) delegate
-                {
-                    MessageBox.Show("Error"); //TODO: bigger!
+                //Invoke((MethodInvoker) delegate
+                //{
+                    MessageBox.Show("Error, sent real key and error was returned\n" + realResponse.Error,"Error", MessageBoxButtons.OK,MessageBoxIcon.Error);
                     this.Close();
-                });
+                //});
                 return;
             }
 
@@ -266,7 +269,8 @@ namespace FEClient.Forms
                 //TODO: is this a performance hit converting from string every time?
             {
                 _logWriter.WriteLine("ERROR, sent REAL key and signature verification failed, terminating");
-                MessageBox.Show("Error, signature verification failed"); //TODO: complete
+                MessageBox.Show("Error, signature verification failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Close();
                 return;
             }
 
