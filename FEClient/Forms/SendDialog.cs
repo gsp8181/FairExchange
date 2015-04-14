@@ -42,18 +42,18 @@ namespace FEClient.Forms
             _timeout = timeout;
         }
 
-        private void MyResource_StartTransmissionAndRespSent(object sender, NotifyRequest vars)
+        private void MyResource_StartTransmissionAndRespSent(object sender, NotifyRequestEventArgs vars)
         {
             if (vars.Guid != _guid)
                 return;
             Invoke((MethodInvoker) timer2_Tick); //TODO: maybe another timeout timer?
         }
 
-        private void MyResource_StartTransmission(object sender, NotifyRequest addrSender, NotifyArgs callbackArgs)
+        private void MyResource_StartTransmission(object sender, StartTransmissionEventArgs args)
         {
-            if (addrSender.FileName != _file.Name)
+            if (args.FileName != _file.Name)
                 return;
-            callbackArgs.HasSet = true;
+            args.HasSet = true;
             Invoke((MethodInvoker) delegate { timeoutTimer.Stop(); });
         }
 

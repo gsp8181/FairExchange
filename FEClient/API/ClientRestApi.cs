@@ -89,7 +89,7 @@ namespace FEClient.API
             NotifyRecieved(this, vars);
         }
 
-        private NotifyRequest NotifySend(HttpListenerContext context) //TODO: rename
+        private NotifyRequestEventArgs NotifySend(HttpListenerContext context) //TODO: rename
         {
             var jsonStr = GetJsonPayload(context.Request); //TODO: validate here with Json.NET Schema
 #if TRACE
@@ -129,15 +129,8 @@ namespace FEClient.API
 
             var ip = context.Request.RemoteEndPoint.Address + ":" + port;
 
-            var output = new NotifyRequest
-            {
-                Email = email,
-                FileName = fileName,
-                Ip = ip,
-                Guid = guid,
-                Timeout = timeout,
-                Complexity = complexity
-            };
+            var output = new NotifyRequestEventArgs(fileName, email, ip, guid, timeout, complexity);
+
             //TODO: err?
             return output;
         }
@@ -180,13 +173,12 @@ namespace FEClient.API
 #if TRACE
             Debug.WriteLine("/start/ cont");
 #endif
-            var args = new NotifyArgs();
-            var vars = NotifySend(context);
+            var vars = (StartTransmissionEventArgs)NotifySend(context);
             if (vars == null)
                 return;
 
-            StartTransmission(this, vars, args);
-            if (args.HasSet)
+            StartTransmission(this, vars);
+            if (vars.HasSet)
             {
                 var response = new JObject {{"accepted", true}};
 #if TRACE

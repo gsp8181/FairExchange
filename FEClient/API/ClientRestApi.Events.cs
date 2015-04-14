@@ -14,11 +14,11 @@
 
         public delegate void KeyRecievedHandler(object sender, KeyReceivedEventArgs e);
 
-        public delegate void NotifyRecievedHandler(object sender, NotifyRequest e);
+        public delegate void NotifyRecievedHandler(object sender, NotifyRequestEventArgs e);
 
-        public delegate void StartTransmissionAndRespSentHandler(object sender, NotifyRequest e);
+        public delegate void StartTransmissionAndRespSentHandler(object sender, NotifyRequestEventArgs e);
 
-        public delegate void StartTransmissionHandler(object sender, NotifyRequest e, NotifyArgs callbackArgs);
+        public delegate void StartTransmissionHandler(object sender, StartTransmissionEventArgs e);
 
         public static event FileRecievedHandler FileRecieved = delegate { };
         public static event KeyRecievedHandler KeyRecieved = delegate { };

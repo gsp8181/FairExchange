@@ -34,7 +34,7 @@ namespace FEClient.Forms
         private bool _recievingCodes;
         private string _remoteKey;
 
-        public ReceiveDialog(NotifyRequest startObj)
+        public ReceiveDialog(NotifyRequestEventArgs startObj)
         {
             InitializeComponent();
             progressLabel.Text += _fileName;

@@ -12,7 +12,7 @@ namespace FEClient
 {
     public partial class Context : ApplicationContext
     {
-        private NotifyRequest _currentTipReq;
+        private NotifyRequestEventArgs _currentTipReq;
         public static readonly string Port = ConfigurationManager.AppSettings["Port"];
         private static readonly RESTServer Server = new RESTServer("+", Port);
 
@@ -54,13 +54,13 @@ namespace FEClient
         }
 
         private void ShowBalloonTip(int timeout, string tipTitle, string tipText, ToolTipIcon tipIcon,
-            NotifyRequest nr = null)
+            NotifyRequestEventArgs nr = null)
         {
             _currentTipReq = nr;
             notifyIcon.ShowBalloonTip(timeout, tipTitle, tipText, tipIcon);
         }
 
-        private void ClientRestApi_NotifyRecieved(object sender, NotifyRequest nr)
+        private void ClientRestApi_NotifyRecieved(object sender, NotifyRequestEventArgs nr)
         {
             ShowBalloonTip(60000, "Incoming File",
                 nr.Email + " wants to send you " + nr.FileName + ". Click to accept", ToolTipIcon.Info, nr);
