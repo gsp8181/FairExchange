@@ -21,6 +21,8 @@ namespace FEClient.Forms
             {
                 logBox.Text = stream.ReadToEnd();
             }
+            logBox.SelectionStart = 0;
+            logBox.SelectionLength = 0;
         }
     }
 }
