@@ -26,7 +26,7 @@ namespace FEClient.Forms
         private readonly int _timeout;
         private AesData _aesData;
         private AesKeys _key;
-        private volatile string _remoteKey;
+        private string _remoteKey;
         private readonly FileStream _log;
         private readonly StreamWriter _logWriter;
 
