@@ -26,7 +26,7 @@ namespace FEClient.Forms
             remoteKey = keyRespObj.Value<string>("pubKey"); //TODO: flag on error
             var email = keyRespObj.Value<string>("email");
 
-            var keyObj = Adapter.Instance.GetByEmail(email);
+            var keyObj = Adapter.GetByEmail(email);
 
             if (keyObj == null)
             {
@@ -37,7 +37,7 @@ namespace FEClient.Forms
                 if (dialogResult == DialogResult.OK)
                 {
                     var dbObj = new PubKey {Email = email, Pem = remoteKey};
-                    Adapter.Instance.Insert(dbObj);
+                    Adapter.Insert(dbObj);
                 }
                 else
                 {
@@ -54,7 +54,7 @@ namespace FEClient.Forms
                 if (dialogResult == DialogResult.OK)
                 {
                     var dbObj = new PubKey {Email = email, Pem = remoteKey};
-                    Adapter.Instance.Insert(dbObj);
+                    Adapter.Insert(dbObj);
                 }
                 else
                 {

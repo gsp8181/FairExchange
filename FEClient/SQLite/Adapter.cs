@@ -2,16 +2,10 @@
 
 namespace FEClient.SQLite
 {
-    internal class Adapter
+    internal static class Adapter
     {
-        static Adapter()
-        {
-            Instance = new Adapter();
-        }
 
-        public static Adapter Instance { get; private set; }
-
-        public void Insert(PubKey key)
+        public static void Insert(PubKey key)
         {
             using(var db = new FedbContext())
             { 
@@ -20,7 +14,7 @@ namespace FEClient.SQLite
             }
         }
 
-        public PubKey GetByEmail(string email)
+        public static PubKey GetByEmail(string email)
         {
             using (var db = new FedbContext())
             {
