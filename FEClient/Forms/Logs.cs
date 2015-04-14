@@ -7,7 +7,7 @@ namespace FEClient.Forms
 {
     public partial class Logs : Form
     {
-        private readonly DirectoryInfo _sentLogpath = new DirectoryInfo(Application.UserAppDataPath + @"\logs\sent\");
+        private readonly DirectoryInfo _sentLogPath = new DirectoryInfo(Application.UserAppDataPath + @"\logs\sent\");
         private readonly DirectoryInfo _receivedLogPath = new DirectoryInfo(Application.UserAppDataPath + @"\logs\received\");
         public Logs()
         {
@@ -19,9 +19,9 @@ namespace FEClient.Forms
 
         private void Logs_Load(object sender, EventArgs e)
         {
-            if (_sentLogpath.Exists)
+            if (_sentLogPath.Exists)
             {
-                foreach (var file in _sentLogpath.GetFiles())
+                foreach (var file in _sentLogPath.GetFiles())
                 {
                     var i = new ListViewItem(file.Name) { ImageIndex = 0 };
                     sentListView.Items.Add(i);
@@ -59,7 +59,7 @@ namespace FEClient.Forms
 
         private void sentListView_DoubleClick(object sender, EventArgs e)
         {
-            var logPath = _sentLogpath;
+            var logPath = _sentLogPath;
 
             Show_Log(sender, logPath);
         }
