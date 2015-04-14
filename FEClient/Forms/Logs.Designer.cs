@@ -30,8 +30,12 @@
         {
             this.tabControl = new System.Windows.Forms.TabControl();
             this.sentTabPage = new System.Windows.Forms.TabPage();
+            this.sentListView = new System.Windows.Forms.ListView();
             this.receivedTabPage = new System.Windows.Forms.TabPage();
+            this.receivedListView = new System.Windows.Forms.ListView();
             this.tabControl.SuspendLayout();
+            this.sentTabPage.SuspendLayout();
+            this.receivedTabPage.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl
@@ -47,6 +51,7 @@
             // 
             // sentTabPage
             // 
+            this.sentTabPage.Controls.Add(this.sentListView);
             this.sentTabPage.Location = new System.Drawing.Point(4, 22);
             this.sentTabPage.Name = "sentTabPage";
             this.sentTabPage.Padding = new System.Windows.Forms.Padding(3);
@@ -55,14 +60,38 @@
             this.sentTabPage.Text = "Sent";
             this.sentTabPage.UseVisualStyleBackColor = true;
             // 
+            // sentListView
+            // 
+            this.sentListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sentListView.Location = new System.Drawing.Point(0, 0);
+            this.sentListView.MultiSelect = false;
+            this.sentListView.Name = "sentListView";
+            this.sentListView.Size = new System.Drawing.Size(276, 236);
+            this.sentListView.TabIndex = 0;
+            this.sentListView.UseCompatibleStateImageBehavior = false;
+            this.sentListView.View = System.Windows.Forms.View.Tile;
+            // 
             // receivedTabPage
             // 
+            this.receivedTabPage.Controls.Add(this.receivedListView);
             this.receivedTabPage.Location = new System.Drawing.Point(4, 22);
             this.receivedTabPage.Name = "receivedTabPage";
             this.receivedTabPage.Size = new System.Drawing.Size(276, 236);
             this.receivedTabPage.TabIndex = 2;
             this.receivedTabPage.Text = "Received";
             this.receivedTabPage.UseVisualStyleBackColor = true;
+            // 
+            // receivedListView
+            // 
+            this.receivedListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.receivedListView.Location = new System.Drawing.Point(0, 0);
+            this.receivedListView.MultiSelect = false;
+            this.receivedListView.Name = "receivedListView";
+            this.receivedListView.Size = new System.Drawing.Size(276, 236);
+            this.receivedListView.TabIndex = 1;
+            this.receivedListView.UseCompatibleStateImageBehavior = false;
+            this.receivedListView.View = System.Windows.Forms.View.Tile;
+            this.receivedListView.DoubleClick += new System.EventHandler(this.receivedListView_DoubleClick);
             // 
             // Logs
             // 
@@ -73,7 +102,10 @@
             this.Icon = global::FEClient.Properties.Resources.Icojam_Blue_Bits_Document_arrow_down;
             this.Name = "Logs";
             this.Text = "Logs";
+            this.Load += new System.EventHandler(this.Logs_Load);
             this.tabControl.ResumeLayout(false);
+            this.sentTabPage.ResumeLayout(false);
+            this.receivedTabPage.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -83,5 +115,7 @@
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage sentTabPage;
         private System.Windows.Forms.TabPage receivedTabPage;
+        private System.Windows.Forms.ListView sentListView;
+        private System.Windows.Forms.ListView receivedListView;
     }
 }
