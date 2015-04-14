@@ -156,7 +156,7 @@ namespace FEClient.Forms
             ClientRestApi.Finish -= ClientRestApi_Finish;
 
             //_logWriter.Close();
-            _log.Close();
+            //_log.Close();
 
             Dispose();
         }

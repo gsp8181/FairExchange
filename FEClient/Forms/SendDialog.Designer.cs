@@ -21,7 +21,11 @@ namespace FEClient.Forms
                 components.Dispose();
             }
 
+            _logWriter.Close();
+            _log.Close();
+
             _logWriter.Dispose();
+            _log.Dispose();
 
             base.Dispose(disposing);
         }
