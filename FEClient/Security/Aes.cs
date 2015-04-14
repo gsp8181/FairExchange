@@ -29,7 +29,7 @@ namespace FEClient.Security
             {
                 aesCsp.GenerateIV();
                 aesCsp.GenerateKey();
-                var ae = new AesKeys {Key = aesCsp.Key, Iv = aesCsp.IV, Rounds = rounds};
+                var ae = new AesKeys(aesCsp.Key, aesCsp.IV) {Rounds = rounds};
                 //TODO: embed the parameter sent through rest as THIS instead, probably when RSA takes shape
 
 

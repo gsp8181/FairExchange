@@ -7,19 +7,49 @@ namespace FEClient.Security
     {
         public string KeyStr
         {
-            get { return Convert.ToBase64String(Key); }
-            set { Key = Convert.FromBase64String(value); }
+            get { return Convert.ToBase64String(_key); }
+            set { _key = Convert.FromBase64String(value); }
         }
 
         public string IvStr
         {
-            get { return Convert.ToBase64String(Iv); }
-            set { Key = Convert.FromBase64String(value); }
+            get { return Convert.ToBase64String(_iv); }
+            set { _iv = Convert.FromBase64String(value); }
         }
 
         public int Rounds { get; set; }
-        public byte[] Key { get; set; }
-        public byte[] Iv { get; set; }
+        /*public byte[] Key { get; set; }
+        public byte[] Iv { get; set; }*/
+        private byte[] _key;
+        private byte[] _iv;
+
+
+        public AesKeys(byte[] key, byte[] iv)
+        {
+            _key = key;
+            _iv = iv;
+        }
+
+        public byte[] Key()
+        {
+            return _key;
+        }
+
+        public byte[] Iv()
+        {
+            return _iv;
+        }
+
+        public void Key(byte[] key)
+        {
+            _key = key;
+        }
+
+        public void Iv(byte[] iv)
+        {
+            _iv = iv;
+        }
+
 
         public JObject ToJObject()
         {
