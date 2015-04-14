@@ -200,7 +200,7 @@ namespace FEClient.Forms
                     _logWriter.WriteLineAsync(string.Format("Failed on key {0} through timeout, {1}ms elapsed", i, stopwatch.ElapsedMilliseconds));
                     _logWriter.WriteLineAsync("Failed fake key: " + fkey);
 
-                    MessageBox.Show("Timed out, transmission ended", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); //TODO: complete
+                    MessageBox.Show("Timed out, transmission ended", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Close();
                     return;
                 }
@@ -216,16 +216,16 @@ namespace FEClient.Forms
                     _logWriter.WriteLineAsync("Actual data: " + data);
                     _logWriter.WriteLineAsync("Data hash: " + hashStr);
                     _logWriter.WriteLineAsync("Provided signature " + sig);
-                    MessageBox.Show("Error, signature verification failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); //TODO: complete
+                    MessageBox.Show("Error, signature verification failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Close();
                     return;
                     //this.Close();
                 }
 
-                if (response.StatusCode != HttpStatusCode.OK) //TODO: OR IF TIMEOUT
+                if (response.StatusCode != HttpStatusCode.OK)
                 {
                     _logWriter.WriteLine("Error through malformed HTTP Code on fake key {0}; {1} with error {2}", i, fkey, response.Error);
-                    MessageBox.Show("Error, remote server returned error\n" + response.Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); //TODO: complete
+                    MessageBox.Show("Error, remote server returned error\n" + response.Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Close();
                     return;
                 }
