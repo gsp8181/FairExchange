@@ -419,6 +419,7 @@ namespace FEClient.Forms
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            Terminate();
             progressLabel.Text = "Finished";
         }
     }
