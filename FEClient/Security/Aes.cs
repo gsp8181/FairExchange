@@ -10,7 +10,14 @@ namespace FEClient.Security
         {
             using (var aesCsp = new AesCryptoServiceProvider())
             {
+                if(rounds > 0)
+                { 
                 aesCsp.Key = Strengthen(aeskey, aesiv, rounds);
+                }
+                else
+                {
+                    aesCsp.Key = aeskey;
+                }
                 aesCsp.IV = aesiv;
 
                 var encrypted = Convert.FromBase64String(payload);
@@ -32,8 +39,8 @@ namespace FEClient.Security
                 var ae = new AesKeys(aesCsp.Key, aesCsp.IV) {Rounds = rounds};
                 //TODO: embed the parameter sent through rest as THIS instead, probably when RSA takes shape
 
-
-                aesCsp.Key = Strengthen(aesCsp.Key, aesCsp.IV, rounds);
+                if(rounds > 0)
+                    aesCsp.Key = Strengthen(aesCsp.Key, aesCsp.IV, rounds);
 
 
                 //byte[] inBlock = Encoding.UTF8.GetBytes(data);

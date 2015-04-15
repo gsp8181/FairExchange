@@ -169,7 +169,7 @@ namespace FEClient.Security
             using (var rsa = new RSACryptoServiceProvider(2048, CsParams))
             {
                 var keyBytes = Convert.FromBase64String(encryptedKey);
-                var decryptedKey = Convert.ToBase64String(rsa.Decrypt(keyBytes, false));
+                var decryptedKey = Encoding.UTF8.GetString(rsa.Decrypt(keyBytes, false));
                 return decryptedKey;
             }
         }

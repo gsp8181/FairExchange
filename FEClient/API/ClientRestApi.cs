@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Net;
+using System.Text;
 using FEClient.Security;
 using Grapevine;
 using Grapevine.Server;
@@ -16,7 +17,8 @@ namespace FEClient.API
         [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/file/?$")]
         public void HandleFileRecievedRequest(HttpListenerContext context)
         {
-            var payload = GetJsonPayload(context.Request);
+            //var payload = GetJsonPayload(context.Request);
+            var payload = decryptRequest(context);
 
 #if TRACE
             Debug.WriteLine("/file/ " + payload);
@@ -77,6 +79,7 @@ namespace FEClient.API
 #if TRACE
             Debug.WriteLine("/notify/ (cont)");
 #endif
+
             var vars = NotifySend(context);
             if (vars == null)
                 return;
@@ -91,7 +94,9 @@ namespace FEClient.API
 
         private NotifyRequestEventArgs NotifySend(HttpListenerContext context)
         {
-            var jsonStr = GetJsonPayload(context.Request);
+            var jsonStr = decryptRequest(context);
+
+            //var jsonStr = GetJsonPayload(context.Request);
 #if TRACE
             Debug.WriteLine(jsonStr);
 #endif
@@ -135,10 +140,24 @@ namespace FEClient.API
             return output;
         }
 
+        private JObject decryptRequest(HttpListenerContext context) //TODO: if encrypted
+        {
+            var str = GetJsonPayload(context.Request);
+            var data = str.Value<string>("data"); //TODO: if decryption fails then return something and quit
+            var key = str.Value<string>("key");
+            var decrypted = Rsa.DecryptData(data, key);
+            var decryptedStr = Encoding.UTF8.GetString(decrypted);
+
+
+            var jsonStr = JObject.Parse(decryptedStr);
+            return jsonStr;
+        }
+
         [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/key/?$")]
         public void HandleKeySend(HttpListenerContext context)
         {
-            var args = GetJsonPayload(context.Request);
+            var args = decryptRequest(context);
+            //var args = GetJsonPayload(context.Request);
 #if TRACE
             Debug.WriteLine("/key/ " + args);
 #endif
@@ -229,7 +248,8 @@ namespace FEClient.API
 #if TRACE
             Debug.WriteLine("/finish/");
 #endif
-            var payload = GetJsonPayload(context.Request);
+            //var payload = GetJsonPayload(context.Request);
+            var payload = decryptRequest(context);
             var guid = payload.Value<string>("guid");
             var args = new FinishEventArgs(guid);
             Finish(this, args);

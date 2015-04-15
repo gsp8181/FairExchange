@@ -171,7 +171,10 @@ namespace FEClient.Forms
 
             var client = new RESTClient("http://" + _ip);
             var data = new JObject { { "fileName", _fileName }, { "email", SettingsWrapper.Email }, { "guid", _guid } };
-            var req = new RESTRequest("/start/", HttpMethod.POST, ContentType.JSON) {Payload = data.ToString()};
+
+            var encData = Rsa.EncryptData(data.ToString(), _remoteKey, 0);
+
+            var req = new RESTRequest("/start/", HttpMethod.POST, ContentType.JSON) {Payload = encData.ToString()};
             var response = client.Execute(req); //TODO: e.response?
             if (response.StatusCode != HttpStatusCode.OK)
             {

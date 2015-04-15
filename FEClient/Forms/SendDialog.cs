@@ -127,7 +127,9 @@ namespace FEClient.Forms
                 {"signature", sig}
             };
 
-            req.Payload = toSend.ToString();
+            var encData = Rsa.EncryptData(toSend.ToString(), _remoteKey, 0);
+
+            req.Payload = encData.ToString();
             //Sends the request
             var response = client.Execute(req);
 
@@ -183,9 +185,11 @@ namespace FEClient.Forms
 
                 var data = new JObject { { "key", fkey }, { "guid", _guid }, { "i", i } }; //TODO: rsa sign?
 
+                var encData = Rsa.EncryptData(data.ToString(), _remoteKey, 0);
+
                 var req = new RESTRequest("/key/", HttpMethod.POST, ContentType.JSON, _timeout)
                 {
-                    Payload = data.ToString()
+                    Payload = encData.ToString()
                 }; //TODO: async and await
 
                 var response = client.Execute(req);
@@ -228,11 +232,11 @@ namespace FEClient.Forms
             }
 
             var realData = new JObject { { "key", _key.KeyStr }, { "guid", _guid }, { "i", _amount } }; //TODO: encrypt keys??, rsa sign?
-
+            var encRealData = Rsa.EncryptData(realData.ToString(), _remoteKey, 0);
 
             var realReq = new RESTRequest("/key/", HttpMethod.POST, ContentType.JSON, _timeout)
             {
-                Payload = realData.ToString()
+                Payload = encRealData.ToString()
             }; //TODO: split into method with above bit //TODO: async and await
 
             var realResponse = client.Execute(realReq);
@@ -276,10 +280,11 @@ namespace FEClient.Forms
             });
 
             var finData = new JObject { { "guid", _guid } };
+            var encryptedFinData = Rsa.EncryptData(finData.ToString(), _remoteKey, 0);
 
             var finReq = new RESTRequest("/finish/", HttpMethod.POST, ContentType.JSON, _timeout)
             {
-                Payload = finData.ToString()
+                Payload = encryptedFinData.ToString()
             };
             client.Execute(finReq);
         }
@@ -357,13 +362,18 @@ namespace FEClient.Forms
                 {"complexity", _complexity},
                 {"port", Context.Port}
             };
-            req.Payload = data.ToString();
+
+            var encData = Rsa.EncryptData(data.ToString(), _remoteKey, 0);
+
+            req.Payload = encData.ToString();
             var response = client.Execute(req);
             _logWriter.WriteLine("Sending start request");
             if (response.StatusCode != HttpStatusCode.OK)
             {
                 _logWriter.WriteLine("Start request failed with error, terminating");
                 MessageBox.Show("error");
+                Close();
+                return;
                 //TODO; this needs to be better, maybe a handle error method which tries to get the error string
             }
             timeoutTimer.Start();
