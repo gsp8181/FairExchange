@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System.Windows.Forms;
 using FEClient.API;
+using FEClient.API.Events;
 using FEClient.Security;
 using Grapevine;
 using Grapevine.Client;

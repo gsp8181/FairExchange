@@ -1,4 +1,5 @@
 ﻿using System;
+using FEClient.API.Events;
 
 namespace FEClient.API
 {

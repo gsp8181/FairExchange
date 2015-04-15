@@ -7,6 +7,7 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Windows.Forms;
 using FEClient.API;
+using FEClient.API.Events;
 using FEClient.Security;
 using Grapevine;
 using Grapevine.Client;

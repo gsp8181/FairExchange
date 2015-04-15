@@ -78,9 +78,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\FinishEventArgs.cs" />
-    <Compile Include="API\KeyArgs.cs" />
-    <Compile Include="API\StartTransmissionEventArgs.cs" />
+    <Compile Include="API\Events\FileSend.cs" />
+    <Compile Include="API\Events\FinishEventArgs.cs" />
+    <Compile Include="API\Events\KeyArgs.cs" />
+    <Compile Include="API\Events\NotifyRequestEventArgs.cs" />
+    <Compile Include="API\Events\StartTransmissionEventArgs.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="Context.Designer.cs">
       <DependentUpon>Context.cs</DependentUpon>
@@ -127,9 +129,7 @@
     <Compile Include="Security\AesData.cs" />
     <Compile Include="Security\AesKeys.cs" />
     <Compile Include="Security\EncryptedData.cs" />
-    <Compile Include="API\FileSend.cs" />
     <Compile Include="NotMyCode\NetAclChecker.cs" />
-    <Compile Include="API\NotifyRequestEventArgs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="API\ClientRestApi.cs" />

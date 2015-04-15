@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FEClient.API
+namespace FEClient.API.Events
 {
     public class FinishEventArgs : EventArgs
     {

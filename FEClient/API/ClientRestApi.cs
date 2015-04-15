@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Net;
 using System.Text;
+using FEClient.API.Events;
 using FEClient.Security;
 using Grapevine;
 using Grapevine.Server;
