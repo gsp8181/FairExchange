@@ -53,8 +53,7 @@ namespace FEClient
                 Server.Stop();
                 Server.Dispose();
             }
-            Server = new RESTServer("+", Port);
-            Server.OnStart = OnServerStartNotify;
+            Server = new RESTServer("+", Port) {OnStart = OnServerStartNotify};
             Server.Start();
         }
 
