@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Net;
+using System.Net.Sockets;
 
 namespace FEClient.NotMyCode
 {
@@ -25,6 +27,16 @@ namespace FEClient.NotMyCode
             };
 
             Process.Start(psi).WaitForExit();
+        }
+
+        public static void CreateFirewallException(int port) //Stackoverflow how to diusplay windows firewall has blocked some features of this program; 
+        {
+            var ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList[0];
+            var ipLocalEndPoint = new IPEndPoint(ipAddress, port);
+
+            var t = new TcpListener(ipLocalEndPoint);
+            t.Start();
+            t.Stop();
         }
     }
 }

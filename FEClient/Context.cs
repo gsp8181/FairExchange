@@ -36,7 +36,7 @@ namespace FEClient
 
             notifyIcon.Text += " :" + Port;
 
-            CreateFirewallException(int.Parse(Port)); //TODO: wait for firewall
+            NetAclChecker.CreateFirewallException(int.Parse(Port)); //TODO: wait for firewall
             timeoutTimer.Start();
             Server_Create();
             if (!Server.IsListening)
@@ -84,17 +84,6 @@ namespace FEClient
         {
             timeoutTimer.Stop();
             ShowBalloonTip(5000, "Started", "Server started and is listening on port " + Port, ToolTipIcon.Info);
-        }
-
-        private static void CreateFirewallException(int port) //Stackoverflow how to diusplay windows firewall has blocked some features of this program; TODO: NMC
-        {
-            var ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList[0];
-            //TODO: is this needed in the presence of the other listener?
-            var ipLocalEndPoint = new IPEndPoint(ipAddress, port);
-
-            var t = new TcpListener(ipLocalEndPoint);
-            t.Start();
-            t.Stop();
         }
 
         [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
