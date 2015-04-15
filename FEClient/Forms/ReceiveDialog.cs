@@ -73,7 +73,7 @@ namespace FEClient.Forms
 
         private void ClientRestApi_Finish(object sender, FinishEventArgs e)
         {
-            if (_guid != e.Guid || !_recievingCodes) 
+            if (_guid != e.Guid || !_recievingCodes || e.IP != _ip) 
                 return;
             _logWriter.WriteLine("Recieved FINISH packet");
             e.HasSet = true;
@@ -82,7 +82,7 @@ namespace FEClient.Forms
 
         private void ClientRestApi_KeyRecieved(object sender, KeyReceivedEventArgs e)
         {
-            if (_guid != e.Guid || !_recievingCodes) //TODO: and IP == ip for sig recieved
+            if (_guid != e.Guid || !_recievingCodes || e.IP != _ip)
             {
                 return;
             }

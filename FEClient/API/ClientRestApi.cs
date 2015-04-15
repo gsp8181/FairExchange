@@ -23,7 +23,7 @@ namespace FEClient.API
             //var payload = GetJsonPayload(context.Request);
             var payload = decryptRequest(context);
             if (payload == null)
-                return null;
+                return;
 
 #if TRACE
             Debug.WriteLine("/file/ " + payload);
@@ -221,7 +221,7 @@ namespace FEClient.API
                 return;
             }
 
-            var kArgs = new KeyReceivedEventArgs(key, guid, i);
+            var kArgs = new KeyReceivedEventArgs(key, guid, i, context.Request.RemoteEndPoint.Address.ToString());
             KeyRecieved(this, kArgs);
 
             if (kArgs.HasSet)
@@ -328,7 +328,7 @@ namespace FEClient.API
                 return;
             }
 
-            var args = new FinishEventArgs(guid);
+            var args = new FinishEventArgs(guid,context.Request.RemoteEndPoint.Address.ToString());
             Finish(this, args);
             if (args.HasSet)
             {

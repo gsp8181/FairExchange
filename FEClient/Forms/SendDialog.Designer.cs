@@ -40,7 +40,7 @@ namespace FEClient.Forms
         {
             this.components = new System.ComponentModel.Container();
             this.progressBar = new System.Windows.Forms.ProgressBar();
-            this.button1 = new System.Windows.Forms.Button();
+            this.abortButton = new System.Windows.Forms.Button();
             this.progressLabel = new System.Windows.Forms.Label();
             this.timeoutTimer = new System.Windows.Forms.Timer(this.components);
             this.sendKeysBackgroundWorker = new System.ComponentModel.BackgroundWorker();
@@ -55,14 +55,15 @@ namespace FEClient.Forms
             this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.progressBar.TabIndex = 0;
             // 
-            // button1
+            // abortButton
             // 
-            this.button1.Location = new System.Drawing.Point(258, 13);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(14, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "X";
-            this.button1.UseVisualStyleBackColor = true;
+            this.abortButton.Location = new System.Drawing.Point(258, 13);
+            this.abortButton.Name = "abortButton";
+            this.abortButton.Size = new System.Drawing.Size(14, 23);
+            this.abortButton.TabIndex = 1;
+            this.abortButton.Text = "X";
+            this.abortButton.UseVisualStyleBackColor = true;
+            this.abortButton.Click += new System.EventHandler(this.abortButton_Click);
             // 
             // progressLabel
             // 
@@ -81,12 +82,14 @@ namespace FEClient.Forms
             // sendKeysBackgroundWorker
             // 
             this.sendKeysBackgroundWorker.WorkerReportsProgress = true;
+            this.sendKeysBackgroundWorker.WorkerSupportsCancellation = true;
             this.sendKeysBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.sendKeysBackgroundWorker_DoWork);
             this.sendKeysBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.sendKeysBackgroundWorker_ProgressChanged);
             this.sendKeysBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.sendKeysBackgroundWorker_RunWorkerCompleted);
             // 
             // generateKeysBackgroundWorker
             // 
+            this.generateKeysBackgroundWorker.WorkerSupportsCancellation = true;
             this.generateKeysBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.generateKeysBackgroundWorker_DoWork);
             this.generateKeysBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.generateKeysBackgroundWorker_RunWorkerCompleted);
             // 
@@ -96,7 +99,7 @@ namespace FEClient.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 85);
             this.Controls.Add(this.progressLabel);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.abortButton);
             this.Controls.Add(this.progressBar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = global::FEClient.Properties.Resources.Icojam_Blue_Bits_Document_arrow_down;
@@ -114,7 +117,7 @@ namespace FEClient.Forms
         #endregion
 
         private ProgressBar progressBar;
-        private Button button1;
+        private Button abortButton;
         private Label progressLabel;
         private Timer timeoutTimer;
         private BackgroundWorker sendKeysBackgroundWorker;

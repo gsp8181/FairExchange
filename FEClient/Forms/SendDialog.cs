@@ -70,7 +70,7 @@ namespace FEClient.Forms
         {
             if (vars.Guid != _guid || vars.FileName != _file.Name || vars.IP != _ip)
                 return;
-            Invoke((MethodInvoker) SendFile); //TODO: maybe another timeout timer?
+            Invoke((MethodInvoker) SendFile); 
             RevokeResp();
         }
 
@@ -98,7 +98,7 @@ namespace FEClient.Forms
             {
                 Invoke((MethodInvoker) delegate { timeoutTimer.Stop(); });
 
-                    //TODO: cancel background workers
+                 sendKeysBackgroundWorker.CancelAsync();
                 _terminated = true;
             }
         }
@@ -188,7 +188,6 @@ namespace FEClient.Forms
             _logWriter.WriteLine("Returned signature " + remoteSig);
 
             if (!Rsa.VerifySignature(sig, remoteSig, _remoteKey))
-                //TODO:INSTEAD This should send an abort request of some kind, make sure it doesn't lock recievedialog
             {
                 _logWriter.WriteLine("Signature verification failed, terminated");
                 Terminate();
@@ -219,7 +218,11 @@ namespace FEClient.Forms
             stopwatch.Start();
             for (var i = 0; i < _amount; i++)
             {
-                //TODO:Check cancellation
+                if (e.Cancel)
+                {
+                    return;
+                }
+
                 var fkey = _fakeKeys.Dequeue();
 
                 var data = new JObject {{"key", fkey}, {"guid", _guid}, {"i", i}}; //TODO: rsa sign?
@@ -229,7 +232,7 @@ namespace FEClient.Forms
                 var req = new RESTRequest("/key/", HttpMethod.POST, ContentType.JSON, _timeout)
                 {
                     Payload = encData.ToString()
-                }; //TODO: async and await
+                }; 
 
                 var response = client.Execute(req);
                 if (stopwatch.ElapsedMilliseconds > _timeout)
@@ -286,6 +289,12 @@ namespace FEClient.Forms
                 Payload = encRealData.ToString()
             }; //TODO: split into method with above bit
 
+            if (e.Cancel)
+            {
+                e.Result = false;
+                return;
+            }
+
             var realResponse = client.Execute(realReq);
 
             _logWriter.WriteLine("Sent real key {0}", _key.KeyStr);
@@ -294,13 +303,10 @@ namespace FEClient.Forms
             if (realResponse.StatusCode != HttpStatusCode.OK) //TODO: OR IF TIMEOUT
             {
                 _logWriter.WriteLine("ERROR: Sent REAL key and error was returned: {0}", realResponse.Error);
-                //Invoke((MethodInvoker) delegate
-                //{
                 Terminate();
                 MessageBox.Show("Error, sent real key and error was returned\n" + realResponse.Error, "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error); //TODO: split into sendakey(key);?
                 Close();
-                //});
                 return;
             }
 
@@ -345,7 +351,25 @@ namespace FEClient.Forms
         private void generateKeysBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             // Opens and reads the file to the end
-            var text = File.ReadAllBytes(_file.FullName); //TODO: if not null and using!
+            bool retry;
+            byte[] text = {};
+            do
+            {
+                retry = true;
+                try
+                {
+                    text = File.ReadAllBytes(_file.FullName);
+                }
+                catch (Exception exception)
+                {
+                    if (
+                        MessageBox.Show(exception.Message + "\nWould you like to retry?",
+                            "Failed to read " + _file.FullName, MessageBoxButtons.OKCancel) == DialogResult.Cancel)
+                    {
+                        retry = false;
+                    }
+                }
+            } while (!retry);
 
             _logWriter.WriteLine("Encrypting file");
 
@@ -356,6 +380,12 @@ namespace FEClient.Forms
 
             _logWriter.WriteLine("Using key: " + _aesData.Key.KeyStr);
             _logWriter.WriteLine("IV: " + _aesData.Key.IvStr);
+
+            if (e.Cancel)
+            {
+                e.Result = false;
+                return;
+            }
 
             int bytes;
             using (var aesCsp = new AesCryptoServiceProvider())
@@ -374,10 +404,22 @@ namespace FEClient.Forms
                 }
             }
 
+            if (e.Cancel)
+            {
+                e.Result = false;
+                return;
+            }
+
             _logWriter.WriteLine("Contacting " + _ip);
 
             Invoke((MethodInvoker) delegate { progressLabel.Text = "Attempting to contact " + _ip; });
             var key = Common.GetSshKey(_ip);
+
+            if (e.Cancel)
+            {
+                e.Result = false;
+                return;
+            }
 
             if (key.IsSet == false)
             {
@@ -400,6 +442,11 @@ namespace FEClient.Forms
             _remoteKey = key.RemoteKey;
             _logWriter.WriteLine("Remote Public Key");
             _logWriter.WriteLine(_remoteKey);
+            if (e.Cancel)
+            {
+                e.Result = false;
+                return;
+            }
             e.Result = true;
         }
 
@@ -413,7 +460,7 @@ namespace FEClient.Forms
 
             progressLabel.Text = "Waiting for the user to respond";
 
-            var req = new RESTRequest("/notify/", HttpMethod.POST, ContentType.JSON, _timeout); //TODO: async and await
+            var req = new RESTRequest("/notify/", HttpMethod.POST, ContentType.JSON, _timeout); 
             var data = new JObject
             {
                 {"fileName", _file.Name},
@@ -444,6 +491,12 @@ namespace FEClient.Forms
         {
             Terminate();
             progressLabel.Text = "Finished";
+        }
+
+        private void abortButton_Click(object sender, EventArgs e)
+        {
+            _logWriter.WriteLineAsync("Termination requested");
+            Terminate();
         }
     }
 }
