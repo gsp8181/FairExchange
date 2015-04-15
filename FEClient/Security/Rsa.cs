@@ -33,7 +33,7 @@ namespace FEClient.Security
             }
         }
 
-        public static void Regenerate_RSA()
+        public static void RegenerateRsa()
         {
             using (var rsa = new RSACryptoServiceProvider(2048, CsParams))
             {
@@ -56,7 +56,7 @@ namespace FEClient.Security
 
             var encryptedKey = EncryptKey(rsa, keyStr);
 
-            var output = new EncryptedData {Data = ad.DataStr, Key = encryptedKey};
+            var output = new EncryptedData {Data = ad.Data, Key = encryptedKey};
             return output;
         }
 

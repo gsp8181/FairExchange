@@ -15,7 +15,7 @@ namespace FEClient.Forms
         public SendOptions()
         {
             InitializeComponent();
-            _rounds = Rng.NextInt(500, 1500);
+            _rounds = RandomNumber.Value(500, 1500);
                 //TODO: does this reprisent a problem because as convergence happens on 1500 it COULD get more rewarding to terminate
             roundsBox.Text = _rounds.ToString();
         }

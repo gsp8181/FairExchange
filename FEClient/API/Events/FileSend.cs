@@ -4,12 +4,12 @@ namespace FEClient.API.Events
 {
     public class FileSendEventArgs : EventArgs //TODO: make immutable
     {
-        public FileSendEventArgs(string filename, string email, string data, string iv, string guid, string signature)
+        public FileSendEventArgs(string fileName, string email, string data, string iv, string guid, string signature)
         {
-            FileName = filename;
+            FileName = fileName;
             Email = email;
             Data = data;
-            Iv = iv;
+            IV = iv;
             Guid = guid;
             Signature = signature;
         }
@@ -17,7 +17,7 @@ namespace FEClient.API.Events
         public string FileName { get; private set; }
         public string Email { get; private set; }
         public string Data { get; private set; }
-        public string Iv { get; private set; }
+        public string IV { get; private set; }
         public string Guid { get; private set; }
         public string Signature { get; private set; }
         public bool HasSet { get; set; }

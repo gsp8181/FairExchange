@@ -37,7 +37,7 @@ namespace FEClient.Forms
 
         private void GenDSAKeysButton_Click(object sender, EventArgs e)
         {
-            Rsa.Regenerate_RSA();
+            Rsa.RegenerateRsa();
             MessageBox.Show("Regenerated Keys", "Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 

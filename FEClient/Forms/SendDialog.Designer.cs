@@ -103,7 +103,7 @@ namespace FEClient.Forms
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SendDialog";
-            this.Text = "SendDialog";
+            this.Text = "Sending File";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SendDialog_FormClosed);
             this.Load += new System.EventHandler(this.SendDialog_Load);
             this.ResumeLayout(false);

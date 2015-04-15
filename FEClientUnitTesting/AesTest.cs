@@ -17,7 +17,7 @@ namespace FEClientUnitTesting
             /*var encrypt = Aes.Encrypt(TestString);
             Assert.AreNotEqual(TestString, encrypt);
 
-            var decrypt = Aes.Decrypt(encrypt.DataStr, encrypt.Key.Key, encrypt.Key.IV);
+            var decrypt = Aes.Decrypt(encrypt.Data, encrypt.Key.Key, encrypt.Key.IV);
             Assert.AreEqual(decrypt, TestString);*/
 
         }

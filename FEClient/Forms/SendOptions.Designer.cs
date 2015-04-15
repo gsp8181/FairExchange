@@ -233,7 +233,7 @@ namespace FEClient.Forms
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SendOptions";
-            this.Text = "SendOptions";
+            this.Text = "Send a File";
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -5,20 +5,14 @@ namespace FEClient.Security
 {
     public static class Aes
     {
-        public static byte[] Decrypt(string payload, byte[] aeskey, byte[] aesiv, int rounds)
+        public static byte[] Decrypt(string payload, byte[] key, byte[] iv, int rounds)
             //TODO: needs some validity method like check against sig?
         {
             using (var aesCsp = new AesCryptoServiceProvider())
             {
-                if (rounds > 0)
-                {
-                    aesCsp.Key = Strengthen(aeskey, aesiv, rounds);
-                }
-                else
-                {
-                    aesCsp.Key = aeskey;
-                }
-                aesCsp.IV = aesiv;
+                aesCsp.Key = rounds > 0 ? Strengthen(key, iv, rounds) : key;
+
+                aesCsp.IV = iv;
 
                 var encrypted = Convert.FromBase64String(payload);
 
@@ -50,23 +44,23 @@ namespace FEClient.Security
                 var xfrm = aesCsp.CreateEncryptor();
                 var outBlock = xfrm.TransformFinalBlock(data, 0, data.Length);
                 var encrypted = Convert.ToBase64String(outBlock);
-                var ad = new AesData {Key = ae, DataStr = encrypted};
+                var ad = new AesData {Key = ae, Data = encrypted};
                 return ad;
             }
         }
 
-        private static byte[] Strengthen(byte[] p, byte[] s, int rounds)
+        private static byte[] Strengthen(byte[] key, byte[] salt, int rounds)
         {
-            using (var rfcKey = new Rfc2898DeriveBytes(p, s, rounds))
+            using (var rfcKey = new Rfc2898DeriveBytes(key, salt, rounds))
             {
-                return rfcKey.GetBytes(p.Length);
+                return rfcKey.GetBytes(key.Length);
             }
         }
 
-        public static byte[] Decrypt(string payload, string aeskey, string aesiv, int rounds)
+        public static byte[] Decrypt(string payload, string key, string iv, int rounds)
         {
-            var aesKeyBytes = Convert.FromBase64String(aeskey);
-            var aesIvBytes = Convert.FromBase64String(aesiv);
+            var aesKeyBytes = Convert.FromBase64String(key);
+            var aesIvBytes = Convert.FromBase64String(iv);
             return Decrypt(payload, aesKeyBytes, aesIvBytes, rounds);
         }
     }

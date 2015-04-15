@@ -3,9 +3,9 @@ using System.Security.Cryptography;
 
 namespace FEClient.NotMyCode
 {
-    public static class Rng
+    public static class RandomNumber
     {
-        public static int NextInt(int min, int max) //http://www.vcskicks.com/code-snippet/rng-int.php
+        public static int Value(int min, int max) //http://www.vcskicks.com/code-snippet/rng-int.php
         {
             using (var rng = new RNGCryptoServiceProvider())
             {

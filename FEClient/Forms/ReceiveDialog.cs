@@ -22,7 +22,7 @@ namespace FEClient.Forms
         private readonly FileInfo _localFile;
         private readonly FileStream _log;
         private readonly StreamWriter _logWriter;
-        private volatile Stack<string> _dict = new Stack<string>(); //TODO: holds I
+        private volatile Stack<string> _dict = new Stack<string>(); //TODO: holds Number
         private volatile string _iv;
         private bool _recievingCodes;
         private string _remoteKey;
@@ -34,7 +34,7 @@ namespace FEClient.Forms
                 throw new ArgumentNullException("startObj");
             InitializeComponent();
             progressLabel.Text += _fileName;
-            _ip = startObj.Ip;
+            _ip = startObj.IP;
             _fileName = startObj.FileName;
             _guid = startObj.Guid;
             decryptTimer.Interval = startObj.Timeout;
@@ -118,7 +118,7 @@ namespace FEClient.Forms
             {
                 sw.Write(file.Data); //TODO: WHY?
             }
-            _iv = file.Iv;
+            _iv = file.IV;
             _logWriter.WriteLine("Received encrypted file and saved at " + _localFile);
             _logWriter.WriteLine("Received IV: " + _iv);
             _logWriter.WriteLine("Starting Key Receive");

@@ -7,7 +7,7 @@ namespace FEClient.Security
     {
         private byte[] _iv;
         /*public byte[] Key { get; set; }
-        public byte[] Iv { get; set; }*/
+        public byte[] IV { get; set; }*/
         private byte[] _key;
 
         public AesKeys(byte[] key, byte[] iv)

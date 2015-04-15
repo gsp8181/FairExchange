@@ -31,6 +31,8 @@ namespace FEClient.Forms
         private AesKeys _key;
         private string _remoteKey;
         private bool _terminated;
+        private bool startRevoked;
+        private bool respRevoked;
 
         public SendDialog(string ip, string fileName, int rounds, int complexity, int timeout)
         {
@@ -88,15 +90,33 @@ namespace FEClient.Forms
 
         private void Terminate()
         {
+            RevokeStart();
+            RevokeResp();
             if (!_terminated)
             {
                 Invoke((MethodInvoker) delegate { timeoutTimer.Stop(); });
-                ClientRestApi.StartTransmission -= MyResource_StartTransmission;
-                ClientRestApi.StartTransmissionAndRespSent -= MyResource_StartTransmissionAndRespSent;
+
                     //TODO: cancel background workers
-
-
                 _terminated = true;
+            }
+        }
+
+        private void RevokeStart()
+        {
+            if(!startRevoked)
+            { 
+                ClientRestApi.StartTransmission -= MyResource_StartTransmission;
+                startRevoked = true;
+            }
+            
+        }
+
+        private void RevokeResp()
+        {
+            if(!respRevoked)
+            { 
+                ClientRestApi.StartTransmissionAndRespSent -= MyResource_StartTransmissionAndRespSent;
+                respRevoked = true;
             }
         }
 
@@ -127,7 +147,7 @@ namespace FEClient.Forms
                 {"guid", _guid},
                 {"iv", _key.IvStr},
                 {"complexity", _complexity},
-                {"data", _aesData.DataStr}
+                {"data", _aesData.Data}
             };
             _logWriter.WriteLine("Sending data");
             var hashStr = Sha1.HashJObject(data);
@@ -153,7 +173,7 @@ namespace FEClient.Forms
             if (response.ReturnedError || !string.IsNullOrEmpty(response.Error))
             {
                 _logWriter.WriteLine("Sending data resulted in an error: " + response.Error);
-                progressBar.Style = ProgressBarStyle.Continuous; //TODO: update label
+                progressBar.Style = ProgressBarStyle.Continuous;
                 Terminate();
                 MessageBox.Show("Remote server did not accept the file\n" + response.Error, "Failed",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -180,7 +200,6 @@ namespace FEClient.Forms
 
 
             // Update the progress box
-            //TODO: use async and await
             progressLabel.Text = "Sending Keys";
             sendKeysBackgroundWorker.RunWorkerAsync();
         }
@@ -412,10 +431,9 @@ namespace FEClient.Forms
             {
                 _logWriter.WriteLine("Start request failed with error, terminating");
                 Terminate();
-                MessageBox.Show("error");
+                MessageBox.Show("Start request has failed, terminating", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Close();
                 return;
-                //TODO; this needs to be better, maybe a handle error method which tries to get the error string
             }
             timeoutTimer.Start();
         }

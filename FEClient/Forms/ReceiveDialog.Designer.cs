@@ -106,7 +106,7 @@ namespace FEClient.Forms
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ReceiveDialog";
-            this.Text = "ReceiveDialog";
+            this.Text = "Receiving File";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ReceiveDialog_FormClosed);
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -8,7 +8,7 @@ namespace FEClient.API.Events
         {
             FileName = fileName;
             Email = email;
-            Ip = ip;
+            IP = ip;
             Guid = guid;
             Timeout = timeout;
             Complexity = complexity;
@@ -16,7 +16,7 @@ namespace FEClient.API.Events
 
         public string FileName { get; private set; }
         public string Email { get; private set; }
-        public string Ip { get; private set; }
+        public string IP { get; private set; }
         public string Guid { get; private set; }
         public int Timeout { get; private set; }
         public int Complexity { get; private set; }
