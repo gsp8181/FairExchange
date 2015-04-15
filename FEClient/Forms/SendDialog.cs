@@ -70,7 +70,7 @@ namespace FEClient.Forms
         {
             if (vars.Guid != _guid || vars.FileName != _file.Name || vars.IP != _ip)
                 return;
-            Invoke((MethodInvoker) timer2_Tick); //TODO: maybe another timeout timer?
+            Invoke((MethodInvoker) SendFile); //TODO: maybe another timeout timer?
             RevokeResp();
         }
 
@@ -122,7 +122,7 @@ namespace FEClient.Forms
             }
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void timeoutTimer_Tick(object sender, EventArgs e)
         {
             _logWriter.WriteLineAsync("Timeout expired, terminating");
             progressBar.Style = ProgressBarStyle.Continuous;
@@ -131,7 +131,7 @@ namespace FEClient.Forms
             Close();
         }
 
-        private void timer2_Tick()
+        private void SendFile()
         {
             // Updates progress label to show file is sending
             progressLabel.Text = "Sending " + _file.Name;
@@ -211,7 +211,7 @@ namespace FEClient.Forms
             generateKeysBackgroundWorker.RunWorkerAsync();
         }
 
-        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        private void sendKeysBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             _logWriter.WriteLine("Now sending fake keys");
             var stopwatch = new Stopwatch();
@@ -284,7 +284,7 @@ namespace FEClient.Forms
             var realReq = new RESTRequest("/key/", HttpMethod.POST, ContentType.JSON, _timeout)
             {
                 Payload = encRealData.ToString()
-            }; //TODO: split into method with above bit //TODO: async and await
+            }; //TODO: split into method with above bit
 
             var realResponse = client.Execute(realReq);
 
@@ -337,12 +337,12 @@ namespace FEClient.Forms
             client.Execute(finReq);
         }
 
-        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void sendKeysBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            progressBar.Value = e.ProgressPercentage; //TODO: does not work
+            progressBar.Value = e.ProgressPercentage;
         }
 
-        private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
+        private void generateKeysBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             // Opens and reads the file to the end
             var text = File.ReadAllBytes(_file.FullName); //TODO: if not null and using!
@@ -403,7 +403,7 @@ namespace FEClient.Forms
             e.Result = true;
         }
 
-        private void backgroundWorker2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void generateKeysBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if ((bool) e.Result == false)
                 return;
@@ -440,7 +440,7 @@ namespace FEClient.Forms
             timeoutTimer.Start();
         }
 
-        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void sendKeysBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             Terminate();
             progressLabel.Text = "Finished";

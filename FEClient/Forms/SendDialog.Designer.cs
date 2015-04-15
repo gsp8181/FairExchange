@@ -76,19 +76,19 @@ namespace FEClient.Forms
             // timeoutTimer
             // 
             this.timeoutTimer.Interval = 60000;
-            this.timeoutTimer.Tick += new System.EventHandler(this.timer1_Tick);
+            this.timeoutTimer.Tick += new System.EventHandler(this.timeoutTimer_Tick);
             // 
             // sendKeysBackgroundWorker
             // 
             this.sendKeysBackgroundWorker.WorkerReportsProgress = true;
-            this.sendKeysBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
-            this.sendKeysBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
-            this.sendKeysBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+            this.sendKeysBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.sendKeysBackgroundWorker_DoWork);
+            this.sendKeysBackgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.sendKeysBackgroundWorker_ProgressChanged);
+            this.sendKeysBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.sendKeysBackgroundWorker_RunWorkerCompleted);
             // 
             // generateKeysBackgroundWorker
             // 
-            this.generateKeysBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker2_DoWork);
-            this.generateKeysBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker2_RunWorkerCompleted);
+            this.generateKeysBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.generateKeysBackgroundWorker_DoWork);
+            this.generateKeysBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.generateKeysBackgroundWorker_RunWorkerCompleted);
             // 
             // SendDialog
             // 

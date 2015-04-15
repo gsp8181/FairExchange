@@ -71,7 +71,8 @@ namespace FEClient.Forms
 
         private void ClientRestApi_Finish(object sender, FinishEventArgs e)
         {
-            if (_guid != e.Guid || !_recievingCodes) return;
+            if (_guid != e.Guid || !_recievingCodes) 
+                return;
             _logWriter.WriteLine("Recieved FINISH packet");
             e.HasSet = true;
             Invoke((MethodInvoker) Decrypt);

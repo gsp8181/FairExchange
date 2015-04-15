@@ -58,12 +58,7 @@ namespace FEClient.Forms
                 return;
             }
 
-            var ip = ""; //TODO: does not need to be used?!
-
-            if (AddressBoxIsIp)
-            {
-                ip = destinationBox.Text;
-            }
+            var ip = destinationBox.Text;
 
             if (!ip.Contains(":"))
             {
