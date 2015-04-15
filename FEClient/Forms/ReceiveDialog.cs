@@ -28,6 +28,7 @@ namespace FEClient.Forms
         private volatile string _iv;
         private bool _recievingCodes;
         private string _remoteKey;
+        private bool _terminated;
 
         public ReceiveDialog(NotifyRequestEventArgs startObj)
         {
@@ -93,6 +94,24 @@ namespace FEClient.Forms
             });
         }
 
+        private void Terminate()
+        {
+            if (!_terminated)
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    decryptTimer.Stop();
+                });
+                ClientRestApi.FileRecieved -= MyResource_FileRecieved;
+                ClientRestApi.FileRecievedAndRespSent -= MyResource_FileRecievedAndRespSent;
+                ClientRestApi.KeyRecieved -= ClientRestApi_KeyRecieved;
+                ClientRestApi.Finish -= ClientRestApi_Finish;//TODO: cancel background workers
+
+
+                _terminated = true;
+            }
+        }
+
         private void MyResource_FileRecievedAndRespSent(object sender, FileSendEventArgs file)
         {
             if (_guid != file.Guid) //TODO: and filenames
@@ -129,6 +148,7 @@ namespace FEClient.Forms
             {
                 _logWriter.WriteLine("Signature verification failed, transfer terminated");
                 _logWriter.WriteLine("Offending signature: " + file.Signature);
+                Terminate();
                 MessageBox.Show("Signature verification failed, transfer terminated", "Failed", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
                 Close();
@@ -143,10 +163,7 @@ namespace FEClient.Forms
 
         private void ReceiveDialog_FormClosed(object sender, FormClosedEventArgs e) //TODO: delink before close, should dispose be done instead?
         {
-            ClientRestApi.FileRecieved -= MyResource_FileRecieved;
-            ClientRestApi.FileRecievedAndRespSent -= MyResource_FileRecievedAndRespSent;
-            ClientRestApi.KeyRecieved -= ClientRestApi_KeyRecieved;
-            ClientRestApi.Finish -= ClientRestApi_Finish;
+            Terminate();
 
             //_logWriter.Close();
             //_log.Close();
@@ -161,6 +178,7 @@ namespace FEClient.Forms
                 _logWriter.WriteLine("Remote public key not trusted, terminated");
                 _logWriter.WriteLine("Remote Public Key");
                 _logWriter.WriteLine(_remoteKey);
+                Terminate();
                 Close();
                 return;
             }
@@ -178,6 +196,7 @@ namespace FEClient.Forms
             var response = client.Execute(req); //TODO: e.response?
             if (response.StatusCode != HttpStatusCode.OK)
             {
+                Terminate();
                 MessageBox.Show("Attempt to respond to notification request returned error", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Close();
@@ -227,7 +246,7 @@ namespace FEClient.Forms
         private void backgroundWorker2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             progressBar1.Value = 100;
-
+            Terminate();
             DialogResult result;
             do
             {
