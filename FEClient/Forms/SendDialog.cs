@@ -225,7 +225,7 @@ namespace FEClient.Forms
 
                 var fkey = _fakeKeys.Dequeue();
 
-                var data = new JObject {{"key", fkey}, {"guid", _guid}, {"i", i}}; //TODO: rsa sign?
+                var data = new JObject {{"key", fkey}, {"guid", _guid}, {"i", i}}; 
 
                 var encData = Rsa.EncryptData(data.ToString(), _remoteKey, 0);
 
@@ -280,13 +280,12 @@ namespace FEClient.Forms
             }
 
             var realData = new JObject {{"key", _key.KeyStr}, {"guid", _guid}, {"i", _amount}};
-                //TODO: encrypt keys??, rsa sign?
             var encRealData = Rsa.EncryptData(realData.ToString(), _remoteKey, 0);
 
             var realReq = new RESTRequest("/key/", HttpMethod.POST, ContentType.JSON, _timeout)
             {
                 Payload = encRealData.ToString()
-            }; //TODO: split into method with above bit
+            };
 
             if (e.Cancel)
             {
@@ -299,12 +298,12 @@ namespace FEClient.Forms
             _logWriter.WriteLine("Sent real key {0}", _key.KeyStr);
             _logWriter.WriteLine(realData);
 
-            if (realResponse.StatusCode != HttpStatusCode.OK) //TODO: OR IF TIMEOUT
+            if (realResponse.StatusCode != HttpStatusCode.OK)
             {
                 _logWriter.WriteLine("ERROR: Sent REAL key and error was returned: {0}", realResponse.Error);
                 Terminate();
                 MessageBox.Show("Error, sent real key and error was returned\n" + realResponse.Error, "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error); //TODO: split into sendakey(key);?
+                    MessageBoxButtons.OK, MessageBoxIcon.Error); 
                 Close();
                 return;
             }
