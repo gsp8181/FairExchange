@@ -76,6 +76,7 @@ namespace FEClient.Forms
             // 
             // sendStartRequestWorker
             // 
+            this.sendStartRequestWorker.WorkerSupportsCancellation = true;
             this.sendStartRequestWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.startSendBackgroundWorker_DoWork);
             // 
             // decryptTimer
@@ -90,6 +91,7 @@ namespace FEClient.Forms
             // 
             // decryptBackgroundWorker
             // 
+            this.decryptBackgroundWorker.WorkerSupportsCancellation = true;
             this.decryptBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker2_DoWork);
             this.decryptBackgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker2_RunWorkerCompleted);
             // 

@@ -250,7 +250,6 @@ namespace FEClient.Forms
 
                 var sig = JObject.Parse(response.Content).Value<string>("signature");
                 if (!Rsa.VerifySignature(data.ToString(), sig, _remoteKey))
-                    //TODO: is this a performance hit converting from string every time?
                 {
                     var hashStr = Sha1.HashJObject(data);
                     _logWriter.WriteLineAsync(string.Format("Failed on fake key {0} as signature verification failed", i));
@@ -316,7 +315,6 @@ namespace FEClient.Forms
             _logWriter.WriteLine("Given signature " + realSig);
 
             if (!Rsa.VerifySignature(realData.ToString(), realSig, _remoteKey))
-                //TODO: is this a performance hit converting from string every time?
             {
                 _logWriter.WriteLine("ERROR, sent REAL key and signature verification failed, terminating");
                 Terminate();

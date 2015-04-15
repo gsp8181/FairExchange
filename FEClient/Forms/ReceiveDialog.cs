@@ -22,7 +22,7 @@ namespace FEClient.Forms
         private readonly FileInfo _localFile;
         private readonly FileStream _log;
         private readonly StreamWriter _logWriter;
-        private volatile Stack<string> _dict = new Stack<string>(); //TODO: holds Number
+        private volatile Stack<string> _dict = new Stack<string>();
         private volatile string _iv;
         private bool _recievingCodes;
         private string _remoteKey;
@@ -105,7 +105,9 @@ namespace FEClient.Forms
 
             Invoke((MethodInvoker) delegate { decryptTimer.Stop(); });
             ClientRestApi.KeyRecieved -= ClientRestApi_KeyRecieved;
-            ClientRestApi.Finish -= ClientRestApi_Finish; //TODO: cancel background workers
+            ClientRestApi.Finish -= ClientRestApi_Finish;
+            decryptBackgroundWorker.CancelAsync();
+            sendStartRequestWorker.CancelAsync();
 
 
             _terminated = true;
@@ -126,7 +128,7 @@ namespace FEClient.Forms
             if (_guid != file.Guid || file.FileName != _fileName)
                 return;
 
-            using (var sw = new StreamWriter(_localFile.OpenWrite())) //TODO: on another thread
+            using (var sw = new StreamWriter(_localFile.OpenWrite()))
             {
                 sw.Write(file.Data);
             }

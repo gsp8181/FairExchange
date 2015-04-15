@@ -16,7 +16,6 @@ namespace FEClient.Forms
         {
             InitializeComponent();
             _rounds = RandomNumber.Value(500, 1500);
-                //TODO: does this reprisent a problem because as convergence happens on 1500 it COULD get more rewarding to terminate
             roundsBox.Text = _rounds.ToString();
         }
 
@@ -74,15 +73,15 @@ namespace FEClient.Forms
 
         private bool ValidateAll()
         {
-            if (!AddressBoxIsIp) //TODO: same method as below?
+            if (!AddressBoxIsIp)
             {
-                errorProvider.SetError(destinationBox, "Wrong format, should be an email or IP");
                 return false;
             }
             if (string.IsNullOrWhiteSpace(fileBox.Text))
                 return false;
 
-            //TODO; validate rounds and that
+            if (!ValidateBoxes(roundsBox) || !ValidateBoxes(complexityBox) || !ValidateBoxes(timeoutBox))
+                return false;
 
             var fileInfo = new FileInfo(fileBox.Text);
             return fileInfo.Exists && fileInfo.Length > 0;
@@ -134,6 +133,28 @@ namespace FEClient.Forms
         {
             if (!Char.IsNumber(e.KeyChar) && !Char.IsControl(e.KeyChar))
                 e.Handled = true;
+        }
+
+        private void roundsBox_Validated(object sender, EventArgs e)
+        {
+            var sendBox = (TextBox) sender;
+            ValidateBoxes(sendBox);
+        }
+
+        private bool ValidateBoxes(TextBox sendBox)
+        {
+            if (sendBox.Text == "")
+            {
+                errorProvider.SetError(sendBox, "You must put in a number");
+                return false;
+            }
+            if (int.Parse(sendBox.Text) <= 0)
+            {
+                errorProvider.SetError(sendBox, "Must be > 0");
+                return false;
+            }
+            errorProvider.SetError(sendBox, string.Empty);
+            return true;
         }
     }
 }

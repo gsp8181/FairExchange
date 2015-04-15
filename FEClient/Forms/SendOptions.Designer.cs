@@ -153,6 +153,7 @@ namespace FEClient.Forms
             this.roundsBox.TabIndex = 3;
             this.roundsBox.Text = "1000";
             this.roundsBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_KeyPress);
+            this.roundsBox.Validated += new System.EventHandler(this.roundsBox_Validated);
             // 
             // complexityBox
             // 
@@ -166,6 +167,7 @@ namespace FEClient.Forms
             this.complexityBox.TabIndex = 4;
             this.complexityBox.Text = "1300000";
             this.complexityBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_KeyPress);
+            this.complexityBox.Validated += new System.EventHandler(this.roundsBox_Validated);
             // 
             // label4
             // 
@@ -188,6 +190,7 @@ namespace FEClient.Forms
             this.timeoutBox.TabIndex = 5;
             this.timeoutBox.Text = "5000";
             this.timeoutBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_KeyPress);
+            this.timeoutBox.Validated += new System.EventHandler(this.roundsBox_Validated);
             // 
             // label5
             // 
