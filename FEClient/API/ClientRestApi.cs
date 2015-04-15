@@ -143,14 +143,39 @@ namespace FEClient.API
         private JObject decryptRequest(HttpListenerContext context) //TODO: if encrypted
         {
             var str = GetJsonPayload(context.Request);
-            var data = str.Value<string>("data"); //TODO: if decryption fails then return something and quit
-            var key = str.Value<string>("key");
-            var decrypted = Rsa.DecryptData(data, key);
-            var decryptedStr = Encoding.UTF8.GetString(decrypted);
+            string key, data;
+            try
+            {
+                key = str.Value<string>("key"); //TODO: this may trigger for one or two things it shouldn't
+                data = str.Value<string>("data");
+               
+            }
+            catch (Exception)
+            {
+                return str;
+
+            }
+            try
+            {
+                var decrypted = Rsa.DecryptData(data, key);
+                var decryptedStr = Encoding.UTF8.GetString(decrypted);
 
 
-            var jsonStr = JObject.Parse(decryptedStr);
-            return jsonStr;
+                var jsonStr = JObject.Parse(decryptedStr);
+                return jsonStr;
+            }
+            catch (Exception)
+            {
+                var eresponse = new JObject {{"accepted", false}, {"error", "could not decrypt"}};
+                context.Response.StatusCode = (int) HttpStatusCode.BadRequest;
+#if TRACE
+                Debug.WriteLine("decrypt SENT " + eresponse);
+#endif
+                SendJsonResponse(context, eresponse);
+                return null; //TODO: for all if null, quit
+            }
+            
+
         }
 
         [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/key/?$")]
