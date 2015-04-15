@@ -36,7 +36,7 @@ namespace FEClient.API
 
 
                 filename = x.Value<string>("fileName");
-                email = x.Value<string>("email"); //TODO: find off tracker or reject
+                email = x.Value<string>("email");
                 data = x.Value<string>("data"); //TODO: encrypted
                 guid = x.Value<string>("guid");
                 //signature = x.Value<string>("signature");

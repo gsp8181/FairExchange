@@ -47,7 +47,6 @@ namespace FEClient.Security
         }
 
         public static EncryptedData EncryptData(string data, RSACryptoServiceProvider rsa, int rounds)
-            //TODO: this encrypts to self
         {
             var dataBytes = Encoding.UTF8.GetBytes(data);
             var ad = Aes.Encrypt(dataBytes, rounds);

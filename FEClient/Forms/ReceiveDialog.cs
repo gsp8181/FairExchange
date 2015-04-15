@@ -39,7 +39,7 @@ namespace FEClient.Forms
             _guid = startObj.Guid;
             decryptTimer.Interval = startObj.Timeout;
             _complexity = startObj.Complexity;
-            ClientRestApi.FileRecieved += MyResource_FileRecieved;
+            ClientRestApi.FileRecieved += MyResource_FileRecieved; //TODO: removethese once called
             ClientRestApi.FileRecievedAndRespSent += MyResource_FileRecievedAndRespSent;
             ClientRestApi.KeyRecieved += ClientRestApi_KeyRecieved;
             ClientRestApi.Finish += ClientRestApi_Finish;
@@ -160,13 +160,8 @@ namespace FEClient.Forms
         }
 
         private void ReceiveDialog_FormClosed(object sender, FormClosedEventArgs e)
-            //TODO: delink before close, should dispose be done instead?
         {
             Terminate();
-
-            //_logWriter.Close();
-            //_log.Close();
-
             Dispose();
         }
 
@@ -203,7 +198,7 @@ namespace FEClient.Forms
             var encData = Rsa.EncryptData(data.ToString(), _remoteKey, 0);
 
             var req = new RESTRequest("/start/", HttpMethod.POST, ContentType.JSON) {Payload = encData.ToString()};
-            var response = client.Execute(req); //TODO: e.response?
+            var response = client.Execute(req); 
             if (response.StatusCode != HttpStatusCode.OK)
             {
                 Terminate();

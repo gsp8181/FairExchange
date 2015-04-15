@@ -19,14 +19,13 @@ namespace FEClient.Forms
             if (keyResponse.StatusCode != HttpStatusCode.OK)
             {
                 MessageBox.Show("Could not contact " + ip, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    //TODO: make better
                 var errResponse = new Ident(false, null, null);
                 return errResponse;
             }
 
             var keyRespObj = JObject.Parse(keyResponse.Content);
 
-            var remoteKey = keyRespObj.Value<string>("pubKey"); //TODO: flag on error
+            var remoteKey = keyRespObj.Value<string>("pubKey"); 
             var email = keyRespObj.Value<string>("email");
 
             var keyObj = Adapter.GetByEmail(email);

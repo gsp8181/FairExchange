@@ -44,6 +44,7 @@ namespace FEClient
             if (!Server.IsListening) //TODO: maybe sort out with a timer
             {
                 NetAclChecker.AddAddress("http://+:" + Port + "/");
+                Server.Stop();
                 Server.Start();
                 /*if (!Program.server.IsListening)
                 {
@@ -68,7 +69,6 @@ namespace FEClient
 
         private void OnServerStartNotify() //TODO: if this doesn't happen in 20 ish seconds, abort/retry/fail?
         {
-//TODO: check if port is open
             ShowBalloonTip(5000, "Started", "Server started and is listening on port " + Port, ToolTipIcon.Info);
         }
 
