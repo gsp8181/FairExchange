@@ -104,7 +104,7 @@ namespace FEClient.Security
             return encryptedKey;
         }
 
-        private static string EncryptKey(string pemKey, string keyStr)
+        /*private static string EncryptKey(string pemKey, string keyStr)
         {
             var rsaKeyInfo = GetPublicKeyParams(pemKey);
 
@@ -114,15 +114,7 @@ namespace FEClient.Security
                 rsa.ImportParameters(rsaKeyInfo);
                 return EncryptKey(rsa, keyStr);
             }
-        }
-
-        public static EncryptedData EncryptData(string data, int rounds) //encrypts with OWN KEY
-        {
-            using (var rsa = new RSACryptoServiceProvider(2048, CsParams))
-            {
-                return EncryptData(data, rsa, rounds);
-            }
-        }
+        }*/
 
         public static EncryptedData EncryptData(string data, string key, int rounds)
         {
