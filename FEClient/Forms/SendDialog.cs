@@ -31,7 +31,7 @@ namespace FEClient.Forms
         private AesKeys _key;
         private string _remoteKey;
         private bool _terminated;
-        private bool startRevoked;
+        private bool _startRevoked;
         private bool respRevoked;
 
         public SendDialog(string ip, string fileName, int rounds, int complexity, int timeout)
@@ -68,17 +68,19 @@ namespace FEClient.Forms
 
         private void MyResource_StartTransmissionAndRespSent(object sender, StartTransmissionEventArgs vars)
         {
-            if (vars.Guid != _guid)
+            if (vars.Guid != _guid || vars.FileName != _file.Name || vars.IP != _ip)
                 return;
             Invoke((MethodInvoker) timer2_Tick); //TODO: maybe another timeout timer?
+            RevokeResp();
         }
 
         private void MyResource_StartTransmission(object sender, StartTransmissionEventArgs args)
         {
-            if (args.FileName != _file.Name)
+            if (args.FileName != _file.Name || args.Guid != _guid || args.IP != _ip)
                 return;
             args.HasSet = true;
             Invoke((MethodInvoker) delegate { timeoutTimer.Stop(); });
+            RevokeStart();
         }
 
         private void SendDialog_FormClosed(object sender, FormClosedEventArgs e)
@@ -103,10 +105,10 @@ namespace FEClient.Forms
 
         private void RevokeStart()
         {
-            if(!startRevoked)
+            if(!_startRevoked)
             { 
                 ClientRestApi.StartTransmission -= MyResource_StartTransmission;
-                startRevoked = true;
+                _startRevoked = true;
             }
             
         }
