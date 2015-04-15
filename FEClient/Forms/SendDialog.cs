@@ -55,7 +55,7 @@ namespace FEClient.Forms
             _logWriter = new StreamWriter(_log);
 
             _logWriter.WriteLine("Log started at " + DateTime.Today.ToString("yyyy:MM:dd:HH:mm:sszzz"));
-            _logWriter.WriteLine("{0} at {1}", /*startObj.Email*/null, _ip); //TODO: fix email
+            _logWriter.WriteLine("Contacting {0}",  _ip);
             _logWriter.WriteLine("Sending: {0} ({1})", fileName, _guid);
             _logWriter.WriteLine("Timeout: " + _timeout);
             _logWriter.WriteLine("Complexity: " + _complexity);
@@ -353,16 +353,27 @@ namespace FEClient.Forms
             _logWriter.WriteLine("Contacting " + _ip);
 
             Invoke((MethodInvoker)delegate { progressLabel.Text = "Attempting to contact " + _ip; });
-            if (!Common.GetSshKey(_ip, out _remoteKey)) 
+            var key = Common.GetSshKey(_ip);
+                        
+            if (key.IsSet == false)
             {
+                if (string.IsNullOrEmpty(key.Email))
+                {
+                    _logWriter.WriteLine("Could not contact remote server, terminated");
+                    Terminate();
+                    Close();
+                    return;
+                }
+            
                 _logWriter.WriteLine("Remote public key not trusted, terminated");
                 _logWriter.WriteLine("Remote Public Key");
-                _logWriter.WriteLine(_remoteKey);
+                _logWriter.WriteLine(key.RemoteKey);
                 e.Result = false;
                 Terminate();
                 Close();
                 return;
             }
+            _remoteKey = key.RemoteKey;
             _logWriter.WriteLine("Remote Public Key");
             _logWriter.WriteLine(_remoteKey);
             e.Result = true;

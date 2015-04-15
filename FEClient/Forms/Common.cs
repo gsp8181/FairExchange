@@ -8,7 +8,7 @@ namespace FEClient.Forms
 {
     internal static class Common
     {
-        public static bool GetSshKey(string ip, out string remoteKey)
+        public static Ident GetSshKey(string ip)
         {
             var client = new RESTClient("http://" + ip);
 
@@ -18,12 +18,14 @@ namespace FEClient.Forms
 
             if (keyResponse.StatusCode != HttpStatusCode.OK)
             {
-                MessageBox.Show("error"); //TODO: make better
+                MessageBox.Show("Could not contact " + ip,"Error",MessageBoxButtons.OK,MessageBoxIcon.Error); //TODO: make better
+                var errResponse = new Ident(false, null, null);
+                return errResponse;
             }
 
             var keyRespObj = JObject.Parse(keyResponse.Content);
 
-            remoteKey = keyRespObj.Value<string>("pubKey"); //TODO: flag on error
+            var remoteKey = keyRespObj.Value<string>("pubKey"); //TODO: flag on error
             var email = keyRespObj.Value<string>("email");
 
             var keyObj = Adapter.GetByEmail(email);
@@ -41,7 +43,7 @@ namespace FEClient.Forms
                 }
                 else
                 {
-                    return false;
+                    return new Ident(false, remoteKey, email);
                 }
             }
             else if (keyObj.Pem != remoteKey)
@@ -58,10 +60,10 @@ namespace FEClient.Forms
                 }
                 else
                 {
-                    return false;
+                    return new Ident(false, remoteKey, email);
                 }
             }
-            return true;
+            return new Ident(true, remoteKey, email);
         }
     }
 }

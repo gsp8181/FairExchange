@@ -91,6 +91,7 @@
     <Compile Include="Database\FEDBContext.cs" />
     <Compile Include="Database\PubKey.cs" />
     <Compile Include="Forms\Common.cs" />
+    <Compile Include="Forms\Ident.cs" />
     <Compile Include="Forms\Logs.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -185,9 +186,7 @@
   <ItemGroup>
     <Content Include="Icojam-Blue-Bits-Document-arrow-down.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="SQLite\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
