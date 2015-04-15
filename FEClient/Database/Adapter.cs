@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace FEClient.SQLite
+namespace FEClient.Database
 {
     internal static class Adapter
     {

@@ -87,6 +87,9 @@
     <Compile Include="Context.Designer.cs">
       <DependentUpon>Context.cs</DependentUpon>
     </Compile>
+    <Compile Include="Database\Adapter.cs" />
+    <Compile Include="Database\FEDBContext.cs" />
+    <Compile Include="Database\PubKey.cs" />
     <Compile Include="Forms\Common.cs" />
     <Compile Include="Forms\Logs.cs">
       <SubType>Form</SubType>
@@ -137,9 +140,6 @@
     <Compile Include="Security\RSASecurity.cs" />
     <Compile Include="Security\Sha1.cs" />
     <Compile Include="SettingsWrapper.cs" />
-    <Compile Include="SQLite\Adapter.cs" />
-    <Compile Include="SQLite\FEDBContext.cs" />
-    <Compile Include="SQLite\PubKey.cs" />
     <EmbeddedResource Include="Forms\Logs.resx">
       <DependentUpon>Logs.cs</DependentUpon>
     </EmbeddedResource>
@@ -185,7 +185,9 @@
   <ItemGroup>
     <Content Include="Icojam-Blue-Bits-Document-arrow-down.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="SQLite\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

@@ -1,6 +1,6 @@
 ﻿using System.Data.Entity;
 
-namespace FEClient.SQLite
+namespace FEClient.Database
 {
     internal class FedbContext : DbContext
     {
@@ -8,7 +8,7 @@ namespace FEClient.SQLite
         {
             // Database initialize
 #if DROP_DB_ON_START
-            Database.SetInitializer(new DropCreateDatabaseAlways<FedbContext>());
+            System.Data.Entity.Database.SetInitializer(new DropCreateDatabaseAlways<FedbContext>());
 #elif DEBUG
             Database.SetInitializer(new DropCreateDatabaseIfModelChanges<FedbContext>());
 #else
