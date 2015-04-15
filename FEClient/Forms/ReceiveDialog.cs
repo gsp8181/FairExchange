@@ -243,13 +243,37 @@ namespace FEClient.Forms
 
         private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
         {
+            if (_dict.Count < 1)
+            {
+                _logWriter.WriteLine("No keys available, failed");
+                Terminate();
+                MessageBox.Show("No keys were received, failed", "No keys", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Close();
+                return;
+            }
             var key = _dict.Peek(); //TODO: 'System.InvalidOperationException' STACK EMPTY
             var str = File.ReadAllText(_localFile.FullName);
 
             _logWriter.WriteLine("Attempting to decrypt using latest key");
             _logWriter.WriteLine(key);
+            byte[] decrypted;
 
-            var decrypted = Aes.Decrypt(str, key, _iv, _complexity); //TODO: try catch
+            try
+            {
+                decrypted = Aes.Decrypt(str, key, _iv, _complexity);
+            }
+            catch (Exception ex)
+            {
+                _logWriter.WriteLine("Decryption failed");
+                _logWriter.WriteLine(ex.Message);
+                _logWriter.WriteLine("Last key attempted: " + key);
+                Terminate();
+                MessageBox.Show("Decryption failed, key is invalid\nCheck the logs for more details",
+                    "Decryption Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Close();
+                return;
+            }
+             
 
             File.WriteAllBytes(_localFile.FullName, decrypted);
             _logWriter.WriteLine("Decryption Successful");
