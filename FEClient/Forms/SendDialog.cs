@@ -29,6 +29,7 @@ namespace FEClient.Forms
         private string _remoteKey;
         private readonly FileStream _log;
         private readonly StreamWriter _logWriter;
+        private bool _terminated;
 
         public SendDialog(string ip, string fileName, int rounds, int complexity, int timeout)
         {
@@ -79,16 +80,32 @@ namespace FEClient.Forms
 
         private void SendDialog_FormClosed(object sender, FormClosedEventArgs e)
         {
-            ClientRestApi.StartTransmission -= MyResource_StartTransmission; //TODO: delink events before form.close()? maybe involve
-            ClientRestApi.StartTransmissionAndRespSent -= MyResource_StartTransmissionAndRespSent;
+            Terminate();
             Dispose();
             //file.Close();
+        }
+
+        private void Terminate()
+        {
+            if (!_terminated)
+            {
+                Invoke((MethodInvoker) delegate
+                {
+                    timeoutTimer.Stop();
+                });
+                    ClientRestApi.StartTransmission -= MyResource_StartTransmission;
+                    ClientRestApi.StartTransmissionAndRespSent -= MyResource_StartTransmissionAndRespSent; //TODO: cancel background workers
+                
+                
+            _terminated = true;
+            }
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
             _logWriter.WriteLineAsync("Timeout expired, terminating");
             progressBar.Style = ProgressBarStyle.Continuous;
+            Terminate();
             MessageBox.Show("Remote user did not respond in time", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             Close();
         }
@@ -138,6 +155,7 @@ namespace FEClient.Forms
             {
                 _logWriter.WriteLine("Sending data resulted in an error: " + response.Error);
                 progressBar.Style = ProgressBarStyle.Continuous; //TODO: update label
+                Terminate();
                 MessageBox.Show("Remote server did not accept the file\n" + response.Error, "Failed",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Close();
@@ -152,6 +170,7 @@ namespace FEClient.Forms
             //TODO:INSTEAD This should send an abort request of some kind, make sure it doesn't lock recievedialog
             {
                 _logWriter.WriteLine("Signature verification failed, terminated");
+                Terminate();
                 MessageBox.Show("Signature verification failed, transfer terminated", "Failed", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
                 Close();
@@ -199,6 +218,7 @@ namespace FEClient.Forms
                     _logWriter.WriteLineAsync("Failed fake key: " + fkey);
 
                     MessageBox.Show("Timed out, transmission ended", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Terminate();
                     Close();
                     return;
                 }
@@ -213,6 +233,7 @@ namespace FEClient.Forms
                     _logWriter.WriteLineAsync("Actual data: " + data);
                     _logWriter.WriteLineAsync("Data hash: " + hashStr);
                     _logWriter.WriteLineAsync("Provided signature " + sig);
+                    Terminate();
                     MessageBox.Show("Error, signature verification failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Close();
                     return;
@@ -222,6 +243,7 @@ namespace FEClient.Forms
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
                     _logWriter.WriteLine("Error through malformed HTTP Code on fake key {0}; {1} with error {2}", i, fkey, response.Error);
+                    Terminate();
                     MessageBox.Show("Error, remote server returned error\n" + response.Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Close();
                     return;
@@ -249,7 +271,8 @@ namespace FEClient.Forms
                 _logWriter.WriteLine("ERROR: Sent REAL key and error was returned: {0}", realResponse.Error);
                 //Invoke((MethodInvoker) delegate
                 //{
-                MessageBox.Show("Error, sent real key and error was returned\n" + realResponse.Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Terminate();
+                MessageBox.Show("Error, sent real key and error was returned\n" + realResponse.Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); //TODO: split into sendakey(key);?
                 Close();
                 //});
                 return;
@@ -264,6 +287,7 @@ namespace FEClient.Forms
             //TODO: is this a performance hit converting from string every time?
             {
                 _logWriter.WriteLine("ERROR, sent REAL key and signature verification failed, terminating");
+                Terminate();
                 MessageBox.Show("Error, signature verification failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Close();
                 return;
@@ -334,6 +358,7 @@ namespace FEClient.Forms
                 _logWriter.WriteLine("Remote Public Key");
                 _logWriter.WriteLine(_remoteKey);
                 e.Result = false;
+                Terminate();
                 Close();
                 return;
             }
@@ -371,6 +396,7 @@ namespace FEClient.Forms
             if (response.StatusCode != HttpStatusCode.OK)
             {
                 _logWriter.WriteLine("Start request failed with error, terminating");
+                Terminate();
                 MessageBox.Show("error");
                 Close();
                 return;
