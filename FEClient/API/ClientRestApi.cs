@@ -30,16 +30,15 @@ namespace FEClient.API
             string filename, email, data, guid, iv, signature, jobj;
             try
             {
-                jobj = payload.Value<string>("data"); //TODO: pass through as event
-                var x = JObject.Parse(jobj); //TODO: could be all in one
+                jobj = payload.Value<string>("data"); 
+                var x = JObject.Parse(jobj);
                 signature = payload.Value<string>("signature");
 
 
                 filename = x.Value<string>("fileName");
                 email = x.Value<string>("email");
-                data = x.Value<string>("data"); //TODO: encrypted
+                data = x.Value<string>("data");
                 guid = x.Value<string>("guid");
-                //signature = x.Value<string>("signature");
                 iv = x.Value<string>("iv");
             }
             catch (NullReferenceException)
@@ -87,7 +86,7 @@ namespace FEClient.API
             if (vars == null)
                 return;
 
-            var response = new JObject {{"accepted", true}}; //TODO: email
+            var response = new JObject {{"accepted", true}};
 #if TRACE
             Debug.WriteLine("/notify/ SENT " + response);
 #endif

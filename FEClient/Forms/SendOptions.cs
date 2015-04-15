@@ -68,19 +68,21 @@ namespace FEClient.Forms
 
             var sendDialog = new SendDialog(ip, fileBox.Text, int.Parse(roundsBox.Text), int.Parse(complexityBox.Text),
                 int.Parse(timeoutBox.Text));
-            sendDialog.Show(); //TODO: validate
+            sendDialog.Show(); 
             Close();
         }
 
         private bool ValidateAll()
         {
-            if (!AddressBoxIsIp)
+            if (!AddressBoxIsIp) //TODO: same method as below?
             {
                 errorProvider.SetError(destinationBox, "Wrong format, should be an email or IP");
                 return false;
             }
             if (string.IsNullOrWhiteSpace(fileBox.Text))
                 return false;
+
+            //TODO; validate rounds and that
 
             var fileInfo = new FileInfo(fileBox.Text);
             return fileInfo.Exists && fileInfo.Length > 0;

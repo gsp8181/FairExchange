@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -38,7 +39,9 @@ namespace FEClient
         private static readonly string Guid =
             ((GuidAttribute) Assembly.GetExecutingAssembly().GetCustomAttributes(typeof (GuidAttribute), true)[0]).Value;
 
-        private static readonly Mutex Mutex = new Mutex(true, Guid); //TODO: port specific
+        private static readonly string Token = Guid + ConfigurationManager.AppSettings["Port"];
+
+        private static readonly Mutex Mutex = new Mutex(true, Token); 
 #endif
     }
 }

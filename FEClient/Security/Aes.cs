@@ -6,7 +6,6 @@ namespace FEClient.Security
     public static class Aes
     {
         public static byte[] Decrypt(string payload, byte[] key, byte[] iv, int rounds)
-            //TODO: needs some validity method like check against sig?
         {
             using (var aesCsp = new AesCryptoServiceProvider())
             {

@@ -76,7 +76,7 @@ namespace FEClient.Forms
             // 
             // sendStartRequestWorker
             // 
-            this.sendStartRequestWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            this.sendStartRequestWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.startSendBackgroundWorker_DoWork);
             // 
             // decryptTimer
             // 

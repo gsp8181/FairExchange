@@ -27,6 +27,8 @@ namespace FEClient.Forms
         private bool _recievingCodes;
         private string _remoteKey;
         private bool _terminated;
+        private bool receiveTerminated;
+        private string newName;
 
         public ReceiveDialog(NotifyRequestEventArgs startObj)
         {
@@ -39,7 +41,7 @@ namespace FEClient.Forms
             _guid = startObj.Guid;
             decryptTimer.Interval = startObj.Timeout;
             _complexity = startObj.Complexity;
-            ClientRestApi.FileRecieved += MyResource_FileRecieved; //TODO: removethese once called
+            ClientRestApi.FileRecieved += MyResource_FileRecieved; 
             ClientRestApi.FileRecievedAndRespSent += MyResource_FileRecievedAndRespSent;
             ClientRestApi.KeyRecieved += ClientRestApi_KeyRecieved;
             ClientRestApi.Finish += ClientRestApi_Finish;
@@ -97,40 +99,50 @@ namespace FEClient.Forms
 
         private void Terminate()
         {
-            if (!_terminated)
-            {
-                Invoke((MethodInvoker) delegate { decryptTimer.Stop(); });
-                ClientRestApi.FileRecieved -= MyResource_FileRecieved;
-                ClientRestApi.FileRecievedAndRespSent -= MyResource_FileRecievedAndRespSent;
-                ClientRestApi.KeyRecieved -= ClientRestApi_KeyRecieved;
-                ClientRestApi.Finish -= ClientRestApi_Finish; //TODO: cancel background workers
+            TermFileReceiveEvents();
+            if (_terminated) 
+                return;
+
+            Invoke((MethodInvoker) delegate { decryptTimer.Stop(); });
+            ClientRestApi.KeyRecieved -= ClientRestApi_KeyRecieved;
+            ClientRestApi.Finish -= ClientRestApi_Finish; //TODO: cancel background workers
 
 
-                _terminated = true;
-            }
+            _terminated = true;
+        }
+
+        private void TermFileReceiveEvents()
+        {
+            if (receiveTerminated) 
+                return;
+
+            ClientRestApi.FileRecieved -= MyResource_FileRecieved;
+            ClientRestApi.FileRecievedAndRespSent -= MyResource_FileRecievedAndRespSent;
+            receiveTerminated = true;
         }
 
         private void MyResource_FileRecievedAndRespSent(object sender, FileSendEventArgs file)
         {
-            if (_guid != file.Guid) //TODO: and filenames
+            if (_guid != file.Guid || file.FileName != _fileName)
                 return;
 
             using (var sw = new StreamWriter(_localFile.OpenWrite())) //TODO: on another thread
             {
-                sw.Write(file.Data); //TODO: WHY?
+                sw.Write(file.Data);
             }
             _iv = file.IV;
             _logWriter.WriteLine("Received encrypted file and saved at " + _localFile);
             _logWriter.WriteLine("Received IV: " + _iv);
             _logWriter.WriteLine("Starting Key Receive");
 
-            Invoke((MethodInvoker) delegate //TODO; does this happen AFTER keys start coming?
+            Invoke((MethodInvoker) delegate 
             {
                 progressBar1.Style = ProgressBarStyle.Continuous;
                 progressBar1.Value = 33;
                 progressLabel.Text = "File recieved, obtaining decryption keys";
                 decryptTimer.Start();
             });
+            TermFileReceiveEvents();
         }
 
         private void MyResource_FileRecieved(object sender, FileSendEventArgs file)
@@ -140,8 +152,8 @@ namespace FEClient.Forms
                 return;
             }
             var hashStr = Sha1.HashString(file.Data);
-            _logWriter.WriteLine("Received Data, SHA1 Hash: " + hashStr); //TODO: make new and truncate data?
-            _logWriter.WriteLine("Recieved Signature: " + ""); //TODO: NYI
+            _logWriter.WriteLine("Received Data, SHA1 Hash: " + hashStr);
+            _logWriter.WriteLine("Recieved Signature: " + file.Signature); 
             if (!Rsa.VerifySignature(file.Data, file.Signature, _remoteKey))
             {
                 _logWriter.WriteLine("Signature verification failed, transfer terminated");
@@ -165,7 +177,7 @@ namespace FEClient.Forms
             Dispose();
         }
 
-        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e) //TODO: does this have to be separate
+        private void startSendBackgroundWorker_DoWork(object sender, DoWorkEventArgs e) 
         {
             var key = Common.GetSshKey(_ip);
             if (key.IsSet == false)
@@ -230,7 +242,7 @@ namespace FEClient.Forms
         private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
             var senderDialog = (SaveFileDialog) sender;
-            File.Copy(_localFile.FullName, senderDialog.FileName, true);
+            File.Copy(newName, senderDialog.FileName, true);
             _logWriter.WriteLine("Saved as " + senderDialog.FileName);
         }
 
@@ -267,8 +279,9 @@ namespace FEClient.Forms
                 return;
             }
 
-
-            File.WriteAllBytes(_localFile.FullName, decrypted);
+            newName = Path.GetTempFileName();
+            _logWriter.WriteLine("Saving decrypted file to " + newName);
+            File.WriteAllBytes(newName, decrypted);
             _logWriter.WriteLine("Decryption Successful");
         }
 

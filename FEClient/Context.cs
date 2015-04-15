@@ -36,7 +36,7 @@ namespace FEClient
 
             notifyIcon.Text += " :" + Port;
 
-            NetAclChecker.CreateFirewallException(int.Parse(Port)); //TODO: wait for firewall
+            NetAclChecker.CreateFirewallException(int.Parse(Port)); 
             timeoutTimer.Start();
             Server_Create();
             if (!Server.IsListening)

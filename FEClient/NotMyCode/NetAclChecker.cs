@@ -16,7 +16,6 @@ namespace FEClient.NotMyCode
         public static void AddAddress(string address, string domain, string user)
         {
             var args = string.Format(@"http add urlacl url={0} user={1}\{2}", address, domain, user);
-            //TODO: check urlacl first
 
             var psi = new ProcessStartInfo("netsh", args)
             {

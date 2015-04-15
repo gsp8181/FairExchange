@@ -2,7 +2,7 @@
 
 namespace FEClient.API.Events
 {
-    public class FileSendEventArgs : EventArgs //TODO: make immutable
+    public class FileSendEventArgs : EventArgs
     {
         public FileSendEventArgs(string fileName, string email, string data, string iv, string guid, string signature)
         {
