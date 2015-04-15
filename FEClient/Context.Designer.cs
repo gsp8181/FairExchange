@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Security.AccessControl;
 using System.Windows.Forms;
 
 namespace FEClient
@@ -36,6 +37,7 @@ namespace FEClient
             this.components = new System.ComponentModel.Container();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.timeoutTimer = new System.Windows.Forms.Timer(this.components);
             this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -92,6 +94,11 @@ namespace FEClient
             this.quitToolStripMenuItem.Text = "Quit";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
             // 
+            // timeoutTimer
+            // 
+            this.timeoutTimer.Interval = 20000;
+            this.timeoutTimer.Tick += new System.EventHandler(this.timeoutTimer_Tick);
+            // 
             // Form1
             // 
             //this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -109,6 +116,7 @@ namespace FEClient
 
         private NotifyIcon notifyIcon;
         private ContextMenuStrip notifyIconMenu;
+        private Timer timeoutTimer;
         private ToolStripMenuItem startToolStripMenuItem;
         private ToolStripMenuItem quitToolStripMenuItem;
         private ToolStripMenuItem settingsToolStripMenuItem;

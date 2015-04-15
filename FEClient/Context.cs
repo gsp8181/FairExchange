@@ -40,6 +40,7 @@ namespace FEClient
 
             CreateFirewallException(int.Parse(Port)); //TODO: wait for firewall
             Server.OnStart = OnServerStartNotify;
+            timeoutTimer.Start();
             Server.Start();
             if (!Server.IsListening) //TODO: maybe sort out with a timer
             {
@@ -52,6 +53,11 @@ namespace FEClient
                     Environment.Exit(-1);
                 }*/
             }
+        }
+
+        private void timeoutTimer_Tick(object sender, EventArgs e)
+        {
+            ShowBalloonTip(10000,"Server has not started","The server has not started properly\nPlease check your network settings",ToolTipIcon.Error,null);
         }
 
         private void ShowBalloonTip(int timeout, string tipTitle, string tipText, ToolTipIcon tipIcon,
@@ -67,13 +73,13 @@ namespace FEClient
                 nr.Email + " wants to send you " + nr.FileName + ". Click to accept", ToolTipIcon.Info, nr);
         }
 
-        private void OnServerStartNotify() //TODO: if this doesn't happen in 20 ish seconds, abort/retry/fail?
+        private void OnServerStartNotify()
         {
+            timeoutTimer.Stop();
             ShowBalloonTip(5000, "Started", "Server started and is listening on port " + Port, ToolTipIcon.Info);
         }
 
-        private static void CreateFirewallException(int port)
-            //Stackoverflow how to diusplay windows firewall has blocked some features of this program;
+        private static void CreateFirewallException(int port) //Stackoverflow how to diusplay windows firewall has blocked some features of this program; TODO: NMC
         {
             var ipAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList[0];
             //TODO: is this needed in the presence of the other listener?
