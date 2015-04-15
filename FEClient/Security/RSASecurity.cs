@@ -12,7 +12,7 @@ namespace FEClient.Security
 {
     public static class Rsa
     {
-        private static readonly CspParameters CsParams = new CspParameters(1) { KeyContainerName = "ttpclient" };
+        private static readonly CspParameters CsParams = new CspParameters(1) {KeyContainerName = "ttpclient"};
         //, KeyNumber = 1};
 
         public static string PublicKey
@@ -47,7 +47,7 @@ namespace FEClient.Security
         }
 
         public static EncryptedData EncryptData(string data, RSACryptoServiceProvider rsa, int rounds)
-        //TODO: this encrypts to self
+            //TODO: this encrypts to self
         {
             var dataBytes = Encoding.UTF8.GetBytes(data);
             var ad = Aes.Encrypt(dataBytes, rounds);
@@ -56,7 +56,7 @@ namespace FEClient.Security
 
             var encryptedKey = EncryptKey(rsa, keyStr);
 
-            var output = new EncryptedData { Data = ad.DataStr, Key = encryptedKey };
+            var output = new EncryptedData {Data = ad.DataStr, Key = encryptedKey};
             return output;
         }
 
@@ -134,8 +134,8 @@ namespace FEClient.Security
             {
                 var keyStreamReader = new StreamReader(keyStream);
                 var pemRead = new PemReader(keyStreamReader);
-                var keyParameter = (AsymmetricKeyParameter)pemRead.ReadObject();
-                var rsaKeyParameters = (RsaKeyParameters)keyParameter;
+                var keyParameter = (AsymmetricKeyParameter) pemRead.ReadObject();
+                var rsaKeyParameters = (RsaKeyParameters) keyParameter;
 
                 var rsaKeyInfo = DotNetUtilities.ToRSAParameters(rsaKeyParameters);
                 return rsaKeyInfo;

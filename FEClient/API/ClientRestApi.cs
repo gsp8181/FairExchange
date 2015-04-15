@@ -52,7 +52,7 @@ namespace FEClient.API
                 SendJsonResponse(context, eresponse);
                 return;
             }
-            var fs = new FileSendEventArgs(filename,email,jobj,iv,guid,signature);
+            var fs = new FileSendEventArgs(filename, email, jobj, iv, guid, signature);
             FileRecieved(this, fs);
             if (fs.HasSet)
             {
@@ -151,12 +151,10 @@ namespace FEClient.API
             {
                 key = str.Value<string>("key"); //TODO: this may trigger for one or two things it shouldn't
                 data = str.Value<string>("data");
-               
             }
             catch (Exception)
             {
                 return str;
-
             }
             try
             {
@@ -177,8 +175,6 @@ namespace FEClient.API
                 SendJsonResponse(context, eresponse);
                 return null; //TODO: for all if null, quit
             }
-            
-
         }
 
         [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -286,7 +282,7 @@ namespace FEClient.API
             Finish(this, args);
             if (args.HasSet)
             {
-                var resp = new JObject { { "accepted", true } };
+                var resp = new JObject {{"accepted", true}};
 #if TRACE
                 Debug.WriteLine("/finish/ sent " + resp);
 #endif
@@ -294,7 +290,7 @@ namespace FEClient.API
             }
             else
             {
-                var resp = new JObject { { "accepted", false } };
+                var resp = new JObject {{"accepted", false}};
 #if TRACE
                 Debug.WriteLine("/finish/ sent " + resp);
 #endif
@@ -302,11 +298,5 @@ namespace FEClient.API
                 SendJsonResponse(context, resp);
             }
         }
-
-        /*[RESTRoute]
-        public void HandleAllGetRequests(HttpListenerContext context)
-        {
-            SendTextResponse(context, "GET is a success!"); //TODO: change to api description
-        }*/
     }
 }

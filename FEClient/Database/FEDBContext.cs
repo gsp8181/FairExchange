@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FEClient.Database
 {
@@ -18,7 +19,7 @@ namespace FEClient.Database
                 db.Database.Initialize(false);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public DbSet<PubKey> PubKeys { get; set; }
     }
 }

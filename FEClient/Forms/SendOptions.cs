@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net;
 using System.Windows.Forms;
@@ -10,10 +11,12 @@ namespace FEClient.Forms
     public partial class SendOptions : Form
     {
         private readonly int _rounds;
+
         public SendOptions()
         {
             InitializeComponent();
-            _rounds = Rng.NextInt(500, 1500); //TODO: does this reprisent a problem because as convergence happens on 1500 it COULD get more rewarding to terminate
+            _rounds = Rng.NextInt(500, 1500);
+                //TODO: does this reprisent a problem because as convergence happens on 1500 it COULD get more rewarding to terminate
             roundsBox.Text = _rounds.ToString();
         }
 
@@ -47,7 +50,7 @@ namespace FEClient.Forms
             Close();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+        [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         private void okButton_Click(object sender, EventArgs e)
         {
             if (!ValidateAll())

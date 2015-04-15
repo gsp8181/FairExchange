@@ -4,7 +4,8 @@ namespace FEClient.API.Events
 {
     public class StartTransmissionEventArgs : EventArgs
     {
-        public StartTransmissionEventArgs(string fileName, string email, string ip, string guid, int timeout, int complexity)
+        public StartTransmissionEventArgs(string fileName, string email, string ip, string guid, int timeout,
+            int complexity)
         {
             FileName = fileName;
             Email = email;
@@ -13,16 +14,10 @@ namespace FEClient.API.Events
             Timeout = timeout;
             Complexity = complexity;
         }
-        public string FileName { get; private set; }
-        public string Email { get; private set; }
-        public string Ip { get; private set; }
-        public string Guid { get; private set; }
-        public int Timeout { get; private set; }
-        public int Complexity { get; private set; }
 
-        public StartTransmissionEventArgs (NotifyRequestEventArgs obj)
+        public StartTransmissionEventArgs(NotifyRequestEventArgs obj)
         {
-            if(obj == null)
+            if (obj == null)
                 throw new ArgumentNullException("obj");
 
 
@@ -34,6 +29,12 @@ namespace FEClient.API.Events
             Complexity = obj.Complexity;
         }
 
+        public string FileName { get; private set; }
+        public string Email { get; private set; }
+        public string Ip { get; private set; }
+        public string Guid { get; private set; }
+        public int Timeout { get; private set; }
+        public int Complexity { get; private set; }
         public bool HasSet { get; set; }
     }
 }

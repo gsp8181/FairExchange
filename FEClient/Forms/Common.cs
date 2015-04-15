@@ -18,7 +18,8 @@ namespace FEClient.Forms
 
             if (keyResponse.StatusCode != HttpStatusCode.OK)
             {
-                MessageBox.Show("Could not contact " + ip,"Error",MessageBoxButtons.OK,MessageBoxIcon.Error); //TODO: make better
+                MessageBox.Show("Could not contact " + ip, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //TODO: make better
                 var errResponse = new Ident(false, null, null);
                 return errResponse;
             }

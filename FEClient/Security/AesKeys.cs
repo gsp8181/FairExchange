@@ -5,6 +5,17 @@ namespace FEClient.Security
 {
     public class AesKeys
     {
+        private byte[] _iv;
+        /*public byte[] Key { get; set; }
+        public byte[] Iv { get; set; }*/
+        private byte[] _key;
+
+        public AesKeys(byte[] key, byte[] iv)
+        {
+            _key = key;
+            _iv = iv;
+        }
+
         public string KeyStr
         {
             get { return Convert.ToBase64String(_key); }
@@ -18,17 +29,6 @@ namespace FEClient.Security
         }
 
         public int Rounds { get; set; }
-        /*public byte[] Key { get; set; }
-        public byte[] Iv { get; set; }*/
-        private byte[] _key;
-        private byte[] _iv;
-
-
-        public AesKeys(byte[] key, byte[] iv)
-        {
-            _key = key;
-            _iv = iv;
-        }
 
         public byte[] Key()
         {
@@ -49,7 +49,6 @@ namespace FEClient.Security
         {
             _iv = iv;
         }
-
 
         public JObject ToJObject()
         {

@@ -13,6 +13,7 @@ namespace FEClient.API.Events
             Timeout = timeout;
             Complexity = complexity;
         }
+
         public string FileName { get; private set; }
         public string Email { get; private set; }
         public string Ip { get; private set; }

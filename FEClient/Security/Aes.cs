@@ -10,9 +10,9 @@ namespace FEClient.Security
         {
             using (var aesCsp = new AesCryptoServiceProvider())
             {
-                if(rounds > 0)
-                { 
-                aesCsp.Key = Strengthen(aeskey, aesiv, rounds);
+                if (rounds > 0)
+                {
+                    aesCsp.Key = Strengthen(aeskey, aesiv, rounds);
                 }
                 else
                 {
@@ -42,7 +42,7 @@ namespace FEClient.Security
                 var ae = new AesKeys(aesCsp.Key, aesCsp.IV) {Rounds = rounds};
                 //TODO: embed the parameter sent through rest as THIS instead, probably when RSA takes shape
 
-                if(rounds > 0)
+                if (rounds > 0)
                     aesCsp.Key = Strengthen(aesCsp.Key, aesCsp.IV, rounds);
 
 
@@ -57,8 +57,8 @@ namespace FEClient.Security
 
         private static byte[] Strengthen(byte[] p, byte[] s, int rounds)
         {
-            using(var rfcKey = new Rfc2898DeriveBytes(p, s, rounds))
-            { 
+            using (var rfcKey = new Rfc2898DeriveBytes(p, s, rounds))
+            {
                 return rfcKey.GetBytes(p.Length);
             }
         }

@@ -25,7 +25,7 @@ namespace FEClient
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 using (var context = new Context())
-                { 
+                {
                     Application.Run(context);
                 }
 #if !MULTIINSTANCE

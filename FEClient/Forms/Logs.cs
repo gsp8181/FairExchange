@@ -7,8 +7,11 @@ namespace FEClient.Forms
 {
     public partial class Logs : Form
     {
+        private readonly DirectoryInfo _receivedLogPath =
+            new DirectoryInfo(Application.UserAppDataPath + @"\logs\received\");
+
         private readonly DirectoryInfo _sentLogPath = new DirectoryInfo(Application.UserAppDataPath + @"\logs\sent\");
-        private readonly DirectoryInfo _receivedLogPath = new DirectoryInfo(Application.UserAppDataPath + @"\logs\received\");
+
         public Logs()
         {
             InitializeComponent();
@@ -23,7 +26,7 @@ namespace FEClient.Forms
             {
                 foreach (var file in _sentLogPath.GetFiles())
                 {
-                    var i = new ListViewItem(file.Name) { ImageIndex = 0 };
+                    var i = new ListViewItem(file.Name) {ImageIndex = 0};
                     sentListView.Items.Add(i);
                 }
             }

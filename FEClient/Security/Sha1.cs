@@ -9,7 +9,7 @@ namespace FEClient.Security
     {
         public static string HashJObject(JObject realData)
         {
-            if(realData == null)
+            if (realData == null)
                 throw new ArgumentNullException("realData");
 
             using (var sha1 = new SHA1CryptoServiceProvider())
@@ -18,7 +18,6 @@ namespace FEClient.Security
                 var hashStr = Convert.ToBase64String(hash);
                 return hashStr;
             }
-            
         }
 
         internal static object HashString(string p)

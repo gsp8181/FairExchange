@@ -19,12 +19,9 @@ namespace FEClient.Forms
         private readonly string _fileName;
         private readonly string _guid;
         private readonly string _ip;
-
         private readonly FileInfo _localFile;
-
-        private readonly FileStream _log; 
+        private readonly FileStream _log;
         private readonly StreamWriter _logWriter;
-
         private volatile Stack<string> _dict = new Stack<string>(); //TODO: holds I
         private volatile string _iv;
         private bool _recievingCodes;
@@ -52,7 +49,7 @@ namespace FEClient.Forms
 
             _localFile = new FileInfo(Path.GetTempFileName());
 
-                var logFile = new FileInfo(logPath + DateTime.Now.ToString("yyyy.MM.dd.HH.mm.ss") + ".log");
+            var logFile = new FileInfo(logPath + DateTime.Now.ToString("yyyy.MM.dd.HH.mm.ss") + ".log");
 
 
             _log = logFile.OpenWrite();
@@ -60,12 +57,12 @@ namespace FEClient.Forms
 
             _logWriter.WriteLine("Log started at " + DateTime.Today.ToString("yyyy:MM:dd:HH:mm:sszzz"));
             _logWriter.WriteLine("{0} at {1}", startObj.Email, _ip);
-            _logWriter.WriteLine("Sending: {0} ({1})",_fileName,_guid);
+            _logWriter.WriteLine("Sending: {0} ({1})", _fileName, _guid);
             _logWriter.WriteLine("Timeout: " + startObj.Timeout);
             _logWriter.WriteLine("Complexity: " + _complexity);
             _logWriter.WriteLine("Local Public Key");
             _logWriter.WriteLine(Rsa.PublicKey);
-            
+
 
             saveFileDialog.FileName = _fileName;
             saveFileDialog.DefaultExt = new FileInfo(_fileName).Extension;
@@ -82,7 +79,7 @@ namespace FEClient.Forms
 
         private void ClientRestApi_KeyRecieved(object sender, KeyReceivedEventArgs e)
         {
-            if (_guid != e.Guid || !_recievingCodes)  //TODO: and IP == ip for sig recieved
+            if (_guid != e.Guid || !_recievingCodes) //TODO: and IP == ip for sig recieved
             {
                 return;
             }
@@ -101,14 +98,11 @@ namespace FEClient.Forms
         {
             if (!_terminated)
             {
-                Invoke((MethodInvoker)delegate
-                {
-                    decryptTimer.Stop();
-                });
+                Invoke((MethodInvoker) delegate { decryptTimer.Stop(); });
                 ClientRestApi.FileRecieved -= MyResource_FileRecieved;
                 ClientRestApi.FileRecievedAndRespSent -= MyResource_FileRecievedAndRespSent;
                 ClientRestApi.KeyRecieved -= ClientRestApi_KeyRecieved;
-                ClientRestApi.Finish -= ClientRestApi_Finish;//TODO: cancel background workers
+                ClientRestApi.Finish -= ClientRestApi_Finish; //TODO: cancel background workers
 
 
                 _terminated = true;
@@ -128,7 +122,7 @@ namespace FEClient.Forms
             _logWriter.WriteLine("Received encrypted file and saved at " + _localFile);
             _logWriter.WriteLine("Received IV: " + _iv);
             _logWriter.WriteLine("Starting Key Receive");
-            
+
             Invoke((MethodInvoker) delegate //TODO; does this happen AFTER keys start coming?
             {
                 progressBar1.Style = ProgressBarStyle.Continuous;
@@ -164,7 +158,8 @@ namespace FEClient.Forms
             //ShowBalloonTip(5000, "File Recieved", fileName, ToolTipIcon.Info);
         }
 
-        private void ReceiveDialog_FormClosed(object sender, FormClosedEventArgs e) //TODO: delink before close, should dispose be done instead?
+        private void ReceiveDialog_FormClosed(object sender, FormClosedEventArgs e)
+            //TODO: delink before close, should dispose be done instead?
         {
             Terminate();
 
@@ -202,7 +197,7 @@ namespace FEClient.Forms
 
 
             var client = new RESTClient("http://" + _ip);
-            var data = new JObject { { "fileName", _fileName }, { "email", SettingsWrapper.Email }, { "guid", _guid } };
+            var data = new JObject {{"fileName", _fileName}, {"email", SettingsWrapper.Email}, {"guid", _guid}};
 
             var encData = Rsa.EncryptData(data.ToString(), _remoteKey, 0);
 
@@ -229,7 +224,7 @@ namespace FEClient.Forms
             _recievingCodes = false;
             //try and decrypt or close and display error
 
-            _logWriter.Write("Received {0} total keys",_dict.Count);
+            _logWriter.Write("Received {0} total keys", _dict.Count);
 
             decryptBackgroundWorker.RunWorkerAsync();
             progressBar1.Value = 67;
@@ -275,7 +270,7 @@ namespace FEClient.Forms
                 Close();
                 return;
             }
-             
+
 
             File.WriteAllBytes(_localFile.FullName, decrypted);
             _logWriter.WriteLine("Decryption Successful");

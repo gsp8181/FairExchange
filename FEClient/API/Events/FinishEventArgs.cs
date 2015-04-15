@@ -8,8 +8,8 @@ namespace FEClient.API.Events
         {
             Guid = guid;
         }
+
         public string Guid { get; private set; }
         public bool HasSet { get; set; }
-
     }
 }

@@ -4,13 +4,12 @@ namespace FEClient.Database
 {
     internal static class Adapter
     {
-
         public static void Insert(PubKey key)
         {
-            using(var db = new FedbContext())
-            { 
-            db.PubKeys.Add(key);
-            db.SaveChanges();
+            using (var db = new FedbContext())
+            {
+                db.PubKeys.Add(key);
+                db.SaveChanges();
             }
         }
 

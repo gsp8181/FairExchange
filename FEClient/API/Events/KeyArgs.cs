@@ -10,6 +10,7 @@ namespace FEClient.API.Events
             Guid = guid;
             I = i;
         }
+
         public string Key { get; private set; }
         public string Guid { get; private set; }
         public int I { get; private set; }

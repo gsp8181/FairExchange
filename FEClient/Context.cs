@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Sockets;
 using System.Windows.Forms;
@@ -14,8 +15,6 @@ namespace FEClient
     public partial class Context : ApplicationContext
     {
         private NotifyRequestEventArgs _currentTipReq;
-        public static readonly string Port = ConfigurationManager.AppSettings["Port"];
-        private static readonly RESTServer Server = new RESTServer("+", Port);
 
         public Context()
         {
@@ -85,7 +84,7 @@ namespace FEClient
             t.Stop();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+        [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         private void notifyIcon_BalloonTipClicked(object sender, EventArgs e)
         {
             if (_currentTipReq == null)
@@ -106,27 +105,28 @@ namespace FEClient
         {
             using (var dialog = new SettingsDialog())
             {
-
                 dialog.ShowDialog();
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+        [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         private void startToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var so = new SendOptions();
-            
-                so.Show();
-                so.Focus();
-            
+
+            so.Show();
+            so.Focus();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+        [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         private void logsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var logs = new Logs();
             logs.Show();
             logs.Focus();
         }
+
+        public static readonly string Port = ConfigurationManager.AppSettings["Port"];
+        private static readonly RESTServer Server = new RESTServer("+", Port);
     }
 }
