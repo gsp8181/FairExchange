@@ -148,6 +148,7 @@ namespace FEClient.Forms
             this.roundsBox.Enabled = false;
             this.roundsBox.Location = new System.Drawing.Point(73, 66);
             this.roundsBox.Name = "roundsBox";
+            this.roundsBox.ShortcutsEnabled = false;
             this.roundsBox.Size = new System.Drawing.Size(199, 20);
             this.roundsBox.TabIndex = 3;
             this.roundsBox.Text = "1000";
@@ -160,6 +161,7 @@ namespace FEClient.Forms
             this.complexityBox.Enabled = false;
             this.complexityBox.Location = new System.Drawing.Point(73, 93);
             this.complexityBox.Name = "complexityBox";
+            this.complexityBox.ShortcutsEnabled = false;
             this.complexityBox.Size = new System.Drawing.Size(199, 20);
             this.complexityBox.TabIndex = 4;
             this.complexityBox.Text = "1300000";
@@ -181,6 +183,7 @@ namespace FEClient.Forms
             this.timeoutBox.Enabled = false;
             this.timeoutBox.Location = new System.Drawing.Point(73, 120);
             this.timeoutBox.Name = "timeoutBox";
+            this.timeoutBox.ShortcutsEnabled = false;
             this.timeoutBox.Size = new System.Drawing.Size(199, 20);
             this.timeoutBox.TabIndex = 5;
             this.timeoutBox.Text = "5000";

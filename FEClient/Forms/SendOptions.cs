@@ -133,7 +133,7 @@ namespace FEClient.Forms
             }
         }
 
-        private void textBox_KeyPress(object sender, KeyPressEventArgs e) //TODO: you CAN still paste a number in!
+        private void textBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!Char.IsNumber(e.KeyChar) && !Char.IsControl(e.KeyChar))
                 e.Handled = true;
