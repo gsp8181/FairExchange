@@ -85,6 +85,7 @@ namespace FEClient
             t.Stop();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         private void notifyIcon_BalloonTipClicked(object sender, EventArgs e)
         {
             if (_currentTipReq == null)
@@ -110,6 +111,7 @@ namespace FEClient
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         private void startToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var so = new SendOptions();
@@ -119,6 +121,7 @@ namespace FEClient
             
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         private void logsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var logs = new Logs();

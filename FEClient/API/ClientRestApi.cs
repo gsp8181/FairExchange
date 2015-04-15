@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Text;
 using FEClient.API.Events;
@@ -15,6 +16,7 @@ namespace FEClient.API
     // ReSharper disable once ClassNeverInstantiated.Global
     public sealed partial class ClientRestApi : RESTResource
     {
+        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/file/?$")]
         public void HandleFileRecievedRequest(HttpListenerContext context)
         {
@@ -179,6 +181,7 @@ namespace FEClient.API
 
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/key/?$")]
         public void HandleKeySend(HttpListenerContext context)
         {
@@ -212,6 +215,7 @@ namespace FEClient.API
             }
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/start/?$")]
         public void HandleStartTransmissionRequest(HttpListenerContext context)
         {
@@ -268,6 +272,7 @@ namespace FEClient.API
             SendJsonResponse(context, returnObj);
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         [RESTRoute(Method = HttpMethod.POST, PathInfo = @"^/finish/?$")]
         public void HandleFinishRequest(HttpListenerContext context)
         {

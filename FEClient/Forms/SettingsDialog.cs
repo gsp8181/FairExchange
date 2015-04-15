@@ -45,6 +45,7 @@ namespace FEClient.Forms
             ValidateEmail();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "System.Net.Mail.MailAddress")]
         private bool ValidateEmail()
         {
             if (string.IsNullOrWhiteSpace(emailBox.Text))

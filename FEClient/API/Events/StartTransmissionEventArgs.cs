@@ -22,6 +22,10 @@ namespace FEClient.API.Events
 
         public StartTransmissionEventArgs (NotifyRequestEventArgs obj)
         {
+            if(obj == null)
+                throw new ArgumentNullException("obj");
+
+
             FileName = obj.FileName;
             Email = obj.Email;
             Ip = obj.Ip;

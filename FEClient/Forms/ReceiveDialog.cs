@@ -33,6 +33,8 @@ namespace FEClient.Forms
 
         public ReceiveDialog(NotifyRequestEventArgs startObj)
         {
+            if (startObj == null)
+                throw new ArgumentNullException("startObj");
             InitializeComponent();
             progressLabel.Text += _fileName;
             _ip = startObj.Ip;
@@ -251,7 +253,7 @@ namespace FEClient.Forms
                 Close();
                 return;
             }
-            var key = _dict.Peek(); //TODO: 'System.InvalidOperationException' STACK EMPTY
+            var key = _dict.Peek();
             var str = File.ReadAllText(_localFile.FullName);
 
             _logWriter.WriteLine("Attempting to decrypt using latest key");

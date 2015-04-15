@@ -32,6 +32,9 @@ namespace FEClient.Security
 
         public static AesData Encrypt(byte[] data, int rounds)
         {
+            if (data == null)
+                throw new ArgumentNullException("data");
+
             using (var aesCsp = new AesCryptoServiceProvider())
             {
                 aesCsp.GenerateIV();

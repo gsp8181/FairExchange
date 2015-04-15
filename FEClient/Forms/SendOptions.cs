@@ -47,6 +47,7 @@ namespace FEClient.Forms
             Close();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         private void okButton_Click(object sender, EventArgs e)
         {
             if (!ValidateAll())

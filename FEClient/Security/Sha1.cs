@@ -9,7 +9,9 @@ namespace FEClient.Security
     {
         public static string HashJObject(JObject realData)
         {
-            
+            if(realData == null)
+                throw new ArgumentNullException("realData");
+
             using (var sha1 = new SHA1CryptoServiceProvider())
             {
                 var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(realData.ToString()));
