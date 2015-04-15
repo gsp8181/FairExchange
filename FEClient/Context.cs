@@ -30,8 +30,6 @@ namespace FEClient
                 }
             }
 
-            //TODO: is port open?
-
             InitializeComponent();
 
             ClientRestApi.NotifyRecieved += ClientRestApi_NotifyRecieved;
@@ -39,25 +37,35 @@ namespace FEClient
             notifyIcon.Text += " :" + Port;
 
             CreateFirewallException(int.Parse(Port)); //TODO: wait for firewall
-            Server.OnStart = OnServerStartNotify;
             timeoutTimer.Start();
-            Server.Start();
-            if (!Server.IsListening) //TODO: maybe sort out with a timer
+            Server_Create();
+            if (!Server.IsListening)
             {
                 NetAclChecker.AddAddress("http://+:" + Port + "/");
-                Server.Stop();
-                Server.Start();
-                /*if (!Program.server.IsListening)
-                {
-                    MessageBox.Show("Could not bind port 6555", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error); //todo: does not work
-                    Environment.Exit(-1);
-                }*/
+                Server_Create();
             }
+        }
+
+        private void Server_Create()
+        {
+            if(Server != null)
+            { 
+                Server.Stop();
+                Server.Dispose();
+            }
+            Server = new RESTServer("+", Port);
+            Server.OnStart = OnServerStartNotify;
+            Server.Start();
         }
 
         private void timeoutTimer_Tick(object sender, EventArgs e)
         {
-            ShowBalloonTip(10000,"Server has not started","The server has not started properly\nPlease check your network settings",ToolTipIcon.Error,null);
+            Server_Create();
+            if (!Server.IsListening)
+            {
+                ShowBalloonTip(10000, "Server has not started",
+                    "The server has not started properly\nPlease check your network settings", ToolTipIcon.Error, null);
+            }
         }
 
         private void ShowBalloonTip(int timeout, string tipTitle, string tipText, ToolTipIcon tipIcon,
@@ -133,6 +141,6 @@ namespace FEClient
         }
 
         public static readonly string Port = ConfigurationManager.AppSettings["Port"];
-        private static readonly RESTServer Server = new RESTServer("+", Port);
+        private static RESTServer Server; // = new RESTServer("+", Port);
     }
 }
