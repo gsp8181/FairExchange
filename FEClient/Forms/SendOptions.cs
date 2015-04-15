@@ -113,11 +113,7 @@ namespace FEClient.Forms
                 !AddressBoxIsIp ? "Wrong format, should be an IP address" : string.Empty);
         }
 
-        private void label2_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        private void advancedCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             if (advancedCheckBox.Checked)
             {
@@ -137,7 +133,7 @@ namespace FEClient.Forms
             }
         }
 
-        private void roundsBox_KeyPress(object sender, KeyPressEventArgs e) //TODO: you CAN still paste a number in!
+        private void textBox_KeyPress(object sender, KeyPressEventArgs e) //TODO: you CAN still paste a number in!
         {
             if (!Char.IsNumber(e.KeyChar) && !Char.IsControl(e.KeyChar))
                 e.Handled = true;

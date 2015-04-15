@@ -78,7 +78,6 @@ namespace FEClient.Forms
             this.label2.Size = new System.Drawing.Size(44, 13);
             this.label2.TabIndex = 11;
             this.label2.Text = "Rounds";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // okButton
             // 
@@ -152,7 +151,7 @@ namespace FEClient.Forms
             this.roundsBox.Size = new System.Drawing.Size(199, 20);
             this.roundsBox.TabIndex = 3;
             this.roundsBox.Text = "1000";
-            this.roundsBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.roundsBox_KeyPress);
+            this.roundsBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_KeyPress);
             // 
             // complexityBox
             // 
@@ -164,7 +163,7 @@ namespace FEClient.Forms
             this.complexityBox.Size = new System.Drawing.Size(199, 20);
             this.complexityBox.TabIndex = 4;
             this.complexityBox.Text = "1300000";
-            this.complexityBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.roundsBox_KeyPress);
+            this.complexityBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_KeyPress);
             // 
             // label4
             // 
@@ -185,7 +184,7 @@ namespace FEClient.Forms
             this.timeoutBox.Size = new System.Drawing.Size(199, 20);
             this.timeoutBox.TabIndex = 5;
             this.timeoutBox.Text = "5000";
-            this.timeoutBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.roundsBox_KeyPress);
+            this.timeoutBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_KeyPress);
             // 
             // label5
             // 
@@ -205,7 +204,7 @@ namespace FEClient.Forms
             this.advancedCheckBox.TabIndex = 7;
             this.advancedCheckBox.Text = "Advanced";
             this.advancedCheckBox.UseVisualStyleBackColor = true;
-            this.advancedCheckBox.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.advancedCheckBox.CheckedChanged += new System.EventHandler(this.advancedCheckBox_CheckedChanged);
             // 
             // SendOptions
             // 

@@ -34,13 +34,10 @@ namespace FEClient.Security
                 aesCsp.GenerateIV();
                 aesCsp.GenerateKey();
                 var ae = new AesKeys(aesCsp.Key, aesCsp.IV) {Rounds = rounds};
-                //TODO: embed the parameter sent through rest as THIS instead, probably when RSA takes shape
-
+                
                 if (rounds > 0)
                     aesCsp.Key = Strengthen(aesCsp.Key, aesCsp.IV, rounds);
 
-
-                //byte[] inBlock = Encoding.UTF8.GetBytes(data);
                 var xfrm = aesCsp.CreateEncryptor();
                 var outBlock = xfrm.TransformFinalBlock(data, 0, data.Length);
                 var encrypted = Convert.ToBase64String(outBlock);
