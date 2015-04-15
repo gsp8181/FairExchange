@@ -14,10 +14,14 @@ namespace FEClient
         [STAThread]
         private static void Main()
         {
+            //AppDomain.SetData("DataDirectory", Application.UserAppDataPath);
+
 #if !MULTIINSTANCE
             if (Mutex.WaitOne(TimeSpan.Zero, true))
             {
 #endif
+                Thread.GetDomain().SetData("DataDirectory", Application.UserAppDataPath);
+
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 using (var context = new Context())
