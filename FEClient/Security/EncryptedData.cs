@@ -14,7 +14,7 @@ namespace FEClient.Security
 
         public JObject ToJObject()
         {
-            var output = new JObject {{"key", Key}, {"data", Data}};
+            var output = new JObject {{"key", Key}, {"data", Data}, {"encrypted",true}};
             return output;
         }
     }
