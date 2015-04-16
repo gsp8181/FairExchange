@@ -121,7 +121,7 @@ namespace FEClient.API
                 timeout = jsonStr.Value<int>("timeout");
                 complexity = jsonStr.Value<int>("complexity");
                 port = jsonStr.Value<string>("port");
-                if (string.IsNullOrWhiteSpace(fileName) || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(guid) || string.IsNullOrWhiteSpace(port))
+                if (string.IsNullOrWhiteSpace(fileName) || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(guid))
                     throw new NullReferenceException();
             }
             catch (NullReferenceException)
