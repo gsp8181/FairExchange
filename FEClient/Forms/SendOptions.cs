@@ -84,7 +84,7 @@ namespace FEClient.Forms
                 return false;
 
             var fileInfo = new FileInfo(fileBox.Text);
-            return fileInfo.Exists && fileInfo.Length > 0;
+            return fileInfo.Exists && fileInfo.Length > 0; //TODO: verbose! like error box
         }
 
         private void textBox2_Validated(object sender, EventArgs e)
