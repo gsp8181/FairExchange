@@ -68,7 +68,7 @@ namespace FEClient.Forms
 
         private void MyResource_StartTransmissionAndRespSent(object sender, StartTransmissionEventArgs vars)
         {
-            if (vars.Guid != _guid || vars.FileName != _file.Name || vars.IP != _ip)
+            if (vars.Guid != _guid || vars.FileName != _file.Name/* || vars.IP != _ip*/) //TODO:STRIP ++ CHECK PORTS
                 return;
             Invoke((MethodInvoker) SendFile); 
             RevokeResp();
