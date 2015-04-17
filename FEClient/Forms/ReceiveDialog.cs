@@ -187,7 +187,7 @@ namespace FEClient.Forms
                 Terminate();
                 MessageBox.Show("Signature verification failed, transfer terminated", "Failed", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-                Close();
+                Invoke((MethodInvoker) Close);
                 return;
             }
 
@@ -212,7 +212,7 @@ namespace FEClient.Forms
                 {
                     _logWriter.WriteLine("Could not contact remote server, terminated");
                     Terminate();
-                    Close();
+                    Invoke((MethodInvoker)Close);
                     return;
                 }
                 _logWriter.WriteLine("Remote public key not trusted, terminated");
@@ -220,7 +220,7 @@ namespace FEClient.Forms
                 _logWriter.WriteLine("Remote Public Key");
                 _logWriter.WriteLine(key.RemoteKey);
                 Terminate();
-                Close();
+                Invoke((MethodInvoker)Close);
                 return;
             }
             _remoteKey = key.RemoteKey;
@@ -242,7 +242,7 @@ namespace FEClient.Forms
                 Terminate();
                 MessageBox.Show("Attempt to respond to notification request returned error", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Close();
+                Invoke((MethodInvoker)Close);
             }
         }
 
@@ -279,7 +279,7 @@ namespace FEClient.Forms
                 _logWriter.WriteLine("No keys available, failed");
                 Terminate();
                 MessageBox.Show("No keys were received, failed", "No keys", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Close();
+                Invoke((MethodInvoker)Close);
                 return;
             }
             var key = _dict.Peek();
@@ -301,7 +301,7 @@ namespace FEClient.Forms
                 Terminate();
                 MessageBox.Show("Decryption failed, key is invalid\nCheck the logs for more details",
                     "Decryption Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Close();
+                Invoke((MethodInvoker)Close);
                 return;
             }
 

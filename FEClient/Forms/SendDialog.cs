@@ -128,7 +128,7 @@ namespace FEClient.Forms
             progressBar.Style = ProgressBarStyle.Continuous;
             Terminate();
             MessageBox.Show("Remote user did not respond in time", "Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            Close();
+            Invoke((MethodInvoker)Close);
         }
 
         private void SendFile()
@@ -179,7 +179,7 @@ namespace FEClient.Forms
                 Terminate();
                 MessageBox.Show("Remote server did not accept the file\n" + response.Error, "Failed",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Close();
+                Invoke((MethodInvoker)Close);
                 return;
             }
             var json = JObject.Parse(response.Content);
@@ -193,7 +193,7 @@ namespace FEClient.Forms
                 Terminate();
                 MessageBox.Show("Signature verification failed, transfer terminated", "Failed", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-                Close();
+                Invoke((MethodInvoker)Close);
                 return;
             }
 
@@ -243,7 +243,7 @@ namespace FEClient.Forms
 
                     MessageBox.Show("Timed out, transmission ended", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Terminate();
-                    Close();
+                    Invoke((MethodInvoker)Close);
                     return;
                 }
                 stopwatch.Restart();
@@ -252,14 +252,14 @@ namespace FEClient.Forms
                 if (!Rsa.VerifySignature(data.ToString(), sig, _remoteKey))
                 {
                     var hashStr = Sha1.HashJObject(data);
-                    _logWriter.WriteLineAsync(string.Format("Failed on fake key {0} as signature verification failed", i));
-                    _logWriter.WriteLineAsync("Actual data: " + data);
-                    _logWriter.WriteLineAsync("Data hash: " + hashStr);
-                    _logWriter.WriteLineAsync("Provided signature " + sig);
+                    _logWriter.WriteLine("Failed on fake key {0} as signature verification failed", i);
+                    _logWriter.WriteLine("Actual data: " + data);
+                    _logWriter.WriteLine("Data hash: " + hashStr);
+                    _logWriter.WriteLine("Provided signature " + sig);
                     Terminate();
                     MessageBox.Show("Error, signature verification failed", "Error", MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
-                    Close();
+                    Invoke((MethodInvoker)Close);
                     return;
                     //this.Close();
                 }
@@ -271,7 +271,7 @@ namespace FEClient.Forms
                     Terminate();
                     MessageBox.Show("Error, remote server returned error\n" + response.Error, "Error",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Close();
+                    Invoke((MethodInvoker)Close);
                     return;
                 }
 
@@ -303,8 +303,8 @@ namespace FEClient.Forms
                 _logWriter.WriteLine("ERROR: Sent REAL key and error was returned: {0}", realResponse.Error);
                 Terminate();
                 MessageBox.Show("Error, sent real key and error was returned\n" + realResponse.Error, "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error); 
-                Close();
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Invoke((MethodInvoker)Close);
                 return;
             }
 
@@ -319,7 +319,7 @@ namespace FEClient.Forms
                 Terminate();
                 MessageBox.Show("Error, signature verification failed", "Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-                Close();
+                Invoke((MethodInvoker)Close);
                 return;
             }
 
@@ -356,6 +356,7 @@ namespace FEClient.Forms
                 try
                 {
                     text = File.ReadAllBytes(_file.FullName);
+                    retry = false;
                 }
                 catch (Exception exception)
                 {
@@ -363,10 +364,11 @@ namespace FEClient.Forms
                         MessageBox.Show(exception.Message + "\nWould you like to retry?",
                             "Failed to read " + _file.FullName, MessageBoxButtons.OKCancel) == DialogResult.Cancel)
                     {
-                        retry = false;
+                        Invoke((MethodInvoker)Close);
+                        return;
                     }
                 }
-            } while (!retry);
+            } while (retry);
 
             _logWriter.WriteLine("Encrypting file");
 
@@ -424,7 +426,7 @@ namespace FEClient.Forms
                 {
                     _logWriter.WriteLine("Could not contact remote server, terminated");
                     Terminate();
-                    Close();
+                    Invoke((MethodInvoker)Close);
                     return;
                 }
 
@@ -433,7 +435,7 @@ namespace FEClient.Forms
                 _logWriter.WriteLine(key.RemoteKey);
                 e.Result = false;
                 Terminate();
-                Close();
+                Invoke((MethodInvoker)Close);
                 return;
             }
             _remoteKey = key.RemoteKey;
