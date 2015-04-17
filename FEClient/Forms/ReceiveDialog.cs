@@ -274,6 +274,7 @@ namespace FEClient.Forms
 
         private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
         {
+            e.Result = false;
             if (_dict.Count < 1)
             {
                 _logWriter.WriteLine("No keys available, failed");
@@ -308,6 +309,7 @@ namespace FEClient.Forms
             newName = Path.GetTempFileName();
             _logWriter.WriteLine("Saving decrypted file to " + newName);
             File.WriteAllBytes(newName, decrypted);
+            e.Result = true;
             _logWriter.WriteLine("Decryption Successful");
         }
 
@@ -315,6 +317,9 @@ namespace FEClient.Forms
         {
             progressBar1.Value = 100;
             Terminate();
+            if ((bool)e.Result == false)
+                return;
+
             DialogResult result;
             do
             {
