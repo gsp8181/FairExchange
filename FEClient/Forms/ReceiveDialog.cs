@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Net;
+using System.Threading;
 using System.Windows.Forms;
 using FEClient.API;
 using FEClient.API.Events;
@@ -32,6 +33,12 @@ namespace FEClient.Forms
 #if CHEAT_RANDOM
         private int count;
         private readonly int cheatat;
+#endif
+#if CHEAT_HOLDANDDECRYPT || CHEAT_HOLDANDDECRYPT_SMART
+        private readonly int cheatTimeout;
+        private Thread thread; //TODO: really here?
+        private volatile bool completed;
+        private string tempStore;
 #endif
 
 
@@ -76,6 +83,15 @@ namespace FEClient.Forms
             _logWriter.WriteLine("Cheating at " + cheatat);
 #endif
 
+#if CHEAT_HOLDANDDECRYPT_SMART
+            throw new NotImplementedException();
+#elif CHEAT_HOLDANDDECRYPT
+            cheatTimeout = (startObj.Timeout/5*4); //TODO: improve
+#endif
+#if CHEAT_HOLDANDDECRYPT || CHEAT_HOLDANDDECRYPT_SMART
+            _logWriter.WriteLine("Also attempting to cheat using HOLDANDDECRYPT");
+            _logWriter.WriteLine("Attempting decrypt up to timeout of " + cheatTimeout);
+#endif
 
             saveFileDialog.FileName = _fileName;
             saveFileDialog.DefaultExt = new FileInfo(_fileName).Extension;
@@ -112,6 +128,27 @@ namespace FEClient.Forms
                 return;
             }
 #endif
+
+#if CHEAT_HOLDANDDECRYPT || CHEAT_HOLDANDDECRYPT_SMART
+            thread = new Thread(new ThreadStart(CheatDecrypt)); //TODO: params?
+            thread.Start();
+            Thread.Sleep(cheatTimeout);
+            if (!completed)
+            {
+                thread.Abort();
+            }
+            else
+            {
+                _logWriter.WriteLine("Key has been successfully fraudulently obtained");
+                _logWriter.WriteLine("Decryption is in progress on cheat thread using last sent key");
+                Terminate();
+                thread.Join();
+                _logWriter.WriteLine("Decryption Successful");
+                saveFileDialog.ShowDialog();
+                return;
+            }
+#endif
+
             e.HasSet = true;
 
             Invoke((MethodInvoker) delegate
@@ -120,6 +157,25 @@ namespace FEClient.Forms
                 decryptTimer.Start();
             });
         }
+
+#if CHEAT_HOLDANDDECRYPT || CHEAT_HOLDANDDECRYPT_SMART
+        private void CheatDecrypt()
+        {
+            var key = _dict.Peek();
+            try
+            {
+                var decrypted = Aes.Decrypt(tempStore, key, _iv, _complexity);
+                completed = true;
+                //tempStore = decrypted;
+
+
+                newName = Path.GetTempFileName();
+                _logWriter.WriteLine("Saving cheat decrypted file to " + newName);
+                File.WriteAllBytes(newName, decrypted);
+            }
+            catch (Exception) { }
+        }
+#endif
 
         private void Terminate()
         {
@@ -160,6 +216,10 @@ namespace FEClient.Forms
             _logWriter.WriteLine("Received encrypted file and saved at " + _localFile);
             _logWriter.WriteLine("Received IV: " + _iv);
             _logWriter.WriteLine("Starting Key Receive");
+
+#if CHEAT_HOLDANDDECRYPT || CHEAT_HOLDANDDECRYPT_SMART
+            tempStore = file.Data;
+#endif
 
             Invoke((MethodInvoker) delegate 
             {
