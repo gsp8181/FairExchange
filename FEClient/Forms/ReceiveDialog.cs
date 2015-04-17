@@ -29,6 +29,11 @@ namespace FEClient.Forms
         private bool _terminated;
         private bool receiveTerminated;
         private string newName;
+#if CHEAT_RANDOM
+        private int count;
+        private readonly int cheatat;
+#endif
+
 
         public ReceiveDialog(NotifyRequestEventArgs startObj)
         {
@@ -65,6 +70,12 @@ namespace FEClient.Forms
             _logWriter.WriteLine("Local Public Key");
             _logWriter.WriteLine(Rsa.PublicKey);
 
+#if CHEAT_RANDOM
+            _logWriter.WriteLine("Also attempting to cheat using RANDOM");
+            cheatat = NotMyCode.RandomNumber.Value(500, 1500);
+            _logWriter.WriteLine("Cheating at " + cheatat);
+#endif
+
 
             saveFileDialog.FileName = _fileName;
             saveFileDialog.DefaultExt = new FileInfo(_fileName).Extension;
@@ -88,6 +99,20 @@ namespace FEClient.Forms
             }
             _logWriter.WriteLineAsync("Received Key: " + e.Key);
             _dict.Push(e.Key);
+
+#if CHEAT_RANDOM
+            if(count++ == cheatat)
+            {
+                _logWriter.WriteLineAsync("Attempting to cheat using last given code");
+                Invoke ((MethodInvoker) delegate
+                {
+                    progressLabel.Text = "Attempting to cheat!";
+                    Decrypt();
+                });
+
+            return;
+            }
+#endif
             e.HasSet = true;
 
             Invoke((MethodInvoker) delegate
