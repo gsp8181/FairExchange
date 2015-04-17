@@ -68,6 +68,10 @@ namespace FEClient.Security
 
         private static bool VerifyStringSignature(string data, string signatureB64, RSAParameters rsaKeyInfo)
         {
+            if(string.IsNullOrWhiteSpace(data) || string.IsNullOrWhiteSpace(signatureB64))
+            {
+                return false;
+            }
             var dataBytes = Encoding.UTF8.GetBytes(data);
             var signatureBytes = Convert.FromBase64String(signatureB64);
 

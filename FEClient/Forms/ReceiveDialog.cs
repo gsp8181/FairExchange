@@ -109,8 +109,7 @@ namespace FEClient.Forms
                     progressLabel.Text = "Attempting to cheat!";
                     Decrypt();
                 });
-
-            return;
+                return;
             }
 #endif
             e.HasSet = true;
