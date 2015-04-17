@@ -76,7 +76,7 @@ namespace FEClient.Forms
 
         private void MyResource_StartTransmission(object sender, StartTransmissionEventArgs args)
         {
-            if (args.FileName != _file.Name || args.Guid != _guid || args.IP != _ip)
+            if (args.FileName != _file.Name || args.Guid != _guid/* || args.IP != _ip*/)
                 return;
             args.HasSet = true;
             Invoke((MethodInvoker) delegate { timeoutTimer.Stop(); });
