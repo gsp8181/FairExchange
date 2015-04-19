@@ -38,7 +38,6 @@ namespace FEClient.Forms
 #endif
 #if CHEAT_HOLDANDDECRYPT || CHEAT_HOLDANDDECRYPT_SMART
         private readonly int cheatTimeout;
-        private Thread thread; //TODO: really here?
         private volatile bool completed;
         private string tempStore;
 #endif
@@ -147,7 +146,7 @@ namespace FEClient.Forms
 #endif
 
 #if CHEAT_HOLDANDDECRYPT || CHEAT_HOLDANDDECRYPT_SMART
-            thread = new Thread(new ThreadStart(CheatDecrypt)); //TODO: params?
+            Thread thread = new Thread(CheatDecrypt); //TODO: params?
             thread.Start();
             Thread.Sleep(cheatTimeout);
             if (!completed)
