@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using FEClient.API;
@@ -84,13 +86,28 @@ namespace FEClient.Forms
 #endif
 
 #if CHEAT_HOLDANDDECRYPT_SMART
-            throw new NotImplementedException();
+            _logWriter.WriteLine("Also attempting to cheat using HOLDANDDECRYPT");
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            Aes.Encrypt(Encoding.UTF8.GetBytes(Rsa.PublicKey), 1000);
+            stopwatch.Stop();
+            var time = (int)stopwatch.ElapsedMilliseconds;
+            time = time*(startObj.Complexity/1000);
+            _logWriter.WriteLine("Estimated decrypt time: " + time + "ms");
+            if (time < startObj.Timeout)
+            {
+                _logWriter.WriteLine("Hold and Decrypt cheat is using smart timeout");
+                cheatTimeout = time;
+            }
+            else
+            {
+                cheatTimeout = -1;
+                _logWriter.WriteLine("Smart timeout detection would fail"); //TODO: dialog box
+            }
 #elif CHEAT_HOLDANDDECRYPT
-            cheatTimeout = (startObj.Timeout/5*4); //TODO: improve
-#endif
-#if CHEAT_HOLDANDDECRYPT || CHEAT_HOLDANDDECRYPT_SMART
             _logWriter.WriteLine("Also attempting to cheat using HOLDANDDECRYPT");
             _logWriter.WriteLine("Attempting decrypt up to timeout of " + cheatTimeout);
+            cheatTimeout = (startObj.Timeout/10*9);
 #endif
 
             saveFileDialog.FileName = _fileName;
