@@ -92,7 +92,7 @@ namespace FEClient.Forms
             Aes.Encrypt(Encoding.UTF8.GetBytes(Rsa.PublicKey), 1000);
             stopwatch.Stop();
             var time = (int)stopwatch.ElapsedMilliseconds;
-            time = time*(startObj.Complexity/1000);
+            time = time*(startObj.Complexity/1000)*3;
             _logWriter.WriteLine("Estimated decrypt time: " + time + "ms");
             if (time < startObj.Timeout)
             {
@@ -161,7 +161,7 @@ namespace FEClient.Forms
                 Terminate();
                 thread.Join();
                 _logWriter.WriteLine("Decryption Successful");
-                saveFileDialog.ShowDialog();
+                Invoke((MethodInvoker) delegate{ saveFileDialog.ShowDialog(); });
                 return;
             }
 #endif
