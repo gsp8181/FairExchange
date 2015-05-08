@@ -219,7 +219,7 @@ namespace FEClient.API
                 return;
             }
 
-            var kArgs = new KeyReceivedEventArgs(key, guid, i, context.Request.RemoteEndPoint.Address.ToString());
+            var kArgs = new KeyReceivedEventArgs(key, guid, i, context.Request.RemoteEndPoint.Address.ToString(), args.ToString());
             KeyRecieved(this, kArgs);
 
             if (kArgs.HasSet)

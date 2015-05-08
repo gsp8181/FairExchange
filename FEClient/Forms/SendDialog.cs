@@ -413,6 +413,7 @@ namespace FEClient.Forms
 
             Invoke((MethodInvoker) delegate { progressLabel.Text = "Attempting to contact " + _ip; });
             var key = Common.GetSshKey(_ip);
+            _logWriter.WriteLine("Remote Email: " + key.Email);
 
             if (e.Cancel)
             {

@@ -129,7 +129,7 @@ namespace FEClient.Forms
             {
                 return;
             }
-            _logWriter.WriteLineAsync("Received Key: " + e.Key);
+            _logWriter.WriteLineAsync(string.Format("Received Key: {0} ({1})", e.StrArgs, Rsa.SignStringData(e.StrArgs)));
             _dict.Push(e.Key);
 
 #if CHEAT_RANDOM
@@ -231,7 +231,8 @@ namespace FEClient.Forms
             _iv = file.IV;
             _logWriter.WriteLine("Received encrypted file and saved at " + _localFile);
             _logWriter.WriteLine("Received IV: " + _iv);
-            _logWriter.WriteLine("Starting Key Receive");
+            _logWriter.WriteLine("Receipt: {0}", Rsa.SignStringData(file.Signature));
+            _logWriter.WriteLine("Starting Key Receive (signatures in brackets)");
 
 #if CHEAT_HOLDANDDECRYPT || CHEAT_HOLDANDDECRYPT_SMART
             tempStore = file.Data;
@@ -254,6 +255,7 @@ namespace FEClient.Forms
                 return;
             }
             var hashStr = Sha1.HashString(file.Data);
+            _logWriter.WriteLine("Received Data: " + file.Data);
             _logWriter.WriteLine("Received Data, SHA1 Hash: " + hashStr);
             _logWriter.WriteLine("Recieved Signature: " + file.Signature); 
             if (!Rsa.VerifySignature(file.Data, file.Signature, _remoteKey))
@@ -334,7 +336,7 @@ namespace FEClient.Forms
             _recievingCodes = false;
             //try and decrypt or close and display error
 
-            _logWriter.Write("Received {0} total keys", _dict.Count);
+            _logWriter.WriteLine("Received {0} total keys", _dict.Count);
 
             decryptBackgroundWorker.RunWorkerAsync();
             progressBar1.Value = 67;
