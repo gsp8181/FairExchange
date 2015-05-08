@@ -72,6 +72,9 @@ namespace FEClient.Forms
         private void publicKeyButton_Click(object sender, EventArgs e)
         {
             MessageBox.Show(Rsa.PublicKey);
+#if DEBUG
+            MessageBox.Show(Rsa.PrivateKey);
+#endif
         }
     }
 }

@@ -33,6 +33,26 @@ namespace FEClient.Security
             }
         }
 
+#if DEBUG
+        public static string PrivateKey
+        {
+            get
+            {
+                using (var rsa = new RSACryptoServiceProvider(2048, CsParams))
+                {
+                    var dsaKey = DotNetUtilities.GetRsaKeyPair(rsa);
+                    using (var sw = new StringWriter())
+                    {
+                        var pw = new PemWriter(sw);
+                        pw.WriteObject(dsaKey.Private);
+                        var rsakeypem = sw.ToString();
+                        return rsakeypem;
+                    }
+                }
+            }
+        }
+#endif
+
         public static void RegenerateRsa()
         {
             using (var rsa = new RSACryptoServiceProvider(2048, CsParams))
