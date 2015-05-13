@@ -113,6 +113,7 @@ namespace FEClient.Forms
         {
             if (advancedCheckBox.Checked)
             {
+#if !DEBUG
                 if (MessageBox.Show("Do you wish to enable advanced options? " +
                                     "Setting incorrect values can help an adversary intercept your communications. " +
                                     "If you do not fully understand what you are doing, press Cancel.", 
@@ -124,6 +125,7 @@ namespace FEClient.Forms
                     advancedCheckBox.Checked = false;
                     return;
                 }
+#endif
                 roundsBox.Enabled = true;
                 complexityBox.Enabled = true;
                 timeoutBox.Enabled = true;
