@@ -220,7 +220,14 @@ namespace FEClient.API
             }
 
             var kArgs = new KeyReceivedEventArgs(key, guid, i, context.Request.RemoteEndPoint.Address.ToString(), args.ToString());
-            KeyRecieved(this, kArgs);
+            try
+            {
+                KeyRecieved(this, kArgs);
+            }
+            catch (NullReferenceException)
+            {
+                return;
+            }
 
             if (kArgs.HasSet)
             {
