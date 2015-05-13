@@ -37,6 +37,12 @@ namespace FEClient.Forms
 
         private void GenDSAKeysButton_Click(object sender, EventArgs e)
         {
+            if (
+                MessageBox.Show(
+                    "Would you like to irrevocably delete the associated keypair and generate a new keypair?",
+                    "Confirm Action", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
+                return;
+
             Rsa.RegenerateRsa();
             MessageBox.Show("Regenerated Keys", "Finished", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
