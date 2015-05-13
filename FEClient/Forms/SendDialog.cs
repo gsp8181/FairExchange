@@ -221,7 +221,7 @@ namespace FEClient.Forms
             stopwatch.Start();
             for (var i = 0; i < _amount; i++)
             {
-                if (e.Cancel)
+                if (sendKeysBackgroundWorker.CancellationPending)
                 {
                     return;
                 }
@@ -290,7 +290,7 @@ namespace FEClient.Forms
                 Payload = encRealData.ToString()
             };
 
-            if (e.Cancel)
+            if (sendKeysBackgroundWorker.CancellationPending)
             {
                 e.Result = false;
                 return;
@@ -383,7 +383,7 @@ namespace FEClient.Forms
             _logWriter.WriteLine("Using key: " + _aesData.Key.KeyStr);
             _logWriter.WriteLine("IV: " + _aesData.Key.IvStr);
 
-            if (e.Cancel)
+            if (generateKeysBackgroundWorker.CancellationPending)
             {
                 e.Result = false;
                 return;
@@ -406,7 +406,7 @@ namespace FEClient.Forms
                 }
             }
 
-            if (e.Cancel)
+            if (generateKeysBackgroundWorker.CancellationPending)
             {
                 e.Result = false;
                 return;
@@ -418,7 +418,7 @@ namespace FEClient.Forms
             var key = Common.GetSshKey(_ip);
             _logWriter.WriteLine("Remote Email: " + key.Email);
 
-            if (e.Cancel)
+            if (generateKeysBackgroundWorker.CancellationPending)
             {
                 e.Result = false;
                 return;
@@ -445,7 +445,7 @@ namespace FEClient.Forms
             _remoteKey = key.RemoteKey;
             _logWriter.WriteLine("Remote Public Key");
             _logWriter.WriteLine(_remoteKey);
-            if (e.Cancel)
+            if (generateKeysBackgroundWorker.CancellationPending)
             {
                 e.Result = false;
                 return;
