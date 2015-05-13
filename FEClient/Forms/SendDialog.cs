@@ -98,6 +98,9 @@ namespace FEClient.Forms
             {
                 Invoke((MethodInvoker) delegate { timeoutTimer.Stop(); });
 
+                _logWriter.Close();
+                _log.Close();
+
                  sendKeysBackgroundWorker.CancelAsync();
                 _terminated = true;
             }
